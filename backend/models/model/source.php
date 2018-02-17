@@ -8,6 +8,8 @@ use yii\db\ActiveRecord;
 use backend\models\mark\mark;
 use backend\models\member\member;
 use backend\models\product\spu;
+use backend\models\product\sku;
+use backend\models\product\virtualItem;
 //========================================
 abstract class source extends SmartActiveRecord{
 	//资源类型
@@ -31,17 +33,24 @@ abstract class source extends SmartActiveRecord{
 	//判断资源是否被锁定
 	public function isLocked(){if($this->locked==0) return false; else return true;}
 	//========================================
+	//不同资源对应的类
+	static private function getClass($sourceType){
+		if($sourceType==self::TYPE_SPU) return spu::className();
+		if($sourceType==self::TYPE_SKU) return sku::className();
+		if($sourceType==self::TYPE_MEMBER) return member::className();
+		if($sourceType==self::TYPE_VIRTUAL_ITEM) return virtualItem::className();
+		throw new SmartException("error sourceType");
+	}
+	//========================================
 	//以sourceType和sourceId字段作为外键来获取资源
-	static public function getSource(ActiveRecord $ar){
-		//spu
-		if($ar->sourceType==self::TYPE_SPU){
-			return $ar->hasOne(spu::className(),array('id'=>'sourceId')); 
-		}
-		//会员
-		if($ar->sourceType==self::TYPE_MEMBER){
-			return $ar->hasOne(member::className(),array('id'=>'sourceId')); 
-		}
-		//错误的资源类型
-		throw new SmartException("error source type");
+	static public function getRelationShip(ActiveRecord $ar){
+		$class=self::getClass($sourceType);
+		return $ar->hasOne($class,array('id'=>'sourceId'));
+	}
+	//========================================
+	//通过类型和id获取资源
+	static public function getSource($sourceType,$sourceId){
+		$class=self::getClass($sourceType);
+		return $class::find()->where("`id`='{$sourceId}'")->one();
 	}
 }
