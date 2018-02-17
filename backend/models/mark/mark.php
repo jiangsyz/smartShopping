@@ -48,7 +48,7 @@ class mark extends SmartActiveRecord{
 	public function getMember(){return $this->hasOne(member::className(),array('id'=>'memberId'));}
 	//========================================
 	//获取推荐的资源
-	public function getSource(){return source::getSource($this);}
+	public function getSource(){return source::getRelationShip($this);}
 	//========================================
 	//检查标记者
 	public function checkMember(){if(!$this->member) throw new SmartException("miss member");}
