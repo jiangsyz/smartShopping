@@ -10,8 +10,6 @@ class SiteController extends SmartWebController{
     public function actionIndex(){
         //根据token获取会员
 		$member=tokenManagement::getManagement(Yii::$app->request->get('token',false),array(source::TYPE_MEMBER))->getOwner();
-		$virtualItem=virtualItem::find()->where("`id`='1'")->one();
-		//var_dump($spu);
-		var_dump($virtualItem);
+		var_dump($member->getLevel());
     }
 }
