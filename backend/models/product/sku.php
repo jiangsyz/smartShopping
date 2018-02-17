@@ -42,7 +42,14 @@ class sku extends salesUnit{
 	public function getCover(){return $this->spu->cover;}
 	//========================================
 	//获取最终成交价格
-	public function getFinalPrice(member $member){return $this->getPrice();}
+	public function getFinalPrice(member $member){
+		//获取会员等级
+		$lv=$member->getLevel();
+		//获取会员专享价
+		$price=skuMemberPrice::find()->where("`skuId`='{$this->id}' AND `lv`='{$lv}'")->one();
+		//有专享价返回专享价,没有返回原价
+		if($price) return $price->price; else return $this->getPrice($member);
+	}
 	//========================================
 	//获取库存(无库存限制返回NULL)
 	public function getKeepCount(){return $this->count;}
