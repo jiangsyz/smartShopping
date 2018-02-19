@@ -5,9 +5,9 @@ use Yii;
 use yii\base\SmartException;
 use yii\db\SmartActiveRecord;
 use backend\models\model\source;
-use backend\models\model\person;
+use backend\models\model\shop;
 //========================================
-class member extends source implements person{
+class member extends source implements shop{
 	//返回资源类型
 	public function getSourceType(){return source::TYPE_MEMBER;}
 	//========================================
