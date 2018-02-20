@@ -49,8 +49,13 @@ abstract class source extends SmartActiveRecord{
 	}
 	//========================================
 	//通过类型和id获取资源
-	static public function getSource($sourceType,$sourceId){
+	static public function getSource($sourceType,$sourceId,$lockFlag=false){
 		$class=self::getClass($sourceType);
-		return $class::find()->where("`id`='{$sourceId}'")->one();
+		//不需要加锁
+		if(!$lockFlag)return $class::find()->where("`id`='{$sourceId}'")->one();
+		//需要加锁
+		$table=$class::tableName();
+		$sql="SELECT * FROM {$table} WHERE `id`='{$sourceId}' FOR UPDATE";
+		return $class::findBySql($sql)->one();
 	}
 }
