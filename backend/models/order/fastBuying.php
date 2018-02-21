@@ -9,15 +9,15 @@ use backend\models\orderFactory\buyingRecord;
 //========================================
 class fastBuying extends Component{
 	//会员
-	public $member;
+	public $member=NULL;
 	//资源类型
-	public $sourceType;
+	public $sourceType=NULL;
 	//资源id
-	public $sourceId;
+	public $sourceId=NULL;
 	//购买数量
-	public $buyCount;
+	public $buyCount=NULL;
 	//购物行为
-	private $buyingRecord;
+	public $buyingRecord=false;
 	//========================================
 	//初始化
 	public function init(){
