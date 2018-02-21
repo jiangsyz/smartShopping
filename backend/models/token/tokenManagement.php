@@ -11,7 +11,7 @@ abstract class tokenManagement extends Component{
 	abstract public function getOwner();
 	//========================================
 	//令牌
-	public $token=false;
+	public $token=NULL;
 	//========================================
 	//获取令牌管理器
 	public static function getManagement($tokenStr,$type=array()){
