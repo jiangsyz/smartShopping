@@ -14,7 +14,7 @@ class mark extends SmartActiveRecord{
 	const TYPE_UPVOTE=3;//点赞(针对产品)
 	//========================================
 	//标记资源类型白名单
-	const SOURCE_LIST=array(
+	private $sourceList=array(
 		self::TYPE_COLLECTION=>array(source::TYPE_SPU),
 		self::TYPE_FOLLOW=>array(source::TYPE_MEMBER),
 		self::TYPE_COLLECTION=>array(source::TYPE_SPU),
@@ -58,8 +58,9 @@ class mark extends SmartActiveRecord{
 	//========================================
 	//检查标记资源类型
 	public function checkSourceType(){
-		//检查资源类型是否合法
-		if(!in_array($this->sourceType,self::SOURCE_LIST[$this->markType]))
-		throw new SmartException("error sourceType");
+		if(!isset($this->sourceList[$this->markType])) 
+			throw new SmartException("Error markType");
+		if(!in_array($this->sourceType,$this->sourceList[$this->markType]))
+			throw new SmartException("error sourceType");	
 	}
 }
