@@ -10,17 +10,17 @@ use backend\models\member\member;
 //========================================
 class buyingRecord extends Component{
 	//会员
-	public $member;
+	public $member=NULL;
 	//资源类型
-	public $sourceType;
+	public $sourceType=NULL;
 	//资源id
-	public $sourceId;
+	public $sourceId=NULL;
 	//售卖数量
-	public $buyCount;
+	public $buyCount=NULL;
 	//是否被选中
-	public $isSelected;
+	public $isSelected=NULL;
 	//购买目标
-	private $salesUnit;
+	private $salesUnit=false;
 	//========================================
 	//初始化
 	public function init(){
