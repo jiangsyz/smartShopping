@@ -1,5 +1,5 @@
 <?php
-//订单申请方
+//订单申请单元
 namespace backend\models\model;
 use Yii;
 //========================================
