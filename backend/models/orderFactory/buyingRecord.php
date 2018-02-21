@@ -22,6 +22,7 @@ class buyingRecord extends Component{
 	//购买目标
 	private $salesUnit;
 	//========================================
+	//初始化
 	public function init(){
 		parent::init();
 		//购买数量必须>0
