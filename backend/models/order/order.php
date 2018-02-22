@@ -24,6 +24,8 @@ class order extends Component{
 	public $finalPrice=NULL;
 	//支付费用(分单位)
 	public $pay=NULL;
+	//父订单
+	public $parentOrder=false;
 	//子订单
 	public $childOrders=array();
 	//购买行为
@@ -51,8 +53,12 @@ class order extends Component{
 	//========================================
 	//添加子订单(非叶子订单不能有购物行为)
 	public function addChildOrder(order $childOrder){
+		//每个订单只能有一个父订单
+		if($childOrder->parentOrder) throw new SmartException("childOrder had parent");
 		//非叶子订单不能有购物行为
 		if(!empty($this->buyingRecords)) throw new SmartException("buyingRecords is not empty");
+		//添加父订单
+		$childOrder->parentOrder=$this;
 		//添加子订单
 		$this->childOrders[]=$childOrder;
 		//有效子订单计数
