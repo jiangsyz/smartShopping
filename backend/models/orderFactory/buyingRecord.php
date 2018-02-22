@@ -20,7 +20,7 @@ class buyingRecord extends Component{
 	//是否被选中
 	public $isSelected=NULL;
 	//购买目标
-	private $salesUnit=false;
+	public $salesUnit=false;
 	//========================================
 	//初始化
 	public function init(){
