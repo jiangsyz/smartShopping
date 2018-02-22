@@ -12,6 +12,9 @@ class virtualItem extends salesUnit{
 	//返回资源类型
 	public function getSourceType(){return source::TYPE_VIRTUAL_ITEM;}
 	//========================================
+	//是否需要收货地址
+	public function isNeedAddress(){return false;}
+	//========================================
 	//获取最终成交价格
 	public function getFinalPrice(member $member){return $this->getPrice();}
 	//========================================
