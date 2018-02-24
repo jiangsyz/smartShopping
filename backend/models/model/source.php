@@ -44,7 +44,7 @@ abstract class source extends SmartActiveRecord{
 	//========================================
 	//以sourceType和sourceId字段作为外键来获取资源
 	static public function getRelationShip(ActiveRecord $ar){
-		$class=self::getClass($sourceType);
+		$class=self::getClass($ar->sourceType);
 		return $ar->hasOne($class,array('id'=>'sourceId'));
 	}
 	//========================================
