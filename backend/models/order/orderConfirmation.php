@@ -11,10 +11,10 @@ class orderConfirmation extends Component{
 	//========================================
 	//获取确认信息
 	public function getConfirmation(){
-		$data=$this->mainOrder->getOrderRecordData();
-		$data['isEffective']=$this->mainOrder->isEffective();
-		$data['effectiveChildOrderCount']=$this->mainOrder->effectiveChildOrderCount;
-		$data['effectiveBuyingRecordCount']=$this->mainOrder->effectiveBuyingRecordCount;
+		$data=$this->order->getOrderRecordData();
+		$data['isEffective']=$this->order->isEffective();
+		$data['effectiveChildOrderCount']=$this->order->effectiveChildOrderCount;
+		$data['effectiveBuyingRecordCount']=$this->order->effectiveBuyingRecordCount;
 		$data['childOrders']=array();
 		$data['salesUnits']=array();
 		//获取子订单确认信息
