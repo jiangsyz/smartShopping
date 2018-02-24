@@ -22,6 +22,7 @@ class orderConfirmation extends Component{
 			$orderConfirmation=new self(array('order'=>$childOrder));
 			$data['childOrders'][]=$orderConfirmation->getConfirmation();
 		}
+		//获取购物行为确认信息
 		foreach($this->order->buyingRecords as $record){
 			$salesUnitInfo=array();
 			$salesUnitInfo['salesUnitNo']=$record->salesUnit->getSourceNo();
