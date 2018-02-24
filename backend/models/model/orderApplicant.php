@@ -11,7 +11,7 @@ interface orderApplicant{
 	//获取申请方类型
 	public function getOrderApplicantType();
 	//========================================
-	//获取结算单位下的所有购买行为
+	//获取申请单元下的所有购买行为
 	public function getBuyingRecords();
 	//========================================
 	//获取会员
