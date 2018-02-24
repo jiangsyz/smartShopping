@@ -7,11 +7,11 @@ use yii\base\Component;
 use backend\models\model\shop;
 use backend\models\member\member;
 //========================================
-class mainOrderFactory extends orderFactory{
+class normalOrderFactory extends orderFactory{
 	//向工厂添加购买行为
 	public function addBuyingRecord(buyingRecord $buyingRecord){
 		//根据目标商品的商家,加入对应的商家子订单工厂
-		$this->getChildFactory($buyingRecord->salesUnit->getShop())->addBuyingRecord($buyingRecord);
+		$this->getShopFactory($buyingRecord->salesUnit->getShop())->addBuyingRecord($buyingRecord);
 	}
 	//========================================
 	//获取价格(不含运费)
@@ -45,9 +45,7 @@ class mainOrderFactory extends orderFactory{
 	public function getIndex(){return 'main';}
 	//========================================
 	//获取某个商家订单子工厂
-	public function getShopFactory(source $shop){
-		//判断输入必须为商家
-		if(!($shop instanceof shop::className())) throw new SmartException("error shop");
+	public function getShopFactory($shop){
 		//确定索引
 		$index=$shop->getSourceNo();
 		//初始化子工厂
