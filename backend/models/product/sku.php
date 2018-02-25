@@ -44,15 +44,16 @@ class sku extends salesUnit{
 	//获取封面
 	public function getCover(){return $this->spu->cover;}
 	//========================================
-	//获取最终成交价格
-	public function getFinalPrice(member $member){
-		//获取会员等级
-		$lv=$member->getLevel();
+	//获取针对某个会员等级的售卖价格
+	public function getLevelPrice($level){
 		//获取会员专享价
-		$price=skuMemberPrice::find()->where("`skuId`='{$this->id}' AND `lv`='{$lv}'")->one();
+		$price=skuMemberPrice::find()->where("`skuId`='{$this->id}' AND `lv`='{$level}'")->one();
 		//有专享价返回专享价,没有返回原价
-		if($price) return $price->price; else return $this->getPrice($member);
+		if($price) return $price->price; else return $this->getPrice();
 	}
+	//========================================
+	//获取最终成交价格
+	public function getFinalPrice(member $member){return $this->getLevelPrice($member->getLevel());}
 	//========================================
 	//获取库存(无库存限制返回NULL)
 	public function getKeepCount(){return $this->count;}
