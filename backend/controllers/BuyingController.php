@@ -9,11 +9,12 @@ use backend\models\order\fastBuying;
 use backend\models\order\orderAccepter;
 use backend\models\orderFactory\normalOrderFactory;
 use backend\models\order\orderConfirmation;
+use backend\models\order\orderChecker;
 use backend\models\token\tokenManagement;
 class BuyingController extends SmartWebController{
 	public $enableCsrfValidation=false;
 	//========================================
-	//通过快速购物创建订单
+	//通过快速购物申请创建订单
 	public function actionApiApplyCreateOrderByFastBuying(){
 		try{
 			//开启事务
@@ -38,6 +39,8 @@ class BuyingController extends SmartWebController{
 			$orderAccepterData['orderApplicant']=$fastBuying;
 			$orderAccepterData['mainOrderFactory']=new normalOrderFactory();
 			$orderAccepter=new orderAccepter($orderAccepterData);
+			//检查订单树的合法性
+			new orderChecker(array('order'=>$orderAccepter->mainOrder));
 			//构建订单确认信息处理器
 			$orderConfirmation=new orderConfirmation(array('order'=>$orderAccepter->mainOrder));
 			$data=$orderConfirmation->getConfirmation();
@@ -52,4 +55,6 @@ class BuyingController extends SmartWebController{
 			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
     	}
 	}
+	//========================================
+
 }
