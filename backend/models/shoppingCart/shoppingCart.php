@@ -35,10 +35,10 @@ class shoppingCart extends Component implements orderApplicant{
 		foreach($this->getShoppingCartRecords() as $shoppingCartRecord){
 			$buyingRecordData=array();
 			$buyingRecordData['member']=$this->member;
-			$buyingRecordData['sourceType']=$this->shoppingCartRecord->sourceType;
-			$buyingRecordData['sourceId']=$this->shoppingCartRecord->sourceId;
-			$buyingRecordData['buyCount']=$this->shoppingCartRecord->count;
-			$buyingRecordData['isSelected']=$this->shoppingCartRecord->isSelected();
+			$buyingRecordData['sourceType']=$shoppingCartRecord->sourceType;
+			$buyingRecordData['sourceId']=$shoppingCartRecord->sourceId;
+			$buyingRecordData['buyCount']=$shoppingCartRecord->count;
+			$buyingRecordData['isSelected']=$shoppingCartRecord->isSelected();
 			$buyingRecord=new buyingRecord($buyingRecordData);
 			$buyingRecords[]=$buyingRecord;
 		}
