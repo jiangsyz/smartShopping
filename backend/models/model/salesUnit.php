@@ -11,9 +11,12 @@ abstract class salesUnit extends product{
 	public function getSalesUnitName(){return $this->title;}
 	//========================================
 	//获取售卖价格(原价)
-	public function getPrice(member $member){return $this->price;}
+	public function getPrice(){return $this->price;}
 	//========================================
-	//获取最终成交价格
+	//获取针对某个会员等级的售卖价格
+	public function getLevelPrice($level){return $this->getPrice();}
+	//========================================
+	//获取会员最终成交价格
 	abstract public function getFinalPrice(member $member);
 	//========================================
 	//获取库存(无库存限制返回NULL)
