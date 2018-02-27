@@ -10,13 +10,9 @@ use backend\models\model\source;
 class mark extends SmartActiveRecord{
 	//标记类型
 	const TYPE_COLLECTION=1;//收藏(针对产品)
-	const TYPE_FOLLOW=2;//关注(针对商家)
-	const TYPE_UPVOTE=3;//点赞(针对产品)
 	//========================================
 	//标记资源类型白名单
 	private $sourceList=array(
-		self::TYPE_COLLECTION=>array(source::TYPE_SPU),
-		self::TYPE_FOLLOW=>array(source::TYPE_MEMBER),
 		self::TYPE_COLLECTION=>array(source::TYPE_SPU),
 	);
 	//========================================
@@ -63,4 +59,29 @@ class mark extends SmartActiveRecord{
 		if(!in_array($this->sourceType,$this->sourceList[$this->markType]))
 			throw new SmartException("error sourceType");	
 	}
+	//========================================
+	//获取某个会员对于某个资源的标记记录
+	static public function getMark(member $member,$markType,$sourceType,$sourceId){
+		$where="`memberId`='{$member->id}'";
+		$where.=" AND `markType`='{$markType}'";
+		$where.=" AND `sourceType`='{$sourceType}'";
+		$where.=" AND `sourceId`='{$sourceId}'";
+		return self::find()->where($where)->one();
+	}
+	//========================================
+	//获取某个资源的某类标记者
+	static public function getMarkers($markType,$sourceType,$sourceId){
+		$members=array();
+		//获取标记记录
+		$where="`markType`='{$markType}'";
+		$where.=" AND `sourceType`='{$sourceType}'";
+		$where.=" AND `sourceId`='{$sourceId}'";
+		$marks=self::find()->where($where)->with("member")->all();
+		//提取标记者
+		foreach($marks as $mark){
+			if(!isset($members[$mark->member->id])) $members[$mark->member->id]=$mark->member;
+		}
+		return $members;
+	}
+
 }
