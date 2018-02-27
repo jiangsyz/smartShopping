@@ -16,14 +16,11 @@ class MarkController extends SmartWebController{
 			//根据token获取会员
 			$member=tokenManagement::getManagement(Yii::$app->request->get('token',false),array(source::TYPE_MEMBER))->getOwner();
 			//获取标记类型
-			$markType=Yii::$app->request->get('markType',false);
-			if(!$markType) throw new SmartException("miss markType");
+			$markType=Yii::$app->request->get('markType',0);
 			//获取资源类型
-			$sourceType=Yii::$app->request->get('sourceType',false);
-			if(!$sourceType) throw new SmartException("miss sourceType");
+			$sourceType=Yii::$app->request->get('sourceType',0);
 			//获取资源id
-			$sourceId=Yii::$app->request->get('sourceId',false);
-			if(!$sourceId) throw new SmartException("miss sourceId");
+			$sourceId=Yii::$app->request->get('sourceId',0);
 			//增加标记
 			$markInfo=array();
 			$markInfo['memberId']=$member->id;
