@@ -25,4 +25,23 @@ class CategoryController extends SmartWebController{
     	}
     	catch(SmartException $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
 	}
+	//========================================
+	//获取一个分类的子分类
+	public function actionApiGetChildren(){
+		try{
+			$data=array();
+			//根据token获取会员
+			$member=tokenManagement::getManagement(Yii::$app->request->get('token',false),array(source::TYPE_MEMBER))->getOwner();
+			//获取分类id
+			$categoryId=Yii::$app->request->get('categoryId',0);
+			//获取分类
+			$category=category::find()->where("`id`='{$categoryId}'")->one();
+			if(!$category) throw new SmartException("miss category");
+			//提取子分类数据
+			foreach($category->children as $child) $data[]=$child->getData();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+    	}
+    	catch(SmartException $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+	}
 }
