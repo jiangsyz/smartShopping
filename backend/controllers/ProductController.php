@@ -13,7 +13,8 @@ class ProductController extends SmartWebController{
 	public function actionApiGetSpuDetail(){
 		try{
 			//根据token获取会员
-			$member=tokenManagement::getManagement(Yii::$app->request->get('token',false),array(source::TYPE_MEMBER))->getOwner();
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取产品id
 			$spuId=Yii::$app->request->get('spuId',0);
 			//获取产品
