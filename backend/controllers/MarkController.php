@@ -14,7 +14,8 @@ class MarkController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$member=tokenManagement::getManagement(Yii::$app->request->get('token',false),array(source::TYPE_MEMBER))->getOwner();
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取标记类型
 			$markType=Yii::$app->request->get('markType',0);
 			//获取资源类型
@@ -39,5 +40,4 @@ class MarkController extends SmartWebController{
 			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
     	}
 	}
-	//========================================
 }
