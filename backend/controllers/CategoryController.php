@@ -15,7 +15,8 @@ class CategoryController extends SmartWebController{
 		try{
 			$data=array();
 			//根据token获取会员
-			$member=tokenManagement::getManagement(Yii::$app->request->get('token',false),array(source::TYPE_MEMBER))->getOwner();
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取顶级分类
 			$categories=category::getTopCategories();
 			//组织数据
@@ -31,7 +32,8 @@ class CategoryController extends SmartWebController{
 		try{
 			$data=array();
 			//根据token获取会员
-			$member=tokenManagement::getManagement(Yii::$app->request->get('token',false),array(source::TYPE_MEMBER))->getOwner();
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取分类id
 			$categoryId=Yii::$app->request->get('categoryId',0);
 			//获取分类
