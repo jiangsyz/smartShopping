@@ -13,7 +13,8 @@ class BannerController extends SmartWebController{
 		try{
 			$data=array();
 			//根据token获取会员
-			$member=tokenManagement::getManagement(Yii::$app->request->get('token',false),array(source::TYPE_MEMBER))->getOwner();
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取广告位编号
 			$siteNo=Yii::$app->request->get('siteNo',false); 
 			if(!$siteNo) throw new SmartException("miss siteNo");
