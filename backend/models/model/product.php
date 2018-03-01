@@ -29,6 +29,9 @@ abstract class product extends source{
 	//获取产品名称
 	public function getProductName(){return $this->title;}
 	//========================================
+	//获取产品描述
+	public function getProductDesc(){return $this->desc;}
+	//========================================
 	//获取封面
 	public function getCover(){return $this->cover;}
 }
