@@ -35,7 +35,6 @@ class RecommendController extends SmartWebController{
 				$spuExtraction=new spuExtraction($recommendRecord->source);
 				$data['spus'][]=$spuExtraction->getBasicData();
 			}
-			var_dump($data);exit;
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
     	}
