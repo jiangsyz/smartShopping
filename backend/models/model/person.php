@@ -10,4 +10,6 @@ interface person{
 	public function getAvatar();
 	//上传头像
 	public function uploadAvatar($avatar);
+	//上传昵称
+	public function uploadNickName($nickName);
 }
