@@ -35,9 +35,32 @@ class MemberController extends SmartWebController{
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取图像
 			$avatar=Yii::$app->request->get('avatar',false);
-			if(!$avatar) throw new SmartException("miss avatar");
 			//上传头像
 			$member->uploadAvatar($avatar);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
+	//添加会员昵称
+	public function actionApiUploadNickname(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取昵称
+			$nickName=Yii::$app->request->get('nickName',false);
+			//上传昵称
+			$member->uploadNickName($nickName);
 			//提交事务
 			$trascation->commit();
 			//返回
