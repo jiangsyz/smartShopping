@@ -28,4 +28,7 @@ class spu extends product{
 		//返回最便宜的
 		return $cheapestSku;
 	}
+	//========================================
+	//获取数据提取器
+	public function getExtraction(){return new spuExtraction($this);}
 }
