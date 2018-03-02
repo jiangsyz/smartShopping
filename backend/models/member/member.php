@@ -27,4 +27,10 @@ class member extends source implements shop{
 		foreach($memberLvs as $v) if($v->lv>$level) $level=$v->lv;
 		return $level;
 	}
+	//========================================
+	//上传头像
+	public function uploadAvatar($avatar){
+		if(!$avatar) throw new SmartException("miss avatar");
+		$this->updateObj(array('avatar'=>$avatar));
+	}
 }
