@@ -31,6 +31,22 @@ class member extends source implements shop{
 	//上传头像
 	public function uploadAvatar($avatar){
 		if(!$avatar) throw new SmartException("miss avatar");
+		//判断是否是可以被base64解码的字符串
+		if($avatar!=base64_encode(base64_decode($avatar))) throw new SmartException("error b64");
+		//解码
+		$avatar=base64_decode($avatar); if(!$avatar) throw new SmartException("error avatar");
+		//保存
 		$this->updateObj(array('avatar'=>$avatar));
+	}
+	//========================================
+	//上传昵称
+	public function uploadNickName($nickName){
+		if(!$nickName) throw new SmartException("miss nickName");
+		//判断是否是可以被base64解码的字符串
+		if($nickName!=base64_encode(base64_decode($nickName))) throw new SmartException("error b64");
+		//解码
+		$nickName=base64_decode($nickName); if(!$nickName) throw new SmartException("error nickName");
+		//保存
+		$this->updateObj(array('nickName'=>$nickName));
 	}
 }
