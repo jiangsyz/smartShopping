@@ -27,7 +27,7 @@ class ProductController extends SmartWebController{
 			$data['distributeType']=$spu->distributeType;
 			//获取sku数据
 			$data['skus']=array();
-			foreach($spu->skus as $sku) $data['skus'][]=$sku->getData();
+			foreach($spu->skus as $sku) $data['skus'][]=$sku->getExtraction()->getBasicData();
 			//获取该会员对于该spu的收藏数据
 			$collection=mark::getMark($member,mark::TYPE_COLLECTION,$spu->getSourceType(),$spu->id);
 			$data['collectionId']=$collection?$collection->id:NULL;
