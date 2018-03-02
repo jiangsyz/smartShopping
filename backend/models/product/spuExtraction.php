@@ -19,6 +19,7 @@ class spuExtraction{
 		$data['cover']=$this->spu->getCover();
 		$data['price']=$this->spu->getCheapestSku()->getPrice();
 		$data['memberPrice']=$this->spu->getCheapestSku()->getLevelPrice(1);
+		$data['isAllowSale']=$this->spu->isAllowSale();
 		return $data;
 	}
 }
