@@ -16,7 +16,7 @@ class skuExtraction{
 		$data['sourceId']=$this->sku->getSourceId();
 		$data['productType']=$this->sku->getProductType();
 		$data['productId']=$this->sku->getProductId();
-		$data['title']=$this->sku->getTitle();
+		$data['title']=$this->sku->getSalesUnitName();
 		$data['price']=$this->sku->getPrice();
 		$data['memberPrice']=$this->sku->getLevelPrice(1);
 		$data['keepCout']=$this->sku->getKeepCount();

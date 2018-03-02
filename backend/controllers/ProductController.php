@@ -21,10 +21,8 @@ class ProductController extends SmartWebController{
 			//获取产品
 			$spu=spu::find()->where("`id`='{$spuId}'")->one();
 			if(!$spu) throw new SmartException("miss spu");
-			//获取spu数据提取器
-			$spuExtraction=new spuExtraction($spu);
 			//获取基础数据
-			$data=$spuExtraction->getBasicData();
+			$data=$spu->getExtraction()->getBasicData();
 			//获取配送类型数据
 			$data['distributeType']=$spu->distributeType;
 			//获取sku数据
