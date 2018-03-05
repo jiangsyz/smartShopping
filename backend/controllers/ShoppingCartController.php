@@ -42,8 +42,8 @@ class ShoppingCartController extends SmartWebController{
     	}
 	}
 	//========================================
-	//向购物车中添加售卖单元
-	public function actionApiAddSalesUnit(){
+	//修改购物车中某个记录的数量
+	public function actionApiUpdateCount(){
 		try{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
@@ -71,38 +71,6 @@ class ShoppingCartController extends SmartWebController{
 				$data['count']=$count;
 				shoppingCartRecord::addObj($data);
 			}
-			//提交事务
-			$trascation->commit();
-			//返回
-			$this->response(1,array('error'=>0));
-		}
-		catch(Exception $e){
-			//回滚
-			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
-    	}
-	}
-	//========================================
-	//修改购物车中某个记录的数量
-	public function actionApiUpdateCount(){
-		try{
-			//开启事务
-			$trascation=Yii::$app->db->beginTransaction();
-			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
-			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
-			//获取资源类型
-			$sourceType=Yii::$app->request->get('sourceType',0);
-			//获取售卖单元id
-			$sourceId=Yii::$app->request->get('sourceId',0);
-			//获取修改的数量,比如5或-10
-			$count=Yii::$app->request->get('count',0);
-			//查询该购买对象的购物车记录是否存在
-			$where="`memberId`='{$member->id}' AND `sourceType`='{$sourceType}' AND `sourceId`='{$sourceId}'";
-			$shoppingCartRecord=shoppingCartRecord::find()->where($where)->one();
-			if(!$shoppingCartRecord) throw new SmartException("miss shoppingCartRecord");
-			//修改数量
-			$shoppingCartRecord->updateObj(array('count'=>$shoppingCartRecord->count+$count));
 			//提交事务
 			$trascation->commit();
 			//返回
