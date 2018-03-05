@@ -17,6 +17,8 @@ class spuExtraction{
 		$data['title']=$this->spu->getProductName();
 		$data['desc']=$this->spu->getProductDesc();
 		$data['cover']=$this->spu->getCover();
+		$data['detail']=$this->spu->detail;
+		$data['uri']=$this->spu->uri;
 		$data['price']=$this->spu->getCheapestSku()->getPrice();
 		$data['memberPrice']=$this->spu->getCheapestSku()->getLevelPrice(1);
 		$data['isAllowSale']=$this->spu->isAllowSale();
