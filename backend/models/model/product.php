@@ -34,4 +34,7 @@ abstract class product extends source{
 	//========================================
 	//获取封面
 	public function getCover(){return $this->cover;}
+	//========================================
+	//获取物流配送方式
+	abstract public function getDistributeType();
 }
