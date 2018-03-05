@@ -43,7 +43,7 @@ class ShoppingCartController extends SmartWebController{
 	}
 	//========================================
 	//修改购物车中某个记录的数量
-	public function actionApiUpdateCount(){
+	public function actionApiUpdate(){
 		try{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
