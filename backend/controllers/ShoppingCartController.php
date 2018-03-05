@@ -84,7 +84,7 @@ class ShoppingCartController extends SmartWebController{
 	}
 	//========================================
 	//删除购物车中某个记录
-	public function actionApiDelRecord(){
+	public function actionApiDel(){
 		try{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
