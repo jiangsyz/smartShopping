@@ -7,6 +7,7 @@ use yii\db\SmartActiveRecord;
 use backend\models\model\source;
 use backend\models\model\salesUnit;
 use backend\models\member\member;
+use backend\models\distribute\distribute;
 //========================================
 class virtualItem extends salesUnit{
 	//返回资源类型
@@ -21,6 +22,9 @@ class virtualItem extends salesUnit{
 	//获取库存(无库存限制返回NULL)
 	public function getKeepCount(){return NULL;}
 	//========================================
+	//获取物流配送方式
+	public function getDistributeType(){return distribute::TYPE_VIRTUAL;}
+	//========================================
 	//更新库存
-	public function updateKeepCount($count){throw new SmartException("virtualItem keepCount is null");}
+	public function updateKeepCount($count){throw new SmartException("virtual can't updateKeepCount");}
 }

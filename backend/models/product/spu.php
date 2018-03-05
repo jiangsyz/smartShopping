@@ -7,10 +7,18 @@ use yii\db\SmartActiveRecord;
 use backend\models\model\source;
 use backend\models\model\product;
 use backend\models\member\member;
+use backend\models\distribute\distribute;
 //========================================
 class spu extends product{
 	//返回资源类型
 	public function getSourceType(){return source::TYPE_SPU;}
+	//========================================
+	//获取物流配送方式
+	public function getDistributeType(){
+		if($this->distributeType==1) return distribute::TYPE_REFRIGERATION;
+		if($this->distributeType==2) return distribute::TYPE_NORMAL;
+		throw new SmartException("error distributeType");
+	}
 	//========================================
 	//获取sku
 	public function getSkus(){return $this->hasMany(sku::className(),array('spuId'=>'id'));}

@@ -58,6 +58,9 @@ class sku extends salesUnit{
 	//获取库存(无库存限制返回NULL)
 	public function getKeepCount(){return $this->count;}
 	//========================================
+	//获取物流配送方式
+	public function getDistributeType(){return $this->spu->getDistributeType();}
+	//========================================
 	//更新库存($count=修改量)
 	public function updateKeepCount($count){
 		//被锁定不能修改库存
