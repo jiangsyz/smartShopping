@@ -19,6 +19,7 @@ class MemberController extends SmartWebController{
 			$data['nickName']=$member->getNickName();
 			$data['avatar']=$member->getAvatar();
 			$data['level']=$member->getLevel();
+			$data['hash']=$member->hash();
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
 		}

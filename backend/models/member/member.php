@@ -28,6 +28,14 @@ class member extends source implements shop{
 		return $level;
 	}
 	//========================================
+	//获取会员信息的hash
+	public function hash(){
+		$data=$this->getData();
+		$data['level']=$this->getLevel();
+		ksort($data);
+		return md5(json_encode($data));
+	}
+	//========================================
 	//上传头像
 	public function uploadAvatar($avatar){
 		if(!$avatar) throw new SmartException("miss avatar");
