@@ -65,7 +65,7 @@ class shoppingCartRecord extends SmartActiveRecord{
 		//获取售卖单元库存
 		$salesUnitCount=$this->salesUnit->getKeepCount();
 		//加入购物车数量不得超过售卖单元库存($salesUnitCount=NULL意味着没有库存限制)
-		if($salesUnitCount==NULL) return;
+		if($salesUnitCount===NULL) return;
 		if($this->count>$salesUnitCount) throw new SmartException("error count");	
 	}
 }
