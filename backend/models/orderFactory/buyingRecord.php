@@ -32,12 +32,14 @@ class buyingRecord extends Component{
 		if(!$this->salesUnit) throw new SmartException("miss salesUnit");
 		//购买目标必须为售卖单元
 		$class=salesUnit::className();
-		if(!($this->salesUnit instanceof $class)) throw new SmartException("source is not salesUnit");
+		if(!($this->salesUnit instanceof $class)) throw new SmartException("is not salesUnit");
 	}
 	//========================================
 	//获取原价
 	public function getPrice(){return $this->salesUnit->getPrice($this->member)*$this->buyCount;}	
 	//========================================
 	//获取成交价格
-	public function getFinalPrice(){return $this->salesUnit->getFinalPrice($this->member)*$this->buyCount;}
+	public function getFinalPrice(){
+		return $this->salesUnit->getFinalPrice($this->member)*$this->buyCount;
+	}
 }
