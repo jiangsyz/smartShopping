@@ -31,6 +31,8 @@ class ProductController extends SmartWebController{
 			//获取该会员对于该spu的收藏数据
 			$collection=mark::getMark($member,mark::TYPE_COLLECTION,$spu->getSourceType(),$spu->id);
 			$data['collectionId']=$collection?$collection->id:NULL;
+			//获取该会员的hash
+			$data['memberHash']=$member->hash();
 			//返回详情
 			$this->response(1,array('error'=>0,'data'=>$data));
 		}
