@@ -50,7 +50,7 @@ abstract class orderFactory extends Component{
 		$order['pay']=static::getPay();
 		$this->order=new order($order);
 		//迭代初始化子订单
-		foreach($this->childFactories as $f) $this->order->addChildOrder($f->initOrder($member));
+		foreach($this->childFactories as $f) $this->order->addChildOrder($f->initOrder());
 		//返回订单
 		return $this->order;
 	}
