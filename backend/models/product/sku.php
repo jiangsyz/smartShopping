@@ -26,9 +26,6 @@ class sku extends salesUnit{
 		return false;
 	}
 	//========================================
-	//是否需要收货地址
-	public function isNeedAddress(){return true;}
-	//========================================
 	//获取商家
 	public function getShop(){return $this->spu->shop;}
 	//========================================
