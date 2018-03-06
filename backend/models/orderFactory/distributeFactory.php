@@ -61,8 +61,8 @@ class distributeFactory extends orderFactory{
 	}
 	//========================================
 	//初始化订单
-	public function initOrder(member $member){
-		parent::initOrder($member);
+	public function initOrder(){
+		parent::initOrder();
 		//加入购物行为
 		foreach($this->buyingRecords as $buyingRecord) 
 			if($buyingRecord->isSelected) $this->order->addBuyingRecord($buyingRecord);
