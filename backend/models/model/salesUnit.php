@@ -24,7 +24,4 @@ abstract class salesUnit extends product{
 	//========================================
 	//更新库存
 	abstract public function updateKeepCount($count);
-	//========================================
-	//是否需要收货地址
-	abstract public function isNeedAddress();
 }
