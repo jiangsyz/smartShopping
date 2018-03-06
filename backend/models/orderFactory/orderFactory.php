@@ -8,6 +8,8 @@ use backend\models\member\member;
 use backend\models\order\order;
 //========================================
 abstract class orderFactory extends Component{
+	//会员
+	public $member=NULL;
 	//父工厂
 	public $parentFactory=NULL;
 	//子工厂
@@ -35,10 +37,10 @@ abstract class orderFactory extends Component{
 	public function getPay(){return (static::getFinalPrice()+static::getFreight())*100;}
 	//========================================
 	//初始化订单
-	public function initOrder(member $member){
+	public function initOrder(){
 		//初始化订单
 		$order=array();
-		$order['member']=$member;
+		$order['member']=$this->member;
 		$order['index']=static::getIndex();
 		$order['factoryType']=static::getFactoryType();
 		$order['title']=static::getTitle();
