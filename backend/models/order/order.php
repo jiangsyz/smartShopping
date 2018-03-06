@@ -6,6 +6,7 @@ use yii\base\Component;
 use backend\models\orderFactory\buyingRecord;
 use backend\models\member\member;
 use backend\models\member\address;
+use backend\models\distribute\distribute;
 //========================================
 class order extends Component{
 	//会员
@@ -44,11 +45,12 @@ class order extends Component{
 	//========================================
 	//是否需要收获地址
 	public function isNeedAddress(){
-		$flag=false;
-		//两个循环只会跑一个,这么写是为了不写if
-		foreach($this->childOrders as $v) $flag=$flag|$v->isNeedAddress();
-		foreach($this->buyingRecords as $v) $flag=$flag|$v->salesUnit->isNeedAddress();
-		return $flag;
+		//两个循环只会跑一个,这么写是为了方便
+		foreach($this->childOrders as $v) 
+			if($v->isNeedAddress()) return true;
+		foreach($this->buyingRecords as $v) 
+			if($v->salesUnit->getDistributeType()!=distribute::TYPE_VIRTUAL) return true;
+		return false;
 	}
 	//========================================
 	//添加子订单(非叶子订单不能有购物行为)
@@ -90,6 +92,8 @@ class order extends Component{
 		$data['freight']=$this->freight;
 		$data['pay']=$this->pay;
 		$data['isNeedAddress']=$this->isNeedAddress();
+		$data['parentId']=NULL;
+		$data['command']=NULL;
 		return $data;
 	}
 	//========================================
