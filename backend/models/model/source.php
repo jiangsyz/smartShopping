@@ -5,6 +5,7 @@ use Yii;
 use yii\base\SmartException;
 use yii\db\SmartActiveRecord;
 use yii\db\ActiveRecord;
+use backend\models\source\sourceProperty;
 use backend\models\mark\mark;
 use backend\models\member\member;
 use backend\models\product\spu;
@@ -29,6 +30,15 @@ abstract class source extends SmartActiveRecord{
 	//========================================
 	//返回资源全局编号
 	public function getSourceNo(){return $this->getSourceType().'_'.$this->getSourceId();}
+	//========================================
+	//获取资源的属性
+	public function getProperty($propertyKey){
+		$sType=$this->getSourceType();
+		$sId=$this->getSourceId();
+		$where="`sourceType`='{$sType}' AND `sourceId`='{$sId}' AND `propertyKey`='{$propertyKey}'";
+		$sourceProperty=sourceProperty::find()->where($where)->one();
+		if(!$sourceProperty) return NULL; else return $sourceProperty->propertyVal;
+	}
 	//========================================
 	//判断资源是否被锁定
 	public function isLocked(){if($this->locked==0) return false; else return true;}
