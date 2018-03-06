@@ -11,7 +11,7 @@ abstract class orderFactory extends Component{
 	//会员
 	public $member=NULL;
 	//父工厂
-	public $parentFactory=NULL;
+	public $parentFactory=false;
 	//子工厂
 	public $childFactories=array();
 	//订单
