@@ -3,6 +3,7 @@
 namespace backend\models\product;
 use Yii;
 use yii\base\SmartException;
+use backend\models\member\member;
 //========================================
 class skuExtraction{
 	private $sku;
@@ -10,8 +11,8 @@ class skuExtraction{
 	public function __construct(sku $sku){$this->sku=$sku;}
 	//========================================
 	//获取基础数据
-	public function getBasicData(){
-		$shoppingCartRecord=$this->sku->getShoppingCartRecord();
+	public function getBasicData(member $member){
+		$shoppingCartRecord=$this->sku->getShoppingCartRecord($member);
 		$data=array();
 		$data['sourceType']=$this->sku->getSourceType();
 		$data['sourceId']=$this->sku->getSourceId();
