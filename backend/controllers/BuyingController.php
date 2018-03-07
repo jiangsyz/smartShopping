@@ -56,4 +56,36 @@ class BuyingController extends SmartWebController{
 			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
     	}
 	}
+	//========================================
+	//通过购物车申请创建订单
+	public function actionApiApplyCreateOrderByShoppingCart(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取购物车
+			$shoppingCart=new shoppingCart(array('member'=>$member));
+			//构建订单受理者
+			$orderAccepterData=array();
+			$orderAccepterData['orderApplicant']=$shoppingCart;
+			$orderAccepterData['mainOrderFactory']=new mainOrderFactory(array('member'=>$member));
+			$orderAccepter=new orderAccepter($orderAccepterData);
+			//检查订单树的合法性
+			new orderChecker(array('order'=>$orderAccepter->mainOrder));
+			//构建订单确认信息处理器
+			$orderConfirmation=new orderConfirmation(array('order'=>$orderAccepter->mainOrder));
+			$data=$orderConfirmation->getConfirmation();
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+		}
+		catch(SmartException $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
 }
