@@ -7,7 +7,7 @@ use yii\base\SmartException;
 use backend\models\model\source;
 use backend\models\order\fastBuying;
 use backend\models\order\orderAccepter;
-use backend\models\orderFactory\normalOrderFactory;
+use backend\models\orderFactory\mainOrderFactory;
 use backend\models\order\orderConfirmation;
 use backend\models\order\orderChecker;
 use backend\models\token\tokenManagement;
@@ -38,7 +38,7 @@ class BuyingController extends SmartWebController{
 			//构建订单受理者
 			$orderAccepterData=array();
 			$orderAccepterData['orderApplicant']=$fastBuying;
-			$orderAccepterData['mainOrderFactory']=new normalOrderFactory();
+			$orderAccepterData['mainOrderFactory']=new mainOrderFactory(array('member'=>$member));
 			$orderAccepter=new orderAccepter($orderAccepterData);
 			//检查订单树的合法性
 			new orderChecker(array('order'=>$orderAccepter->mainOrder));
