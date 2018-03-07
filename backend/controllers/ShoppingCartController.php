@@ -9,7 +9,7 @@ use backend\models\shoppingCart\shoppingCart;
 use backend\models\shoppingCart\shoppingCartRecord;
 use backend\models\model\source;
 use backend\models\order\orderAccepter;
-use backend\models\orderFactory\normalOrderFactory;
+use backend\models\orderFactory\mainOrderFactory;
 use backend\models\order\orderConfirmation;
 class ShoppingCartController extends SmartWebController{
 	//获取购物车信息
@@ -25,7 +25,7 @@ class ShoppingCartController extends SmartWebController{
 			//构建订单受理者
 			$orderAccepterData=array();
 			$orderAccepterData['orderApplicant']=$shoppingCart;
-			$orderAccepterData['mainOrderFactory']=new normalOrderFactory();
+			$orderAccepterData['mainOrderFactory']=new mainOrderFactory(array('member'=>$member));
 			$orderAccepter=new orderAccepter($orderAccepterData);
 			//构建订单确认信息处理器
 			$orderConfirmation=new orderConfirmation(array('order'=>$orderAccepter->mainOrder));
