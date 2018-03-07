@@ -10,10 +10,7 @@ use backend\models\orderFactory\buyingRecord;
 use backend\models\token\tokenManagement;
 class SiteController extends SmartWebController{
     public function actionIndex(){
-        //根据token获取会员
-		$member=tokenManagement::getManagement(Yii::$app->request->get('token',false),array(source::TYPE_MEMBER))->getOwner();
-		$source=source::getSource(1,1);
-		$buyingRecord=new buyingRecord(array('member'=>$member,'sourceType'=>2,'sourceId'=>1,'buyCount'=>10,'isSelected'=>true));
-		var_dump($buyingRecord->getPrice());exit;
+        $sku=sku::find()->where("`id`='1'")->one();
+        var_dump($sku->getPrice());
     }
 }

@@ -11,6 +11,7 @@ use backend\models\member\member;
 use backend\models\product\spu;
 use backend\models\product\sku;
 use backend\models\product\virtualItem;
+use backend\models\shoppingCart\shoppingCartRecord;
 //========================================
 abstract class source extends SmartActiveRecord{
 	//资源类型
@@ -38,6 +39,15 @@ abstract class source extends SmartActiveRecord{
 		$where="`sourceType`='{$sType}' AND `sourceId`='{$sId}' AND `propertyKey`='{$propertyKey}'";
 		$sourceProperty=sourceProperty::find()->where($where)->one();
 		if(!$sourceProperty) return NULL; else return $sourceProperty->propertyVal;
+	}
+	//========================================
+	//获取该资源在购物车中的记录
+	public function getShoppingCartRecord(member $member){
+		$mId=$member->getSourceId();
+		$sType=$this->getSourceType();
+		$sId=$this->getSourceId();
+		$where="`memberId`={$mId} AND `sourceType`='{$sType}' AND `sourceId`='{$sId}'";
+		return shoppingCartRecord::find()->where($where)->one();
 	}
 	//========================================
 	//判断资源是否被锁定

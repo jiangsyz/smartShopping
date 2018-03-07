@@ -11,6 +11,7 @@ class skuExtraction{
 	//========================================
 	//获取基础数据
 	public function getBasicData(){
+		$shoppingCartRecord=$this->sku->getShoppingCartRecord();
 		$data=array();
 		$data['sourceType']=$this->sku->getSourceType();
 		$data['sourceId']=$this->sku->getSourceId();
@@ -20,6 +21,7 @@ class skuExtraction{
 		$data['price']=number_format(floatval($this->sku->getPrice()),2);
 		$data['memberPrice']=number_format(floatval($this->sku->getLevelPrice(1)),2);
 		$data['keepCout']=$this->sku->getKeepCount();
+		$data['shoppingCartCount']=$shoppingCartRecord?$shoppingCartRecord->count:0;
 		$data['isAllowSale']=$this->sku->isAllowSale();
 		return $data;
 	}
