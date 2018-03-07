@@ -17,8 +17,8 @@ class skuExtraction{
 		$data['productType']=$this->sku->getProductType();
 		$data['productId']=$this->sku->getProductId();
 		$data['title']=$this->sku->getSalesUnitName();
-		$data['price']=$this->sku->getPrice();
-		$data['memberPrice']=$this->sku->getLevelPrice(1);
+		$data['price']=number_format(floatval($this->sku->getPrice()),2);
+		$data['memberPrice']=number_format(floatval($this->sku->getLevelPrice(1)),2);
 		$data['keepCout']=$this->sku->getKeepCount();
 		$data['isAllowSale']=$this->sku->isAllowSale();
 		return $data;
