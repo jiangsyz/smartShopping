@@ -6,6 +6,7 @@ use yii\base\SmartException;
 use yii\db\SmartActiveRecord;
 use backend\models\model\source;
 use backend\models\model\shop;
+use backend\models\token\tokenManagement;
 //========================================
 class member extends source implements shop{
 	//返回资源类型
@@ -56,5 +57,10 @@ class member extends source implements shop{
 		$nickName=base64_decode($nickName); if(!$nickName) throw new SmartException("error nickName");
 		//保存
 		$this->updateObj(array('nickName'=>$nickName));
+	}
+	//========================================
+	//创建用户令牌
+	public function createToken(){
+		return tokenManagement::createToken(source::TYPE_MEMBER,$this->getSourceId());
 	}
 }
