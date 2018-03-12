@@ -5,8 +5,28 @@ use yii\web\SmartWebController;
 use yii\base\SmartException;
 use yii\base\Exception;
 use backend\models\model\source;
+use backend\models\member\member;
 use backend\models\token\tokenManagement;
 class MemberController extends SmartWebController{
+	//通过手机拿令牌
+    public function actionApiGetTokenByPhone(){
+		try{
+			//获取手机
+			$phone=Yii::$app->request->get('phone',"");
+			//获取会员
+			$member=member::find()->where("`phone`='{$phone}'")->one();
+			//不是会员
+			if(!$member) throw new SmartException("miss member");
+			//创建会员令牌
+			$token=$member->createToken();
+			//获取令牌及超时时间戳
+			$data=array('token'=>$token->token,'timeOut'=>$token->getTimeOutTimestamp());
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+        }
+        catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+    }
+	//========================================
 	//获取会员信息
 	public function actionApiGetInfo(){
 		try{
