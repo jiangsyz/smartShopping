@@ -7,6 +7,8 @@ use yii\base\Exception;
 use backend\models\model\source;
 use backend\models\member\member;
 use backend\models\token\tokenManagement;
+use backend\models\member\signInManagement;
+use backend\models\identifyingCode\identifyingCodeManagement;
 class MemberController extends SmartWebController{
 	//通过手机拿令牌
     public function actionApiGetTokenByPhone(){
@@ -25,6 +27,51 @@ class MemberController extends SmartWebController{
 			$this->response(1,array('error'=>0,'data'=>$data));
         }
         catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+    }
+	//========================================
+    //通过手机号申请登陆
+	public function actionApiApplySignInByPhone(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//获取手机号
+			$phone=Yii::$app->request->get('phone',false);
+			//申请注册,获取验证码订单号
+			$orderId=signInManagement::applySignInByPhone($phone);
+			//提交事务
+			$trascation->commit();
+			//返回验证码订单号
+			$this->response(1,array('error'=>0,'data'=>array('orderId'=>$orderId)));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+		}
+	}
+	//========================================
+	//会员注册或登录
+	public function actionApiSignUpOrSignIn(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//获取验证码订单号
+			$orderId=Yii::$app->request->get('orderId',false); 
+			//获取验证码
+			$identifyingCode=Yii::$app->request->get('identifyingCode',false);
+            //注册,并获取令牌
+            $token=identifyingCodeManagement::getManagement($orderId,$identifyingCode)->handle();
+            //提交事务
+            $trascation->commit();
+            //返回令牌
+            $data=array('token'=>$token->token,'timeOut'=>$token->getTimeOutTimestamp());
+            $this->response(1,array('error'=>0,'data'=>$data));
+        }
+        catch(SmartException $e){
+            //回滚
+            $trascation->rollback();
+            $this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+        }
     }
 	//========================================
 	//获取会员信息
