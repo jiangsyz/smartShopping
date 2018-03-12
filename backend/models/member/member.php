@@ -9,6 +9,15 @@ use backend\models\model\shop;
 use backend\models\token\tokenManagement;
 //========================================
 class member extends source implements shop{
+	//初始化
+	public function init(){
+		parent::init();
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initTime"));
+	}
+	//========================================
+	//初始化用户创建时间
+	public function initTime(){$this->createTime=time();}
+	//========================================
 	//返回资源类型
 	public function getSourceType(){return source::TYPE_MEMBER;}
 	//========================================
