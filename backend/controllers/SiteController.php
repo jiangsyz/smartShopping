@@ -11,7 +11,25 @@ use backend\models\member\member;
 use backend\models\token\tokenManagement;
 class SiteController extends SmartWebController{
     public function actionIndex(){
-		$member=member::find()->where("`id`='1'")->one();
-		var_dump($member->createToken()->getData());
+    	$token=Yii::$app->smartQiNiu->getToken();
+    	var_dump($token);
+    }
+    //========================================
+    public function actionApiGetQiNiuToken(){
+    	try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//获取令牌
+			$token=Yii::$app->smartQiNiu->getToken();
+			//提交事务
+			$trascation->commit();
+			//返回验证码订单号
+			$this->response(1,array('error'=>0,'data'=>$token));
+		}
+		catch(Exception $e){
+			//回滚
+            $trascation->rollback();
+    		$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
     }
 }
