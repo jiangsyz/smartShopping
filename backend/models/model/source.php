@@ -11,7 +11,9 @@ use backend\models\member\member;
 use backend\models\product\spu;
 use backend\models\product\sku;
 use backend\models\product\virtualItem;
+use backend\models\staff\staff;
 use backend\models\shoppingCart\shoppingCartRecord;
+use backend\models\token\tokenManagement;
 //========================================
 abstract class source extends SmartActiveRecord{
 	//资源类型
@@ -53,11 +55,17 @@ abstract class source extends SmartActiveRecord{
 	//判断资源是否被锁定
 	public function isLocked(){if($this->locked==0) return false; else return true;}
 	//========================================
+	//创建用户令牌
+	public function createToken(){
+		return tokenManagement::createToken($this->getSourceType(),$this->getSourceId());
+	}
+	//========================================
 	//不同资源对应的类
 	static private function getClass($sourceType){
 		if($sourceType==self::TYPE_SPU) return spu::className();
 		if($sourceType==self::TYPE_SKU) return sku::className();
 		if($sourceType==self::TYPE_MEMBER) return member::className();
+		if($sourceType==self::TYPE_STAFF) return staff::className();
 		if($sourceType==self::TYPE_VIRTUAL_ITEM) return virtualItem::className();
 		throw new SmartException("error sourceType");
 	}
