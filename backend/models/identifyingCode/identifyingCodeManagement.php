@@ -7,7 +7,7 @@ use yii\base\SmartException;
 abstract class identifyingCodeManagement extends Component{
 	//验证码订单类型
 	const TYPE_MEMBER_SIGN_IN_BY_PHONE=1;
-	const TYPE_STAFF_SIGN_IN=2;
+	const TYPE_STAFF_SIGN_IN_BY_PHONE=2;
 	//========================================
 	abstract public function handle();
 	//========================================
@@ -28,6 +28,8 @@ abstract class identifyingCodeManagement extends Component{
 		//返回对应的验证码管理器
 		if($order->type==self::TYPE_MEMBER_SIGN_IN_BY_PHONE) 
 			return new memberSignInByPhone(array('order'=>$order));
+		if($order->type==self::TYPE_STAFF_SIGN_IN_BY_PHONE) 
+			return new staffSignInByPhone(array('order'=>$order));
 		//找不到合适的管理器
 		throw new SmartException("miss identifyingCodeManagement");
 	}
