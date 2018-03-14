@@ -139,4 +139,52 @@ class MemberController extends SmartWebController{
 			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
     	}
 	}
+	//========================================
+	//添加会员推送平台id
+	public function actionApiUploadPushUniqueId(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取平台id
+			$pushUniqueId=Yii::$app->request->get('pushUniqueId',false);
+			//上传昵称
+			$member->uploadPushUniqueId($pushUniqueId);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$member->pushUniqueId));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
+	//添加会员推送平台id
+	public function actionApiUploadCustomServiceUniqueId(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取平台id
+			$customServiceUniqueId=Yii::$app->request->get('customServiceUniqueId',false);
+			//上传昵称
+			$member->uploadCustomServiceUniqueId($customServiceUniqueId);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$member->customServiceUniqueId));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
 }
