@@ -7,7 +7,7 @@ use yii\base\Exception;
 use backend\models\model\source;
 use backend\models\member\member;
 use backend\models\token\tokenManagement;
-use backend\models\member\signInManagement;
+use backend\models\signInManagement\signInManagement;
 use backend\models\identifyingCode\identifyingCodeManagement;
 class MemberController extends SmartWebController{
 	//通过手机拿令牌
@@ -37,7 +37,7 @@ class MemberController extends SmartWebController{
 			//获取手机号
 			$phone=Yii::$app->request->get('phone',false);
 			//申请注册,获取验证码订单号
-			$orderId=signInManagement::applySignInByPhone($phone);
+			$orderId=signInManagement::memberApplySignInByPhone($phone);
 			//提交事务
 			$trascation->commit();
 			//返回验证码订单号
@@ -64,8 +64,7 @@ class MemberController extends SmartWebController{
             //提交事务
             $trascation->commit();
             //返回令牌
-            $data=array('token'=>$token->token,'timeOut'=>$token->getTimeOutTimestamp());
-            $this->response(1,array('error'=>0,'data'=>$data));
+            $this->response(1,array('error'=>0,'data'=>$token->getInfo()));
         }
         catch(SmartException $e){
             //回滚
