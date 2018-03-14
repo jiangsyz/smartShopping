@@ -52,4 +52,16 @@ class StaffController extends SmartWebController{
             $this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
         }
     }
+    //========================================
+    //获取员工信息
+    public function actionApiGetInfo(){
+    	try{
+			//根据token获取员工
+			$token=Yii::$app->request->get('token',false);
+			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$staff->getData()));
+		}
+		catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+    }
 }
