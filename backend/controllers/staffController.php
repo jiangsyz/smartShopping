@@ -41,18 +41,10 @@ class StaffController extends SmartWebController{
 			$identifyingCode=Yii::$app->request->get('identifyingCode',false);
             //注册,并获取令牌
             $token=identifyingCodeManagement::getManagement($orderId,$identifyingCode)->handle();
-            //查找员工
-            $staff=tokenManagement::getManagement($token->token,array(source::TYPE_STAFF))->getOwner();
-            if(!$staff) throw new SmartException("miss staff");
             //提交事务
 			$trascation->commit();
             //返回令牌
-            $data=array();
-            $data['token']=$token->token;
-            $data['timeOut']=$token->getTimeOutTimestamp();
-            $data['staffId']=$staff->id;
-            $data['staffName']=$staff->name;
-            $this->response(1,array('error'=>0,'data'=>$data));
+            $this->response(1,array('error'=>0,'data'=>$token->getInfo()));
         }
         catch(Exception $e){
             //回滚
