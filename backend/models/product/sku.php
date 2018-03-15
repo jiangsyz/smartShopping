@@ -43,11 +43,16 @@ class sku extends salesUnit{
 	//========================================
 	//获取针对某个会员等级的售卖价格
 	public function getLevelPrice($level){
-		//获取会员专享价
+		//获取某个等级的价格
 		$price=skuMemberPrice::find()->where("`skuId`='{$this->id}' AND `lv`='{$level}'")->one();
-		//有专享价返回专享价,没有返回原价
-		if($price) return $price->price; else return $this->getPrice();
+		//找到当前等级价格直接返回
+		if($price) return $price->price;
+		//原价找不到直接报错,其他等级找不到返回原价
+		if($level==0) throw new SmartException("miss lv0 price"); else return $this->getPrice();
 	}
+	//========================================
+	//获取售卖价格(原价)
+	public function getPrice(){return $this->getLevelPrice(0);}
 	//========================================
 	//获取最终成交价格
 	public function getFinalPrice(member $member){return $this->getLevelPrice($member->getLevel());}
