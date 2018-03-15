@@ -6,6 +6,8 @@ use yii\base\SmartException;
 use yii\base\Exception;
 use backend\models\token\tokenManagement;
 use backend\models\product\spu;
+use backend\models\product\sku;
+use backend\models\product\skuPriceManagement;
 use backend\models\model\source;
 use backend\models\mark\mark;
 use backend\models\product\spuExtraction;
@@ -38,6 +40,39 @@ class ProductController extends SmartWebController{
 		}
 		catch(Exception $e){
     		$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
+	//修改sku价格
+	public function actionApiUpdateSkuPrice(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取员工
+			$token=Yii::$app->request->get('token',false);
+			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
+			//获取skuId
+			$skuId=Yii::$app->request->get('skuId',0);
+			//获取等级
+			$level=Yii::$app->request->get('level',-1);
+			//获取价格
+			$price=Yii::$app->request->get('price',-1);
+			//获取sku(加锁)
+			$sku=source::getSource(source::TYPE_SKU,$skuId,true);
+			if(!$sku) throw new SmartException("miss sku");
+			//获取sku价格管理器
+			$skuPriceManagement=new skuPriceManagement(array('sku'=>$sku));
+			//设置价格
+			$skuPriceManagement->updatePrice($level,$price,$staff);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
     	}
 	}
 }
