@@ -10,9 +10,10 @@ use backend\models\orderFactory\buyingRecord;
 use backend\models\member\member;
 use backend\models\token\tokenManagement;
 class SiteController extends SmartWebController{
+	public $enableCsrfValidation=false;
+	//========================================
     public function actionIndex(){
-    	$token=Yii::$app->smartQiNiu->getToken();
-    	var_dump($token);
+    	Yii::$app->smartQiNiu->uploadSimpleFile($_FILES["file"]["tmp_name"]);
     }
     //========================================
     public function actionApiGetQiNiuToken(){
