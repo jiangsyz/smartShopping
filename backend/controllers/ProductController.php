@@ -75,4 +75,33 @@ class ProductController extends SmartWebController{
 			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
     	}
 	}
+	//========================================
+	//修改sku库存
+	public function actionApiUpdateSkuKeepCount(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取员工
+			$token=Yii::$app->request->get('token',false);
+			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
+			//获取skuId
+			$skuId=Yii::$app->request->get('skuId',0);
+			//获取库存
+			$keepCount=Yii::$app->request->get('keepCount',0);
+			//获取sku(加锁)
+			$sku=source::getSource(source::TYPE_SKU,$skuId,true);
+			if(!$sku) throw new SmartException("miss sku");
+			//修改库存
+			$sku->updateKeepCount(source::TYPE_STAFF,$staff->getSourceId(),$keepCount);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
 }
