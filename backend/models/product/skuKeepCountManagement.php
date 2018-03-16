@@ -32,5 +32,20 @@ class skuKeepCountManagement extends Component{
 			throw new SmartException("keepCount==originaKeepCount");
 		//修改
 		$this->sku->updateObj(array('count'=>$this->keepCount));
+		//记录日志
+		salesUnitKeepCountLog::addObj($this->getLogData());
+	}
+	//========================================
+	//获取记录日志所需的数据
+	private function getLogData(){
+		$logData=array();
+		$logData['sourceType']=$this->sku->getSourceType();
+		$logData['sourceId']=$this->sku->getSourceId();
+		$logData['handlerType']=$this->handlerType;
+		$logData['handlerId']=$this->handlerId;
+		$logData['keepCount']=$this->keepCount;
+		$logData['originaKeepCount']=$this->originaKeepCount;
+		$logData['memo']=$this->memo;
+		return $logData;
 	}
 }
