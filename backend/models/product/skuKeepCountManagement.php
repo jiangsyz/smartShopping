@@ -11,6 +11,7 @@ class skuKeepCountManagement extends Component{
 	public $handlerType=NULL;
 	public $handlerId=NULL;
 	public $keepCount=NULL;
+	public $memo=NULL;
 	public $handler=false;
 	public $originaKeepCount=false;
 	//========================================

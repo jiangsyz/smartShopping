@@ -64,13 +64,14 @@ class sku extends salesUnit{
 	public function getDistributeType(){return $this->spu->getDistributeType();}
 	//========================================
 	//更新库存
-	public function updateKeepCount($handlerType,$handlerId,$keepCount){
+	public function updateKeepCount($handlerType,$handlerId,$keepCount,$memo=NULL){
 		//sku库存管理器,创建同时也就完成了库存修改
 		$data=array();
 		$data['sku']=$this;
 		$data['handlerType']=$handlerType;//操作者类型
 		$data['handlerId']=$handlerId;//操作者数据
 		$data['keepCount']=$keepCount;//修改后的库存
+		$data['memo']=$memo;//备注
 		new skuKeepCountManagement($data);
 	}
 	//========================================
