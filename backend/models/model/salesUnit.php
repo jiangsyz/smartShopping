@@ -23,5 +23,5 @@ abstract class salesUnit extends product{
 	abstract public function getKeepCount();
 	//========================================
 	//更新库存
-	abstract public function updateKeepCount($count);
+	abstract public function updateKeepCount($handlerType,$handlerId,$keepCount);
 }
