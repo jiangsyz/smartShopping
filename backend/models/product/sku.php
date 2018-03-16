@@ -63,14 +63,15 @@ class sku extends salesUnit{
 	//获取物流配送方式
 	public function getDistributeType(){return $this->spu->getDistributeType();}
 	//========================================
-	//更新库存($count=修改量)
-	public function updateKeepCount($count){
-		//被锁定不能修改库存
-		if($this->isLocked()) throw new SmartException("salesUnit locked");
-		//更新量不能为0
-		if($count==0) throw new SmartException("count==0");
-		//修改库存
-		$this->updateObj(array('count'=>$this->count+$count));
+	//更新库存
+	public function updateKeepCount($handlerType,$handlerId,$keepCount){
+		//sku库存管理器,创建同时也就完成了库存修改
+		$data=array();
+		$data['sku']=$this;
+		$data['handlerType']=$handlerType;//操作者类型
+		$data['handlerId']=$handlerId;//操作者数据
+		$data['keepCount']=$keepCount;//修改后的库存
+		new skuKeepCountManagement($data);
 	}
 	//========================================
 	//获取spu
