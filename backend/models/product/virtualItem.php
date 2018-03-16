@@ -23,5 +23,7 @@ class virtualItem extends salesUnit{
 	public function getDistributeType(){return distribute::TYPE_VIRTUAL;}
 	//========================================
 	//更新库存
-	public function updateKeepCount($count){throw new SmartException("virtual can't updateKeepCount");}
+	public function updateKeepCount($handlerType,$handlerId,$keepCount){
+		throw new SmartException("virtual can't updateKeepCount");
+	}
 }
