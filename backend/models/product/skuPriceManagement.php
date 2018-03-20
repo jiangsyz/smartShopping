@@ -11,10 +11,20 @@ class skuPriceManagement extends Component{
 	//========================================
 	//设置价格
 	public function updatePrice($level,$price,staff $staff){
-		//获取某个等级的价格
-		$p=skuMemberPrice::find()->where("`skuId`='{$this->sku->id}' AND `lv`='{$level}'")->one();
-		if(!$p) throw new SmartException("miss level price");
+		//获取原价
+		$where="`skuId`='{$this->sku->id}' AND `lv`='{$level}'";
+		$originaPrice=skuMemberPrice::find()->where($where)->one();
+		if(!$originaPrice) throw new SmartException("miss originaPrice");
+		//日志
+		$log=array();
+		$log['handlerType']=$staff->getSourceType();
+		$log['handlerId']=$staff->getSourceId();
+		$log['skuId']=$this->sku->getSourceId();
+		$log['lv']=$level;
+		$log['originaPrice']=$originaPrice->price;
+		$log['price']=$price;
+		skuPriceLog::addObj($log);
 		//改价
-		$p->updateObj(array('price'=>$price));
+		$originaPrice->updateObj(array('price'=>$price));
 	}
 }
