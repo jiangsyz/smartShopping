@@ -11,6 +11,7 @@ use backend\models\orderFactory\mainOrderFactory;
 use backend\models\order\orderConfirmation;
 use backend\models\order\orderChecker;
 use backend\models\token\tokenManagement;
+use backend\models\shoppingCart\shoppingCart;
 class BuyingController extends SmartWebController{
 	public $enableCsrfValidation=false;
 	//========================================
