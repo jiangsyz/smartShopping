@@ -8,8 +8,6 @@ use backend\models\model\source;
 use backend\models\member\address;
 //========================================
 class orderRecord extends source{
-	//是否需要收货地址
-	public $isNeedAddress=NULL;
 	//创建订单时所需的外部命令
 	public $command=NULL;
 	//========================================
