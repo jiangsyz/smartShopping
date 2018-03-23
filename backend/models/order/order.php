@@ -19,10 +19,14 @@ class order extends Component{
 	public $title=NULL;
 	//运费
 	public $freight=NULL;
-	//价格
+	//非会员价
 	public $price=NULL;
+	//会员价
+	public $memberPrice=NULL;
 	//成交价格
 	public $finalPrice=NULL;
+	//节省下的金额
+	public $reduction=NULL;
 	//支付费用(分单位)
 	public $pay=NULL;
 	//父订单
@@ -88,6 +92,8 @@ class order extends Component{
 		$data['factoryType']=$this->factoryType;
 		$data['title']=$this->title;
 		$data['price']=$this->price;
+		$data['memberPrice']=$this->memberPrice;
+		$data['reduction']=$this->reduction;
 		$data['finalPrice']=$this->finalPrice;
 		$data['freight']=$this->freight;
 		$data['pay']=$this->pay;
