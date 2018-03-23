@@ -35,8 +35,11 @@ class buyingRecord extends Component{
 		if(!($this->salesUnit instanceof $class)) throw new SmartException("is not salesUnit");
 	}
 	//========================================
-	//获取原价
-	public function getPrice(){return $this->salesUnit->getPrice()*$this->buyCount;}	
+	//获取非会员价
+	public function getPrice(){return $this->salesUnit->getLevelPrice(0)*$this->buyCount;}
+	//========================================
+	//获取会员价
+	public function getMemberPrice(){return $this->salesUnit->getLevelPrice(1)*$this->buyCount;}
 	//========================================
 	//获取成交价格
 	public function getFinalPrice(){
