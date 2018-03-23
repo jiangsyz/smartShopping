@@ -12,6 +12,8 @@ use backend\models\order\orderAccepter;
 use backend\models\orderFactory\mainOrderFactory;
 use backend\models\order\orderConfirmation;
 class ShoppingCartController extends SmartWebController{
+	public $enableCsrfValidation=false;
+	//========================================
 	//获取购物车信息
 	public function actionApiGetShoppingCart(){
 		try{
@@ -83,24 +85,32 @@ class ShoppingCartController extends SmartWebController{
     	}
 	}
 	//========================================
-	//删除购物车中某个记录
+	//删除购物车中多个记录
 	public function actionApiDel(){
 		try{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=Yii::$app->request->post('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
-			//获取资源类型
-			$sourceType=Yii::$app->request->get('sourceType',0);
-			//获取售卖单元id
-			$sourceId=Yii::$app->request->get('sourceId',0);
-			//查询该购买对象的购物车记录是否存在
-			$where="`memberId`='{$member->id}' AND `sourceType`='{$sourceType}' AND `sourceId`='{$sourceId}'";
-			$shoppingCartRecord=shoppingCartRecord::find()->where($where)->one();
-			if(!$shoppingCartRecord) throw new SmartException("miss shoppingCartRecord");
-			//删除
-			$shoppingCartRecord->delete();
+			//获取资源列表
+			$sourceList=Yii::$app->request->post('sourceList',false);
+			//处理资源列表
+			$sourceList=json_decode($sourceList,true);
+			if(!is_array($sourceList)) throw new SmartException("error sourceList");
+			//逐个删除
+			foreach($sourceList as $s){
+				//每个sourceList元素必须包含sourceType和sourceId
+				if(!isset($s['sourceType'])) throw new SmartException("miss sourceType");
+				if(!isset($s['sourceId'])) throw new SmartException("miss sourceId");
+				//查询该购买对象的购物车记录是否存在
+				$where="`memberId`='{$member->id}' ";
+				$where.="AND `sourceType`='{$s['sourceType']}' AND `sourceId`='{$s['sourceId']}'";
+				$shoppingCartRecord=shoppingCartRecord::find()->where($where)->one();
+				if(!$shoppingCartRecord) throw new SmartException("miss shoppingCartRecord");
+				//删除
+				$shoppingCartRecord->delete();
+			}
 			//提交事务
 			$trascation->commit();
 			//返回
