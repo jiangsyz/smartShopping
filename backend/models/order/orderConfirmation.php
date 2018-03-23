@@ -34,7 +34,8 @@ class orderConfirmation extends Component{
 			$salesUnitInfo['viceTitle']=$record->salesUnit->getSalesUnitName();
 			$salesUnitInfo['keepCount']=$record->salesUnit->getKeepCount();
 			$salesUnitInfo['cover']=$record->salesUnit->getCover();
-			$salesUnitInfo['price']=$record->salesUnit->getPrice($this->order->member);
+			$salesUnitInfo['price']=$record->salesUnit->getLevelPrice(0);
+			$salesUnitInfo['memberPrice']=$record->salesUnit->getLevelPrice(1);
 			$salesUnitInfo['finalPrice']=$record->salesUnit->getFinalPrice($this->order->member);
 			$salesUnitInfo['buyCount']=$record->buyCount;
 			$salesUnitInfo['totalPrice']=$record->getPrice();
