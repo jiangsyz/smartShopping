@@ -30,7 +30,8 @@ class member extends source implements shop{
 	public function getLevel(){
 		$now=time();
 		//查找在有效期内的会员等级记录
-		$memberLvs=memberLv::find()->where("`start`<='{$now}' AND `end`>='{$now}'")->all();
+		$where="`start`<='{$now}' AND `end`>='{$now}' AND `memberId`='{$this->id}'";
+		$memberLvs=memberLv::find()->where($where)->all();
 		//找出最高的等级
 		$level=0;
 		foreach($memberLvs as $v) if($v->lv>$level) $level=$v->lv;
