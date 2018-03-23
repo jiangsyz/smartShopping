@@ -19,8 +19,10 @@ abstract class orderFactory extends Component{
 	//========================================
 	//向工厂添加购买行为
 	abstract public function addBuyingRecord(buyingRecord $buyingRecord);
-	//获取价格(不含运费)
+	//获取非会员价格(不含运费)
 	abstract public function getPrice();
+	//获取会员价(不含运费)
+	abstract public function getMemberPrice();
 	//获取最终成交价格(不含运费)
 	abstract public function getFinalPrice();
 	//获取运费
@@ -46,7 +48,9 @@ abstract class orderFactory extends Component{
 		$order['title']=static::getTitle();
 		$order['freight']=static::getFreight();
 		$order['price']=static::getPrice();
+		$order['memberPrice']=static::getMemberPrice();
 		$order['finalPrice']=static::getFinalPrice();
+		$order['reduction']=$order['price']-$order['finalPrice'];
 		$order['pay']=static::getPay();
 		$this->order=new order($order);
 		//迭代初始化子订单
