@@ -12,6 +12,7 @@ class orderConfirmation extends Component{
 	//获取确认信息
 	public function getConfirmation(){
 		$data=$this->order->getOrderRecordData();
+		$data['pay']=$data['pay']/100;//将支付金额转为元
 		$data['isEffective']=$this->order->isEffective();
 		$data['effectiveChildOrderCount']=$this->order->effectiveChildOrderCount;
 		$data['effectiveBuyingRecordCount']=$this->order->effectiveBuyingRecordCount;
