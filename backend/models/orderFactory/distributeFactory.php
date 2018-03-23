@@ -22,11 +22,19 @@ class distributeFactory extends orderFactory{
 		$this->buyingRecords[$index]=$buyingRecord;
 	}
 	//========================================
-	//获取价格(不含运费)
+	//获取非会员价格(不含运费)
 	public function getPrice(){
 		$price=0;
 		//累加选中的购买行为的价格
 		foreach($this->buyingRecords as $r) if($r->isSelected) $price+=$r->getPrice();
+		return $price;
+	}
+	//========================================
+	//获取会员价(不含运费)
+	public function getMemberPrice(){
+		$price=0;
+		//累加选中的购买行为的价格
+		foreach($this->buyingRecords as $r) if($r->isSelected) $price+=$r->getMemberPrice();
 		return $price;
 	}
 	//========================================

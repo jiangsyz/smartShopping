@@ -25,11 +25,19 @@ class mainOrderFactory extends orderFactory{
 		$this->childFactories[$distributeType]->addBuyingRecord($buyingRecord);
 	}
 	//========================================
-	//获取价格(不含运费)
+	//获取非会员价格(不含运费)
 	public function getPrice(){
 		$price=0;
 		//累加子订单的价格
 		foreach($this->childFactories as $f) $price+=$f->getPrice();
+		return $price;
+	}
+	//========================================
+	//获取会员价(不含运费)
+	public function getMemberPrice(){
+		$price=0;
+		//累加子订单的价格
+		foreach($this->childFactories as $f) $price+=$f->getMemberPrice();
 		return $price;
 	}
 	//========================================
