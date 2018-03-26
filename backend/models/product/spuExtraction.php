@@ -5,8 +5,8 @@ use Yii;
 use yii\base\SmartException;
 //========================================
 class spuExtraction{
-	private $spu;
-	private $cheapestSku
+	private $spu=false;
+	private $cheapestSku=false;
 	//========================================
 	public function __construct(spu $spu){
 		$this->spu=$spu;
