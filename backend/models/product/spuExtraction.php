@@ -6,8 +6,13 @@ use yii\base\SmartException;
 //========================================
 class spuExtraction{
 	private $spu;
+	private $cheapestSku
 	//========================================
-	public function __construct(spu $spu){$this->spu=$spu;}
+	public function __construct(spu $spu){
+		$this->spu=$spu;
+		$this->cheapestSku=$this->spu->getCheapestSku();
+		if(!$this->cheapestSku) throw new SmartException("miss cheapestSku");
+	}
 	//========================================
 	//获取基础数据
 	public function getBasicData(){
@@ -19,9 +24,13 @@ class spuExtraction{
 		$data['cover']=$this->spu->getCover();
 		$data['detail']=$this->spu->detail;
 		$data['uri']=$this->spu->uri;
-		$data['price']=number_format(floatval($this->spu->getCheapestSku()->getPrice()),2);
-		$data['memberPrice']=number_format(floatval($this->spu->getCheapestSku()->getLevelPrice(1)),2);
+		$data['price']=formatPrice::formatPrice($this->cheapestSku->getLevelPrice(0));
+		$data['memberPrice']=formatPrice::formatPrice($this->cheapestSku->getLevelPrice(1));
+		$data['reduction']=formatPrice::formatPrice($this->cheapestSku->getReduction());
 		$data['isAllowSale']=$this->spu->isAllowSale();
 		return $data;
 	}
+	//========================================
+	//格式化价格
+	static public function formatPrice($price){return number_format(floatval($price),2);}
 }
