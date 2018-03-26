@@ -166,7 +166,7 @@ class MemberController extends SmartWebController{
     	}
 	}
 	//========================================
-	//添加会员推送平台id
+	//添加会员客服平台id
 	public function actionApiUploadCustomServiceUniqueId(){
 		try{
 			//开启事务
