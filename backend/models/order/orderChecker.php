@@ -17,9 +17,10 @@ class orderChecker extends Component{
 	//========================================
 	//检查
 	private function check(){
-		$this->checkEffect();
-		$this->checkeepCount();
-		$this->checkChildOrders();
+		$this->checkEffect();//检查订单有效性
+		$this->checkeepCount();//检查订单下的购买目标的库存
+		$this->checkIsAllowSale();//检查订单下的购买目标是否允许购买
+		$this->checkChildOrders();//检查子订单有效性
 	}
 	//========================================
 	//检查订单有效性
@@ -30,12 +31,28 @@ class orderChecker extends Component{
 	//检查订单下的购买目标的库存
 	private function checkeepCount(){
 		foreach($this->order->buyingRecords as $r){
-			//获取购买对象库存(已经加锁)
-			$keepCount=$r->salesUnit->getKeepCount();
+			//获取购买对象
+			$salesUnit=$r->salesUnit;
+			//获取购买对象全局编号
+			$salesUnitNo=$salesUnit->getSourceNo();
+			//获取购买对象库存
+			$keepCount=$salesUnit->getKeepCount();
 			//库存为NULL,代表没有库存限制
 			if($keepCount==NULL) continue;
 			//如果购买数量大于库存,报错
-			if($r->buyCount>$keepCount) throw new SmartException("need more keepCount");
+			if($r->buyCount>$keepCount) throw new SmartException("{$salesUnitNo} need more keepCount");
+		}
+	}
+	//========================================
+	//检查订单下的购买目标是否允许购买
+	private function checkIsAllowSale(){
+		foreach($this->order->buyingRecords as $r){
+			//获取购买对象
+			$salesUnit=$r->salesUnit;
+			//获取购买对象全局编号
+			$salesUnitNo=$salesUnit->getSourceNo();
+			//如果购买对象不允许销售,报错
+			if(!$salesUnit->isAllowSale()) throw new SmartException("{$salesUnitNo} is not allow sale");
 		}
 	}
 	//========================================
