@@ -47,7 +47,7 @@ class distributeFactory extends orderFactory{
 	}
 	//========================================
 	//获取运费
-	public function getFreight(){return NULL;}
+	public function getFreight(){return 0;}
 	//========================================
 	//获取订单标题
 	public function getTitle(){return $this->distributeType;}
