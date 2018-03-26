@@ -18,12 +18,16 @@ class orderRecord extends source{
 	public function init(){
 		parent::init();
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initStatus"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this,"addAddress"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this,"addMemo"));
 	}
 	//========================================
 	//初始化创建时间
 	public function initCreateTime(){$this->createTime=time();}
+	//========================================
+	//初始化订单核心状态
+	public function initStatus(){$this->status=0;}
 	//========================================
 	//添加收货地址
 	public function addAddress(){
