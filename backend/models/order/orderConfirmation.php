@@ -4,6 +4,7 @@ namespace backend\models\order;
 use Yii;
 use yii\base\SmartException;
 use yii\base\Component;
+use backend\models\product\formatPrice;
 //========================================
 class orderConfirmation extends Component{
 	//订单
@@ -12,7 +13,10 @@ class orderConfirmation extends Component{
 	//获取确认信息
 	public function getConfirmation(){
 		$data=$this->order->getOrderRecordData();
-		$data['pay']=$data['pay']/100;//将支付金额转为元
+		$data['price']=formatPrice::formatPrice($data['price']);
+		$data['memberPrice']=formatPrice::formatPrice($data['memberPrice']);
+		$data['reduction']=formatPrice::formatPrice($data['reduction']);
+		$data['pay']=formatPrice::formatPrice($data['pay']/100);
 		$data['isEffective']=$this->order->isEffective();
 		$data['effectiveChildOrderCount']=$this->order->effectiveChildOrderCount;
 		$data['effectiveBuyingRecordCount']=$this->order->effectiveBuyingRecordCount;
@@ -26,18 +30,19 @@ class orderConfirmation extends Component{
 		//获取购物行为确认信息
 		foreach($this->order->buyingRecords as $record){
 			$salesUnitInfo=array();
-			$salesUnitInfo['salesUnitNo']=$record->salesUnit->getSourceNo();
-			$salesUnitInfo['salesUnitType']=$record->salesUnit->getSourceType();
-			$salesUnitInfo['salesUnitId']=$record->salesUnit->getSourceId();
-			$salesUnitInfo['productType']=$record->salesUnit->getProductType();
-			$salesUnitInfo['productId']=$record->salesUnit->getProductId();
-			$salesUnitInfo['title']=$record->salesUnit->getProductName();
-			$salesUnitInfo['viceTitle']=$record->salesUnit->getSalesUnitName();
-			$salesUnitInfo['keepCount']=$record->salesUnit->getKeepCount();
-			$salesUnitInfo['cover']=$record->salesUnit->getCover();
-			$salesUnitInfo['price']=$record->salesUnit->getLevelPrice(0);
-			$salesUnitInfo['memberPrice']=$record->salesUnit->getLevelPrice(1);
-			$salesUnitInfo['finalPrice']=$record->salesUnit->getFinalPrice($this->order->member);
+			$salesUnit=$record->salesUnit;
+			$salesUnitInfo['salesUnitNo']=$salesUnit->getSourceNo();
+			$salesUnitInfo['salesUnitType']=$salesUnit->getSourceType();
+			$salesUnitInfo['salesUnitId']=$salesUnit->getSourceId();
+			$salesUnitInfo['productType']=$salesUnit->getProductType();
+			$salesUnitInfo['productId']=$salesUnit->getProductId();
+			$salesUnitInfo['title']=$salesUnit->getProductName();
+			$salesUnitInfo['viceTitle']=$salesUnit->getSalesUnitName();
+			$salesUnitInfo['keepCount']=$salesUnit->getKeepCount();
+			$salesUnitInfo['cover']=$salesUnit->getCover();
+			$salesUnitInfo['price']=formatPrice::formatPrice($salesUnit->getLevelPrice(0));
+			$salesUnitInfo['memberPrice']=formatPrice::formatPrice($salesUnit->getLevelPrice(1));
+			$salesUnitInfo['finalPrice']=$salesUnit->getFinalPrice($this->order->member);
 			$salesUnitInfo['buyCount']=$record->buyCount;
 			$salesUnitInfo['totalPrice']=$record->getPrice();
 			$salesUnitInfo['totalFinalPrice']=$record->getFinalPrice();
