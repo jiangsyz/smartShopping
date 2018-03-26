@@ -13,7 +13,21 @@ class SiteController extends SmartWebController{
 	public $enableCsrfValidation=false;
 	//========================================
     public function actionIndex(){
-    	Yii::$app->smartQiNiu->uploadSimpleFile($_FILES["file"]["tmp_name"]);
+    	/*
+        try{
+            $command=array();
+            $command['attach']="支付测试";
+            $command['body']="APP支付测试";
+            $command['out_trade_no']=$this->runningId;
+            $command['total_fee']="1";
+            //返回验证码订单号
+            $data=Yii::$app->smartWechatPay->applyPay("android",$command);
+            $this->response(1,array('error'=>0,'data'=>$data));
+        }
+        catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+        */
+        $data=array(array('sourceType'=>2,'sourceId'=>1));
+        echo json_encode($data);
     }
     //========================================
     public function actionApiGetQiNiuToken(){
