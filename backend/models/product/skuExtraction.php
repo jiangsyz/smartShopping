@@ -19,8 +19,9 @@ class skuExtraction{
 		$data['productType']=$this->sku->getProductType();
 		$data['productId']=$this->sku->getProductId();
 		$data['title']=$this->sku->getSalesUnitName();
-		$data['price']=number_format(floatval($this->sku->getPrice()),2);
-		$data['memberPrice']=number_format(floatval($this->sku->getLevelPrice(1)),2);
+		$data['price']=formatPrice::formatPrice($this->sku->getLevelPrice(0));
+		$data['memberPrice']=formatPrice::formatPrice($this->sku->getLevelPrice(1));
+		$data['reduction']=formatPrice::formatPrice($this->sku->getReduction());
 		$data['keepCout']=$this->sku->getKeepCount();
 		$data['shoppingCartCount']=$shoppingCartRecord?$shoppingCartRecord->count:0;
 		$data['isAllowSale']=$this->sku->isAllowSale();
