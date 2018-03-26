@@ -21,15 +21,21 @@ class address extends SmartActiveRecord{
 	//初始化
 	public function init(){
 		parent::init();
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initIsDeled"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"checkArea"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"checkMember"));
-		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"checkIsDeled"));
 		$this->on(self::EVENT_BEFORE_UPDATE,array($this,"checkArea"));
 		$this->on(self::EVENT_BEFORE_UPDATE,array($this,"checkMember"));
+		$this->on(self::EVENT_BEFORE_UPDATE,array($this,"checkIsDeled"));
 	}
 	//========================================
 	//初始化时间
 	public function initCreateTime(){$this->createTime=time();}
+	//========================================
+	//初始化软删除状态
+	public function initIsDeled(){$this->isDeled=0;}
 	//========================================
 	//获取会员
 	public function getMember(){return $this->hasOne(member::className(),array('id'=>'memberId'));}
@@ -49,4 +55,12 @@ class address extends SmartActiveRecord{
 	//========================================
 	//检查会员
 	public function checkMember(){if(!$this->member) throw new SmartException("miss member");}
+	//========================================
+	//检查软删除状态
+	public function checkIsDeled(){
+		if($this->isDeled) throw new SmartException("address is deled");
+	}
+	//========================================
+	//重载delete进行软删除
+	public function delete(){$this->updateObj(array('isDeled'=>1));}
 }
