@@ -5,6 +5,7 @@ use Yii;
 use yii\base\SmartException;
 use yii\db\SmartActiveRecord;
 use backend\models\member\member;
+use backend\models\product\salesUnitExtraction;
 //========================================
 abstract class salesUnit extends product{
 	//获取售卖单元名称
@@ -18,6 +19,9 @@ abstract class salesUnit extends product{
 	//========================================
 	//获取成为会员后的节省金额
 	public function getReduction(){return $this->getLevelPrice(0)-$this->getLevelPrice(1);}
+	//========================================
+	//获取salesUnit数据提取器
+	public function getExtraction(){return new salesUnitExtraction($this);}
 	//========================================
 	//获取会员最终成交价格
 	abstract public function getFinalPrice(member $member);
