@@ -30,7 +30,4 @@ class spuExtraction{
 		$data['isAllowSale']=$this->spu->isAllowSale();
 		return $data;
 	}
-	//========================================
-	//格式化价格
-	static public function formatPrice($price){return number_format(floatval($price),2);}
 }
