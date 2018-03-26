@@ -42,10 +42,10 @@ class orderConfirmation extends Component{
 			$salesUnitInfo['cover']=$salesUnit->getCover();
 			$salesUnitInfo['price']=formatPrice::formatPrice($salesUnit->getLevelPrice(0));
 			$salesUnitInfo['memberPrice']=formatPrice::formatPrice($salesUnit->getLevelPrice(1));
-			$salesUnitInfo['finalPrice']=$salesUnit->getFinalPrice($this->order->member);
+			$salesUnitInfo['finalPrice']=formatPrice::formatPrice($salesUnit->getFinalPrice($this->order->member));
 			$salesUnitInfo['buyCount']=$record->buyCount;
-			$salesUnitInfo['totalPrice']=$record->getPrice();
-			$salesUnitInfo['totalFinalPrice']=$record->getFinalPrice();
+			$salesUnitInfo['totalPrice']=formatPrice::formatPrice($record->getPrice());
+			$salesUnitInfo['totalFinalPrice']=formatPrice::formatPrice($record->getFinalPrice());
 			$salesUnitInfo['isSelected']=$record->isSelected;
 			$data['salesUnits'][]=$salesUnitInfo;
 		}
