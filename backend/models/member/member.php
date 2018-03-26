@@ -38,6 +38,11 @@ class member extends source implements shop{
 		return $level;
 	}
 	//========================================
+	//获取地址簿
+	public function getAddressList(){
+		return address::find()->where("`memberId`='{$this->id}' AND `isDeled`='0'")->all();
+	}
+	//========================================
 	//获取会员信息的hash
 	public function hash(){
 		$data=$this->getData();
