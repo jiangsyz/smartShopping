@@ -122,7 +122,7 @@ class order extends Component{
 			$orderBuyingRecord['sourceId']=$buyingRecord->salesUnit->id;
 			$orderBuyingRecord['buyingCount']=$buyingRecord->buyCount;
 			$orderBuyingRecord['price']=$buyingRecord->salesUnit->getPrice();
-			$orderBuyingRecord['finalPrice']=$buyingRecord->salesUnit->getFinalPrice();
+			$orderBuyingRecord['finalPrice']=$buyingRecord->salesUnit->getFinalPrice($this->member);
 			orderBuyingRecord::addObj($orderBuyingRecord);
 		}
 		//处理子订单
