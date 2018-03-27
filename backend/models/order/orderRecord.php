@@ -48,6 +48,13 @@ class orderRecord extends source{
 		return self::findBySql($sql)->all();
 	}
 	//========================================
+	//获取购买行为(加锁)
+	public function getBuyingRecords(){
+		$table=orderBuyingRecord::tableName();
+		$sql="SELECT * FROM {$table} WHERE `orderId`='{$this->id}' FOR UPDATE";
+		return orderBuyingRecord::findBySql($sql)->all();	
+	}
+	//========================================
 	//添加订单属性
 	public function addProperty($key,$val){
 		$orderProperty=array();
