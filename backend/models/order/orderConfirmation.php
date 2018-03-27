@@ -49,6 +49,9 @@ class orderConfirmation extends Component{
 			$salesUnitInfo['isSelected']=$record->isSelected;
 			$data['salesUnits'][]=$salesUnitInfo;
 		}
+		//hash
+		$data['hash']=md5(json_encode($data));
+		//返回数据
 		return $data;
 	}
 }
