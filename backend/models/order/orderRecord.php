@@ -21,6 +21,7 @@ class orderRecord extends source{
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initStatus"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this,"addAddress"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this,"addMemo"));
+		$this->on(self::EVENT_AFTER_INSERT,array($this,"addDate"));
 	}
 	//========================================
 	//初始化创建时间
@@ -28,6 +29,15 @@ class orderRecord extends source{
 	//========================================
 	//初始化订单核心状态
 	public function initStatus(){$this->status=0;}
+	//========================================
+	//添加订单属性
+	public function addProperty($key,$val){
+		$orderProperty=array();
+		$orderProperty['orderId']=$this->id;
+		$orderProperty['propertyKey']=$key;
+		$orderProperty['propertyVal']=$val;
+		orderProperty::addObj($orderProperty);
+	}
 	//========================================
 	//添加收货地址
 	public function addAddress(){
@@ -38,11 +48,11 @@ class orderRecord extends source{
 		//客户端没有提交地址
 		if(!isset($this->command[$addressIndex])) return;
 		//获取地址
-		$address=address::find()->where("`id`='{$this->command[$addressIndex]}'")->one();
+		$where="`id`='{$this->command[$addressIndex]}' AND `memberId`='{$this->memberId}' AND `isDeled`='0'";
+		$address=address::find()->where($where)->one();
 		if(!$address) throw new SmartException("miss address");
 		//添加收货地址
-		$orderAddress=array('orderId'=>$this->id,'addressInfo'=>json_encode($address->getData()));
-		orderAddress::addObj($orderAddress);
+		$this->addProperty('address',json_encode($address->getData()));
 	}
 	//========================================
 	//添加备注
@@ -51,7 +61,19 @@ class orderRecord extends source{
 		$memoIndex='memo_'.$this->index;
 		//客服端没有为该订单指定备注
 		if(!isset($this->command[$memoIndex])) return;
-		//增加订单备注
-		orderMemo::addObj(array('orderId'=>$this->id,'memo'=>$this->command[$memoIndex]));
+		//添加会员备注
+		$this->addProperty('memberMemo',$this->command[$memoIndex]);
+	}
+	//========================================
+	//添加期望收获日期
+	public function addDate(){
+		//确定命令中表明该订单期望收获日期的索引
+		$dateIndex='date_'.$this->index;
+		//客服端没有为该订单指定备注
+		if(!isset($this->command[$dateIndex])) return;
+		//期望收货日期目前只支持1/2/4
+		if(!in_array($this->command[$dateIndex],array(1,2,4))) throw new SmartException("error date");
+		//添加期望收货日期
+		$this->addProperty('date',$this->command[$dateIndex]);
 	}
 }
