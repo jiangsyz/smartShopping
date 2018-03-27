@@ -19,6 +19,7 @@ class orderRecord extends source{
 		parent::init();
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initStatus"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initLocked"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this,"addAddress"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this,"addMemo"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this,"addDate"));
@@ -29,6 +30,23 @@ class orderRecord extends source{
 	//========================================
 	//初始化订单核心状态
 	public function initStatus(){$this->status=0;}
+	//========================================
+	//初始化订单锁定状态
+	public function initLocked(){$this->locked=0;}
+	//========================================
+	//获取父订单(加锁)
+	public function getParentOrder(){
+		$table=self::tableName();
+		$sql="SELECT * FROM {$table} WHERE `id`='{$this->parentId}' FOR UPDATE";
+		return self::findBySql($sql)->one();
+	}
+	//========================================
+	//获取子订单(加锁)
+	public function getChildOrders(){
+		$table=self::tableName();
+		$sql="SELECT * FROM {$table} WHERE `parentId`='{$this->id}' FOR UPDATE";
+		return self::findBySql($sql)->all();
+	}
 	//========================================
 	//添加订单属性
 	public function addProperty($key,$val){
