@@ -41,6 +41,33 @@ class MarkController extends SmartWebController{
     	}
 	}
 	//========================================
+	//取消标记
+	public function actionApiCancelMark(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取标记id
+			$markId=Yii::$app->request->get('markId',0);
+			//获取标记
+			$where="`id`='{$markId}' AND `memberId`='{$member->id}'";
+			$mark=mark::find()->where($where)->one(); if(!$mark) throw new SmartException("miss mark");
+			//删除标记
+			$mark->delete();
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
 	//获取对于某个资源的标记者
 	public function actionApiGetCollectors(){
 		try{
