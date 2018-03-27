@@ -25,7 +25,6 @@ class address extends SmartActiveRecord{
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initIsDeled"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"checkArea"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"checkMember"));
-		$this->on(self::EVENT_BEFORE_INSERT,array($this,"checkIsDeled"));
 		$this->on(self::EVENT_BEFORE_UPDATE,array($this,"checkArea"));
 		$this->on(self::EVENT_BEFORE_UPDATE,array($this,"checkMember"));
 		$this->on(self::EVENT_BEFORE_UPDATE,array($this,"checkIsDeled"));
@@ -58,7 +57,7 @@ class address extends SmartActiveRecord{
 	//========================================
 	//检查软删除状态
 	public function checkIsDeled(){
-		if($this->isDeled) throw new SmartException("address is deled");
+		if($this->oldAttributes['isDeled']) throw new SmartException("address is deled");
 	}
 	//========================================
 	//重载delete进行软删除
