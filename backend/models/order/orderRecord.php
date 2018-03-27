@@ -10,6 +10,14 @@ use backend\models\member\address;
 class orderRecord extends source{
 	//创建订单时所需的外部命令
 	public $command=NULL;
+	//属性管理器
+	public $propertyManagement=false;
+	//地址管理器
+	public $addressManagement=false;
+	//备注管理器
+	public $memoManagement=false;
+	//预期送货日管理器
+	public $dateManagement=false;
 	//========================================
 	//返回资源类型
 	public function getSourceType(){return source::TYPE_ORDER_RECORD;}
@@ -17,12 +25,16 @@ class orderRecord extends source{
 	//初始化
 	public function init(){
 		parent::init();
+		$this->propertyManagement=new orderPropertyManagement(array('orderRecord'=>$this));
+		$this->addressManagement=new orderAddressManagement(array('orderRecord'=>$this));
+		$this->memoManagement=new orderMemoManagement(array('orderRecord'=>$this));
+		$this->dateManagement=new orderDateManagement(array('orderRecord'=>$this));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initStatus"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initLocked"));
-		$this->on(self::EVENT_AFTER_INSERT,array($this,"addAddress"));
-		$this->on(self::EVENT_AFTER_INSERT,array($this,"addMemo"));
-		$this->on(self::EVENT_AFTER_INSERT,array($this,"addDate"));
+		$this->on(self::EVENT_AFTER_INSERT,array($this->addressManagement,"addAddress"));
+		$this->on(self::EVENT_AFTER_INSERT,array($this->memoManagement,"addMemberMemo"));
+		$this->on(self::EVENT_AFTER_INSERT,array($this->dateManagement,"addDate"));
 	}
 	//========================================
 	//初始化创建时间
@@ -53,52 +65,5 @@ class orderRecord extends source{
 		$table=orderBuyingRecord::tableName();
 		$sql="SELECT * FROM {$table} WHERE `orderId`='{$this->id}' FOR UPDATE";
 		return orderBuyingRecord::findBySql($sql)->all();	
-	}
-	//========================================
-	//添加订单属性
-	public function addProperty($key,$val){
-		$orderProperty=array();
-		$orderProperty['orderId']=$this->id;
-		$orderProperty['propertyKey']=$key;
-		$orderProperty['propertyVal']=$val;
-		orderProperty::addObj($orderProperty);
-	}
-	//========================================
-	//添加收货地址
-	public function addAddress(){
-		//不需要收货地址的情况
-		if(!$this->isNeedAddress) return;
-		//确定命令中表明该订单记录收货地址的索引
-		$addressIndex='address_'.$this->index;
-		//客户端没有提交地址
-		if(!isset($this->command[$addressIndex])) return;
-		//获取地址
-		$where="`id`='{$this->command[$addressIndex]}' AND `memberId`='{$this->memberId}' AND `isDeled`='0'";
-		$address=address::find()->where($where)->one();
-		if(!$address) throw new SmartException("miss address");
-		//添加收货地址
-		$this->addProperty('address',json_encode($address->getData()));
-	}
-	//========================================
-	//添加备注
-	public function addMemo(){
-		//确定命令中表明该订单备注的索引
-		$memoIndex='memo_'.$this->index;
-		//客服端没有为该订单指定备注
-		if(!isset($this->command[$memoIndex])) return;
-		//添加会员备注
-		$this->addProperty('memberMemo',$this->command[$memoIndex]);
-	}
-	//========================================
-	//添加期望收获日期
-	public function addDate(){
-		//确定命令中表明该订单期望收获日期的索引
-		$dateIndex='date_'.$this->index;
-		//客服端没有为该订单指定备注
-		if(!isset($this->command[$dateIndex])) return;
-		//期望收货日期目前只支持1/2/4
-		if(!in_array($this->command[$dateIndex],array(1,2,4))) throw new SmartException("error date");
-		//添加期望收货日期
-		$this->addProperty('date',$this->command[$dateIndex]);
-	}
+	}	
 }
