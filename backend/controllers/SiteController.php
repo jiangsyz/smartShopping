@@ -13,7 +13,6 @@ class SiteController extends SmartWebController{
 	public $enableCsrfValidation=false;
 	//========================================
     public function actionIndex(){
-    	/*
         try{
             $command=array();
             $command['attach']="支付测试";
@@ -25,9 +24,6 @@ class SiteController extends SmartWebController{
             $this->response(1,array('error'=>0,'data'=>$data));
         }
         catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
-        */
-        $data=array(array('sourceType'=>2,'sourceId'=>1));
-        echo json_encode($data);
     }
     //========================================
     public function actionApiGetQiNiuToken(){
