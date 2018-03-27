@@ -71,12 +71,12 @@ class ShoppingCartController extends SmartWebController{
 				$data['sourceType']=$sourceType;
 				$data['sourceId']=$sourceId;
 				$data['count']=$count;
-				shoppingCartRecord::addObj($data);
+				$shoppingCartRecord=shoppingCartRecord::addObj($data);
 			}
 			//提交事务
 			$trascation->commit();
 			//返回
-			$this->response(1,array('error'=>0));
+			$this->response(1,array('error'=>0,'data'=>$shoppingCartRecord->count));
 		}
 		catch(Exception $e){
 			//回滚
