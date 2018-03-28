@@ -47,7 +47,8 @@ class orderPropertyManagement extends Component{
 			//初始化propertyKey为索引的小池
 			if(!isset($this->pList[$p->propertyKey])) $this->pList[$p->propertyKey]=array();
 			//将属性值加入池中
-			$this->pList[$p->propertyKey][]=$p->propertyVal; 
+			$data=array('val'=>$p->propertyVal,'time'=>$p->createTime);
+			$this->pList[$p->propertyKey][]=$data;
 		}
 	}
 	//========================================
