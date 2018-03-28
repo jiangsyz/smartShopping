@@ -11,13 +11,12 @@ class orderPropertyManagement extends Component{
 	//========================================
 	//订单记录
 	public $orderRecord=NULL;
-	//属性池
-	public $pList=array();
+	//属性池(不能直接取,一定要通过getPropertyList()取)
+	private $pList=false;
 	//========================================
 	//初始化
 	public function init(){
 		parent::init();
-		$this->updatePropertyList();
 		$this->on(self::EVENT_PROPERTY_CHANGED,array($this,"updatePropertyList"));
 	}
 	//========================================
@@ -50,5 +49,19 @@ class orderPropertyManagement extends Component{
 			//将属性值加入池中
 			$this->pList[$p->propertyKey][]=$p->propertyVal; 
 		}
+	}
+	//========================================
+	//获取属性池
+	public function getPropertyList(){
+		if($this->pList===false) $this->updatePropertyList();
+		return $this->pList;
+	}
+	//========================================
+	//获取具体某个属性
+	public function getProperty($key){
+		//获取属性池
+		$pList=$this->getPropertyList();
+		//返回具体属性值
+		if(!isset($pList[$key])) return NULL; else return $pList[$key];
 	}
 }
