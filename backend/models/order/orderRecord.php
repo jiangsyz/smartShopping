@@ -16,7 +16,7 @@ class orderRecord extends source{
 	public $addressManagement=false;
 	//备注管理器
 	public $memoManagement=false;
-	//预期送货日管理器
+	//预期收货日期管理器
 	public $dateManagement=false;
 	//========================================
 	//返回资源类型
