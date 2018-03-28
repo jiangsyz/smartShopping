@@ -30,7 +30,7 @@ class orderRecord extends source{
 		$this->memoManagement=new orderMemoManagement(array('orderRecord'=>$this));
 		$this->dateManagement=new orderDateManagement(array('orderRecord'=>$this));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
-		$this->on(self::EVENT_BEFORE_INSERT,array($this,"payStatus"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initPayStatus"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCancelStatus"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initLocked"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this->addressManagement,"addAddress"));
