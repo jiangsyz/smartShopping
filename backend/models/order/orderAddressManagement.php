@@ -47,8 +47,7 @@ class orderAddressManagement extends Component{
 		if(!$oRecord->parentId) return NULL;
 		//如果是子订单找不到地址,获取父订单地址
 		$parent=$oRecord->parentOrder;
-		if(!$parent) 
-			throw new SmartException("order {$oRecord->id} miss parent");
+		if(!$parent) throw new SmartException("order {$oRecord->id} miss parent");
 		return $parent->addressManagement->getAddress();
 	}
 }
