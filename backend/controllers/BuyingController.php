@@ -111,6 +111,8 @@ class BuyingController extends SmartWebController{
 			new orderChecker(array('order'=>$orderAccepter->mainOrder));
 			//创建订单记录
 			$orderRecord=$orderAccepter->mainOrder->createOrderRecord($_POST);
+			//检查订单记录
+			$orderRecord->checker->check();
 			//创建支付信息
 			$payCommand=array();
             $payCommand['attach']="订单支付";
@@ -162,6 +164,8 @@ class BuyingController extends SmartWebController{
 			new orderChecker(array('order'=>$orderAccepter->mainOrder));
 			//创建订单记录
 			$orderRecord=$orderAccepter->mainOrder->createOrderRecord($_POST);
+			//检查订单记录
+			$orderRecord->checker->check();
 			//创建支付信息
 			$payCommand=array();
             $payCommand['attach']="订单支付";
