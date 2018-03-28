@@ -30,7 +30,8 @@ class orderRecord extends source{
 		$this->memoManagement=new orderMemoManagement(array('orderRecord'=>$this));
 		$this->dateManagement=new orderDateManagement(array('orderRecord'=>$this));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
-		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initStatus"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"payStatus"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCancelStatus"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initLocked"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this->addressManagement,"addAddress"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this->memoManagement,"addMemberMemo"));
@@ -40,8 +41,11 @@ class orderRecord extends source{
 	//初始化创建时间
 	public function initCreateTime(){$this->createTime=time();}
 	//========================================
-	//初始化订单核心状态
-	public function initStatus(){$this->status=0;}
+	//初始化订单支付状态
+	public function initPayStatus(){$this->payStatus=0;}
+	//========================================
+	//初始化订单取消状态
+	public function initCancelStatus(){$this->cancelStatus=0;}
 	//========================================
 	//初始化订单锁定状态
 	public function initLocked(){$this->locked=0;}
