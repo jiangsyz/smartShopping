@@ -20,4 +20,25 @@ class orderMemoManagement extends Component{
 		//添加会员备注
 		$oRecord->propertyManagement->addProperty('memberMemo',$oRecord->command[$memoIndex]);
 	}
+	//========================================
+	//获取备注
+	public function getMemo($type){
+		//订单
+		$oRecord=$this->orderRecord;
+		//根据type确定取会员备注或员工备注
+		$key=false;
+		if($type==1) $key='memberMemo';
+		if($type==2) $key='staffMemo';
+		if(!$key) throw new SmartException("error memo type");
+		//获取备注属性
+		$memoList=$oRecord->propertyManagement->getProperty($key);
+		//当前订单有备注,直接返回
+		if($memoList) return $memoList;
+		//如果是主订单找不到备注,返回NULL
+		if(!$oRecord->parentId) return NULL;
+		//如果是子订单找不到备注,获取父订单备注
+		$parent=$oRecord->parentOrder;
+		if(!$parent) throw new SmartException("order {$oRecord->id} miss parent");
+		return $parent->memoManagement->getMemo($type);
+	}
 }
