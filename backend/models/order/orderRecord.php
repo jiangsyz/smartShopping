@@ -18,6 +18,8 @@ class orderRecord extends source{
 	public $memoManagement=false;
 	//预期收货日期管理器
 	public $dateManagement=false;
+	//检查器
+	public $checker=false;
 	//========================================
 	//返回资源类型
 	public function getSourceType(){return source::TYPE_ORDER_RECORD;}
@@ -29,6 +31,7 @@ class orderRecord extends source{
 		$this->addressManagement=new orderAddressManagement(array('orderRecord'=>$this));
 		$this->memoManagement=new orderMemoManagement(array('orderRecord'=>$this));
 		$this->dateManagement=new orderDateManagement(array('orderRecord'=>$this));
+		$this->checker=new orderRecordChecker(array('orderRecord'=>$this));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initPayStatus"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCancelStatus"));
