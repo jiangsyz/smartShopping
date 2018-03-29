@@ -38,8 +38,8 @@ class orderRelationshipManagement extends Component{
 		//用栈代替递归,寻找直接子订单和间接子订单
 		$checkList=$posterities=$this->getChildren($lockFlag);
 		while(!empty($checkList)){
-			$ckeck=array_shift($checkList);
-			$children=$ckeck->relationManagement->getChildren($lockFlag);
+			$check=array_shift($checkList);
+			$children=$check->relationManagement->getChildren($lockFlag);
 			foreach($children as $c) $checkList[]=$posterities[]=$c;
 		}
 		//返回后代订单
