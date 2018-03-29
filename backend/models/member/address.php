@@ -36,6 +36,16 @@ class address extends SmartActiveRecord{
 	//初始化软删除状态
 	public function initIsDeled(){$this->isDeled=0;}
 	//========================================
+	//获取数据
+	public function getData(){
+		//获取收获地址基础数据
+		$data=parent::getData();
+		//冗余完整区域信息		
+		$data['fullAreaName']=$this->area->full_area_name;
+		//返回数据
+		return $data;
+	}
+	//========================================
 	//获取会员
 	public function getMember(){return $this->hasOne(member::className(),array('id'=>'memberId'));}
 	//========================================
