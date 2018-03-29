@@ -22,7 +22,7 @@ class spuExtraction{
 		$data['title']=$this->spu->getProductName();
 		$data['desc']=$this->spu->getProductDesc();
 		$data['cover']=$this->spu->getCover();
-		$data['detail']=$this->spu->detail;
+		$data['detail']=base64_encode($this->spu->detail);
 		$data['uri']=$this->spu->uri;
 		$data['price']=formatPrice::formatPrice($this->cheapestSku->getLevelPrice(0));
 		$data['memberPrice']=formatPrice::formatPrice($this->cheapestSku->getLevelPrice(1));
