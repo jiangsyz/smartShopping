@@ -13,6 +13,7 @@ use backend\models\product\sku;
 use backend\models\product\virtualItem;
 use backend\models\staff\staff;
 use backend\models\shoppingCart\shoppingCartRecord;
+use backend\models\order\orderRecord;
 use backend\models\token\tokenManagement;
 //========================================
 abstract class source extends SmartActiveRecord{
@@ -67,6 +68,7 @@ abstract class source extends SmartActiveRecord{
 		if($sourceType==self::TYPE_MEMBER) return member::className();
 		if($sourceType==self::TYPE_STAFF) return staff::className();
 		if($sourceType==self::TYPE_VIRTUAL_ITEM) return virtualItem::className();
+		if($sourceType==self::TYPE_ORDER_RECORD) return orderRecord::className();
 		throw new SmartException("error sourceType");
 	}
 	//========================================
