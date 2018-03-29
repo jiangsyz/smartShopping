@@ -37,9 +37,9 @@ class address extends SmartActiveRecord{
 	public function initIsDeled(){$this->isDeled=0;}
 	//========================================
 	//获取数据
-	public function getData(){
+	public function getData($keys=array()){
 		//获取收获地址基础数据
-		$data=parent::getData();
+		$data=parent::getData($keys);
 		//冗余完整区域信息		
 		$data['fullAreaName']=$this->area->full_area_name;
 		//返回数据
