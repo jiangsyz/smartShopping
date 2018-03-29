@@ -18,18 +18,17 @@ class skuKeepCountManagement extends Component{
 	//初始化
 	public function init(){
 		parent::init();
-		//获取操作者
-		$this->handler=source::getSource($this->handlerType,$this->handlerId);
 		//获取原价
 		$this->originaKeepCount=$this->sku->count;
+		//获取操作者
+		$this->handler=source::getSource($this->handlerType,$this->handlerId);
 		if(!$this->handler) throw new SmartException("error handler");
 		//操作者被锁定不能修改
 		if($this->handler->isLocked()) throw new SmartException("handler isLocked");
 		//检查修改后的库存数
 		if($this->keepCount<0) throw new SmartException("error keepCount");
 		//检查是否修改
-		if($this->keepCount==$this->originaKeepCount) 
-			throw new SmartException("keepCount==originaKeepCount");
+		if($this->keepCount==$this->originaKeepCount) throw new SmartException("keepCount==origina");
 		//修改
 		$this->sku->updateObj(array('count'=>$this->keepCount));
 		//记录日志
