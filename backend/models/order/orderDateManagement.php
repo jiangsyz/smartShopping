@@ -38,7 +38,7 @@ class orderDateManagement extends Component{
 		//如果是主订单找不到预期收货日期,返回NULL
 		if(!$oRecord->parentId) return NULL;
 		//如果是子订单找不到预期收货日期,获取父订单预期收货日期
-		$parent=$oRecord->parentOrder;
+		$parent=$oRecord->relationManagement->getParent();
 		if(!$parent) throw new SmartException("order {$oRecord->id} miss parent");
 		return $parent->dateManagement->getDate();
 	}
