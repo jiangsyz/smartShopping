@@ -22,6 +22,7 @@ class salesUnitExtraction{
 		$data['title']=$this->salesUnit->getSalesUnitName();
 		$data['price']=formatPrice::formatPrice($this->salesUnit->getLevelPrice(0));
 		$data['memberPrice']=formatPrice::formatPrice($this->salesUnit->getLevelPrice(1));
+		$data['finalPrice']=formatPrice::formatPrice($this->salesUnit->getFinalPrice($member));
 		$data['reduction']=formatPrice::formatPrice($this->salesUnit->getReduction());
 		$data['keepCout']=$this->salesUnit->getKeepCount();
 		$data['shoppingCartCount']=$shoppingCartRecord?$shoppingCartRecord->count:0;
