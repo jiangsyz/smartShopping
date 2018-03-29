@@ -18,6 +18,10 @@ class orderRecord extends source{
 	public $memoManagement=false;
 	//预期收货日期管理器
 	public $dateManagement=false;
+	//订单关系管理器
+	public $relationManagement=false;
+	//购买行为管理器
+	public $buyingManagement=false;
 	//检查器
 	public $checker=false;
 	//========================================
@@ -31,6 +35,8 @@ class orderRecord extends source{
 		$this->addressManagement=new orderAddressManagement(array('orderRecord'=>$this));
 		$this->memoManagement=new orderMemoManagement(array('orderRecord'=>$this));
 		$this->dateManagement=new orderDateManagement(array('orderRecord'=>$this));
+		$this->relationManagement=new orderRelationshipManagement(array('orderRecord'=>$this));
+		$this->buyingManagement=new orderBuyingManagement(array('orderRecord'=>$this));
 		$this->checker=new orderRecordChecker(array('orderRecord'=>$this));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initPayStatus"));
@@ -52,25 +58,4 @@ class orderRecord extends source{
 	//========================================
 	//初始化订单锁定状态
 	public function initLocked(){$this->locked=0;}
-	//========================================
-	//获取父订单(加锁)
-	public function getParentOrder(){
-		$table=self::tableName();
-		$sql="SELECT * FROM {$table} WHERE `id`='{$this->parentId}' FOR UPDATE";
-		return self::findBySql($sql)->one();
-	}
-	//========================================
-	//获取子订单(加锁)
-	public function getChildOrders(){
-		$table=self::tableName();
-		$sql="SELECT * FROM {$table} WHERE `parentId`='{$this->id}' FOR UPDATE";
-		return self::findBySql($sql)->all();
-	}
-	//========================================
-	//获取购买行为(加锁)
-	public function getBuyingRecords(){
-		$table=orderBuyingRecord::tableName();
-		$sql="SELECT * FROM {$table} WHERE `orderId`='{$this->id}' FOR UPDATE";
-		return orderBuyingRecord::findBySql($sql)->all();	
-	}	
 }
