@@ -116,6 +116,7 @@ class order extends Component{
 		//处理购买行为
 		foreach($this->buyingRecords as $buyingRecord){
 			if(!$buyingRecord->isSelected) continue;
+			$dataPhoto=$buyingRecord->salesUnit->getExtraction()->getBasicData($this->member);
 			$orderBuyingRecord=array();
 			$orderBuyingRecord['orderId']=$orderRecord->id;
 			$orderBuyingRecord['sourceType']=$buyingRecord->salesUnit->getSourceType();
@@ -123,7 +124,7 @@ class order extends Component{
 			$orderBuyingRecord['buyingCount']=$buyingRecord->buyCount;
 			$orderBuyingRecord['price']=$buyingRecord->salesUnit->getPrice();
 			$orderBuyingRecord['finalPrice']=$buyingRecord->salesUnit->getFinalPrice($this->member);
-			$orderBuyingRecord['dataPhoto']=$buyingRecord->salesUnit->getExtraction()->getBasicData();
+			$orderBuyingRecord['dataPhoto']=json_encode($dataPhoto);
 			orderBuyingRecord::addObj($orderBuyingRecord);
 		}
 		//处理子订单
