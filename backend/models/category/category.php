@@ -22,7 +22,7 @@ class category extends SmartActiveRecord{
 	//========================================
 	//获取所有的顶级分类
 	static public function getTopCategories(){
-		return self::find()->where("`pid` is NULL")->orderBy("`sort` ASC")->all();
+		return self::find()->where("`pid`='0'")->orderBy("`sort` ASC")->all();
 	}
 
 }
