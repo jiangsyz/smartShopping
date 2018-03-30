@@ -13,14 +13,14 @@ class orderRecordChecker extends Component{
 	public function check(){
 		//订单
 		$oRecord=$this->orderRecord;
-		//根据是否是主订单做不同的检查
-		if(!$oRecord->parentId) $this->checkMainOrder(); else $this->checkChildOrder();
+		//检查订单关系
+		$this->checkRelation();
 		//检查收获地址
 		$this->checkAddress();
 		//检查预期收货日期
 		$this->checkDate();
 		//递归检查子订单
-		foreach($oRecord->getChildOrders() as $c) $c->checker->check();
+		foreach($oRecord->relationManagement->getChildren() as $c) $c->checker->check();
 	}
 	//========================================
 	//检查地址
@@ -35,34 +35,24 @@ class orderRecordChecker extends Component{
 		if(!$address) throw new SmartException("order {$oRecord->id} miss address");
 	}
 	//========================================
-	//检查主订单
-	public function checkMainOrder(){
+	//检查订单关系
+	public function checkRelation(){
 		//订单
 		$oRecord=$this->orderRecord;
-		//主订单不能有parentId
-		if($oRecord->parentId) throw new SmartException("order {$oRecord->id} error parentId");
-		//主订单必须有子订单
-		$childOrders=$oRecord->getChildOrders();
-		if(!$childOrders) throw new SmartException("order {$oRecord->id} miss childOrders");
-		//主订单一定不能有购买行为
-		$buyingRecords=$oRecord->getBuyingRecords();
-		if($buyingRecords) throw new SmartException("order {$oRecord->id} has buyingRecords");
-	}
-	//========================================
-	//检查子订单
-	public function checkChildOrder(){
-		//订单
-		$oRecord=$this->orderRecord;
-		//子订单一定要有父订单
-		$parentOrder=$oRecord->getParentOrder();
-		if(!$parentOrder) throw new SmartException("order {$oRecord->id} miss parentOrder");
+		//如果有父订单id,父订单要存在
+		if($oRecord->parentId)
+			if(!$oRecord->relationManagement->getParent())
+				throw new SmartException("order {$oRecord->id} miss parent");
 		//获取子订单
-		$childOrders=$oRecord->getChildOrders();
+		$children=$oRecord->relationManagement->getChildren();
 		//获取购买行为
-		$buyingRecords=$oRecord->getBuyingRecords();
-		//子订单和购买行为不能都为空
-		$empty=empty($childOrders) && empty($buyingRecords);
-		if($empty) throw new SmartException("order {$oRecord->id} empty");
+		$buyingRecords=$oRecord->buyingManagement->getBuyingRecords();
+		//不能即没子订单也没购买行为
+		if(!$children && !$buyingRecords) 
+			throw new SmartException("order {$oRecord->id} effective error1");
+		//不能既有子订单又有购买行为
+		if($children && $buyingRecords)
+			throw new SmartException("order {$oRecord->id} effective error2");
 	}
 	//========================================
 	//检查预期收货日期
