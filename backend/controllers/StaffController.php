@@ -5,63 +5,31 @@ use yii\web\SmartWebController;
 use yii\base\SmartException;
 use yii\base\Exception;
 use backend\models\model\source;
-use backend\models\token\tokenManagement;
-use backend\models\signInManagement\signInManagement;
-use backend\models\identifyingCode\identifyingCodeManagement;
+use backend\models\staff\staff;
 class StaffController extends SmartWebController{
-    //员工申请登录
-	public function actionApiApplySignIn(){
-		try{
-			//开启事务
-			$trascation=Yii::$app->db->beginTransaction();
-			//获取手机号
-			$phone=Yii::$app->request->get('phone',false);
-			//申请注册,获取验证码订单号
-			$orderId=signInManagement::staffApplySignInByPhone($phone);
-			//提交事务
-			$trascation->commit();
-			//返回验证码订单号
-			$this->response(1,array('error'=>0,'data'=>array('orderId'=>$orderId)));
-		}
-		catch(Exception $e){
-			//回滚
-            $trascation->rollback();
-    		$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
-    	}
-	}
-	//========================================
-	//员工登录
-	public function actionApiSignIn(){
-		try{
-			//开启事务
-			$trascation=Yii::$app->db->beginTransaction();
-			//获取验证码订单号
-			$orderId=Yii::$app->request->get('orderId',false); 
-			//获取验证码
-			$identifyingCode=Yii::$app->request->get('identifyingCode',false);
-            //注册,并获取令牌
-            $token=identifyingCodeManagement::getManagement($orderId,$identifyingCode)->handle();
-            //提交事务
-			$trascation->commit();
-            //返回令牌
-            $this->response(1,array('error'=>0,'data'=>$token->getInfo()));
-        }
-        catch(Exception $e){
-            //回滚
-            $trascation->rollback();
-            $this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
-        }
-    }
-    //========================================
-    //获取员工信息
-    public function actionApiGetInfo(){
+    //获取员工令牌
+    public function actionApiGetToken(){
     	try{
-			//根据token获取员工
-			$token=Yii::$app->request->get('token',false);
-			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
+			//获取手机
+	    	$phone=Yii::$app->request->get('phone',false);
+	    	if(!$phone) throw new SmartException("miss phone");
+	    	//获取密码
+	    	$pwd=Yii::$app->request->get('pwd',false);
+	    	if(!$pwd) throw new SmartException("miss pwd");
+	    	//获取员工
+	    	$staff=staff::find()->where("`phone`='{$phone}' AND `locked`='0'")->one();
+	    	if(!$staff) throw new SmartException("miss staff");
+	    	//不能空密码
+	    	if(!$staff->pwd) throw new SmartException("empty pwd");
+	    	//对比密码
+	    	if($staff->pwd!=$pwd) throw new SmartException("staff is locked");
+	    	//创建令牌
+	    	$token=$staff->createToken();			
+			//获取令牌及超时时间戳
+			$data=array('token'=>$token->token,'timeOut'=>$token->getTimeOutTimestamp());
 			//返回
-			$this->response(1,array('error'=>0,'data'=>$staff->getData()));
-		}
-		catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+			$this->response(1,array('error'=>0,'data'=>$data));
+        }
+        catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
     }
 }
