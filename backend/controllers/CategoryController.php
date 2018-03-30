@@ -36,11 +36,17 @@ class CategoryController extends SmartWebController{
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取分类id
 			$categoryId=Yii::$app->request->get('categoryId',0);
+			//获取是否包含父分类
+			$includeSelf=Yii::$app->request->get('includeSelf',0);
 			//获取分类
 			$category=category::find()->where("`id`='{$categoryId}'")->one();
 			if(!$category) throw new SmartException("miss category");
 			//提取子分类数据
 			foreach($category->children as $child) $data[]=$child->getData();
+			//如果包含父分类,对数据进行处理后入栈
+			$parentData=$category->getData();
+			$parentData['name']='全部';
+			if($includeSelf==1) array_unshift($data,$parentData);
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
     	}
