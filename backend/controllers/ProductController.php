@@ -25,8 +25,6 @@ class ProductController extends SmartWebController{
 			if(!$spu) throw new SmartException("miss spu");
 			//获取基础数据
 			$data=$spu->getExtraction()->getBasicData();
-			//获取配送类型数据
-			$data['distributeType']=$spu->distributeType;
 			//获取sku数据
 			$data['skus']=array();
 			foreach($spu->skus as $sku) $data['skus'][]=$sku->getExtraction()->getBasicData($member);
