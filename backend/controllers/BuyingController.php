@@ -102,6 +102,8 @@ class BuyingController extends SmartWebController{
 			$appType=Yii::$app->request->post('appType',false);
 			//获取购物车
 			$shoppingCart=new shoppingCart(array('member'=>$member));
+			//获取购物车记录
+			$shoppingCartRecords=$shoppingCart->getShoppingCartRecords();
 			//构建订单受理者
 			$orderAccepterData=array();
 			$orderAccepterData['orderApplicant']=$shoppingCart;
@@ -113,6 +115,14 @@ class BuyingController extends SmartWebController{
 			$orderRecord=$orderAccepter->mainOrder->createOrderRecord($_POST);
 			//检查订单记录
 			$orderRecord->checker->check();
+			//记录购物车快照并清空选中的购物车
+			$shoppingCartPhoto=array();
+			foreach($shoppingCartRecords as $r){
+				$shoppingCartPhoto[]=$r->getData();
+				if($r->isSelected()) $r->delete();
+			}
+			$shoppingCartPhoto=json_encode($shoppingCartPhoto);
+			$orderRecord->propertyManagement->addProperty('shoppingCartPhoto',$shoppingCartPhoto);
 			//创建支付信息
 			$payCommand=array();
             $payCommand['attach']="订单支付";
