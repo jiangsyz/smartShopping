@@ -45,6 +45,13 @@ class shoppingCartRecord extends SmartActiveRecord{
 		return $this->salesUnit->getFinalPrice($this->member)*$this->count;
 	}
 	//========================================
+	//获取基础数据
+	public function getData($keys=array()){
+		$data=parent::getData($keys);
+		$data['isSelected']=$this->isSelected();
+		return $data;
+	}
+	//========================================
 	//获取是否被选中(这是为以后改进留出接口)
 	public function isSelected(){return true;}
 	//========================================
