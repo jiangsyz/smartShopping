@@ -42,9 +42,11 @@ class order extends Component{
 	//========================================
 	//判断是否为有效订单
 	public function isEffective(){
-		//即没有子订单也没有购物行为的为非有效订单
-		$count=$this->effectiveChildOrderCount+$this->effectiveBuyingRecordCount;
-		if($count==0) return false; else return true;
+		//不能既有子订单又有购买行为
+		if($this->effectiveChildOrderCount && $this->effectiveBuyingRecordCount) return false;
+		//不能即没子订单也没购买行为
+		if(!$this->effectiveChildOrderCount && !$this->effectiveBuyingRecordCount) return false;
+		return true;
 	}
 	//========================================
 	//是否需要收获地址
