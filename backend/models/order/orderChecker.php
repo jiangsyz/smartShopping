@@ -38,7 +38,7 @@ class orderChecker extends Component{
 			//获取购买对象库存
 			$keepCount=$salesUnit->getKeepCount();
 			//库存为NULL,代表没有库存限制
-			if($keepCount==NULL) continue;
+			if($keepCount===NULL) continue;
 			//如果购买数量大于库存,报错
 			if($r->buyCount>$keepCount) throw new SmartException("{$salesUnitNo} need more keepCount");
 		}
