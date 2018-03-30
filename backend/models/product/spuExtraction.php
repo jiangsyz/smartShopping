@@ -28,6 +28,7 @@ class spuExtraction{
 		$data['memberPrice']=formatPrice::formatPrice($this->cheapestSku->getLevelPrice(1));
 		$data['reduction']=formatPrice::formatPrice($this->cheapestSku->getReduction());
 		$data['isAllowSale']=$this->spu->isAllowSale();
+		$data['distributeType']=$this->spu->distributeType;
 		return $data;
 	}
 }
