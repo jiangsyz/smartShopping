@@ -123,13 +123,8 @@ class BuyingController extends SmartWebController{
 			}
 			$shoppingCartPhoto=json_encode($shoppingCartPhoto);
 			$orderRecord->propertyManagement->addProperty('shoppingCartPhoto',$shoppingCartPhoto);
-			//创建支付信息
-			$payCommand=array();
-            $payCommand['attach']="订单支付";
-            $payCommand['body']=$orderRecord->id;
-            $payCommand['out_trade_no']=$this->runningId;
-            $payCommand['total_fee']=$orderRecord->pay;
-            $payData=Yii::$app->smartWechatPay->applyPay($appType,$payCommand);
+			//申请支付
+            $payData=$orderRecord->payManagement->applyPay('wechat',$appType);
 			//提交事务
 			$trascation->commit();
 			//返回
@@ -176,13 +171,8 @@ class BuyingController extends SmartWebController{
 			$orderRecord=$orderAccepter->mainOrder->createOrderRecord($_POST);
 			//检查订单记录
 			$orderRecord->checker->check();
-			//创建支付信息
-			$payCommand=array();
-            $payCommand['attach']="订单支付";
-            $payCommand['body']=$orderRecord->id;
-            $payCommand['out_trade_no']=$this->runningId;
-            $payCommand['total_fee']=$orderRecord->pay;
-            $payData=Yii::$app->smartWechatPay->applyPay($appType,$payCommand);
+			//申请支付
+            $payData=$orderRecord->payManagement->applyPay('wechat',$appType);
 			//提交事务
 			$trascation->commit();
 			//返回
