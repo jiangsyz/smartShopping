@@ -12,6 +12,7 @@ use backend\models\order\orderConfirmation;
 use backend\models\order\orderChecker;
 use backend\models\token\tokenManagement;
 use backend\models\shoppingCart\shoppingCart;
+use backend\models\order\orderRecord;
 class BuyingController extends SmartWebController{
 	public $enableCsrfValidation=false;
 	//========================================
@@ -171,6 +172,35 @@ class BuyingController extends SmartWebController{
 			$orderRecord=$orderAccepter->mainOrder->createOrderRecord($_POST);
 			//检查订单记录
 			$orderRecord->checker->check();
+			//申请支付
+            $payData=$orderRecord->payManagement->applyPay('wechat',$appType);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$payData));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
+	//对某一笔未支付订单申请支付
+	public function actionApiApplyPay(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=Yii::$app->request->post('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取app类型(android/ios/web)
+			$appType=Yii::$app->request->post('appType',false);
+			//获取订单id
+			$orderId=Yii::$app->request->post('orderId',0);
+			//获取订单
+			$orderRecord=orderRecord::getLockedOrderById($orderId);
+			if(!$orderRecord) throw new SmartException("miss orderRecord");
 			//申请支付
             $payData=$orderRecord->payManagement->applyPay('wechat',$appType);
 			//提交事务
