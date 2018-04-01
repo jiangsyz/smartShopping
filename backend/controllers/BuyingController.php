@@ -192,12 +192,12 @@ class BuyingController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->post('token',false);
+			$token=Yii::$app->request->get('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取app类型(android/ios/web)
-			$appType=Yii::$app->request->post('appType',false);
+			$appType=Yii::$app->request->get('appType',false);
 			//获取订单id
-			$orderId=Yii::$app->request->post('orderId',0);
+			$orderId=Yii::$app->request->get('orderId',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");
