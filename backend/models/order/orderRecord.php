@@ -61,4 +61,11 @@ class orderRecord extends source{
 	//========================================
 	//初始化订单锁定状态
 	public function initLocked(){$this->locked=0;}
+	//========================================
+	//获取通过订单id获取一个锁住的订单
+	public static function getLockedOrderById($id){
+		$table=self::tableName();
+		$sql="SELECT * FROM {$table} WHERE `id`='{$id}' FOR UPDATE";
+		return self::findBySql($sql)->one();
+	}
 }
