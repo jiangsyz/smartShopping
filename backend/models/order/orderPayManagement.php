@@ -7,7 +7,7 @@ use yii\base\Component;
 //========================================
 class orderPayManagement extends Component{
 	//支付超时秒数
-	const PAY_TIME_OUT=60*5
+	const PAY_TIME_OUT=60*5;
 	//========================================
 	//订单记录
 	public $orderRecord=NULL;
