@@ -22,6 +22,8 @@ class orderRecord extends source{
 	public $relationManagement=false;
 	//购买行为管理器
 	public $buyingManagement=false;
+	//支付管理器
+	public $payManagement=false;
 	//检查器
 	public $checker=false;
 	//========================================
@@ -37,6 +39,7 @@ class orderRecord extends source{
 		$this->dateManagement=new orderDateManagement(array('orderRecord'=>$this));
 		$this->relationManagement=new orderRelationshipManagement(array('orderRecord'=>$this));
 		$this->buyingManagement=new orderBuyingManagement(array('orderRecord'=>$this));
+		$this->payManagement=new orderPayManagement(array('orderRecord'=>$this));
 		$this->checker=new orderRecordChecker(array('orderRecord'=>$this));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initPayStatus"));
