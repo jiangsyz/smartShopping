@@ -12,26 +12,29 @@ class orderPayManagement extends Component{
 	//订单记录
 	public $orderRecord=NULL;
 	//========================================
-	//检测订单支付超时
-	public function checkPayTimeOut(){
-		//不是主订单不处理
-		if($this->orderRecord->parentId) return;
-		//不是未支付状态的不处理
-		if($this->orderRecord->payStatus!=0) return;
+	//判断一笔订单能否被支付
+	public function canOrderPay(){
+		//不是主订单不能被处理
+		if($this->orderRecord->parentId) return false;
+		//已经被取消的不能被支付
+		if($this->orderRecord->cancelStatus==1) return false;
+		//支付状态不是未支付的不能被支付
+		if($this->orderRecord->payStatus!=0) return false;
 		//计算等待支付时常
-		$timeOut=time()-$this->orderRecord->createTime;
-		//超时了修改支付状态
-		if($timeOut>self::PAY_TIME_OUT) $this->orderRecord->updateObj(array('payStatus'=>-1));
+		$waiting=time()-$this->orderRecord->createTime;
+		//超时了修改支付状态,不能被支付
+		if($waiting>self::PAY_TIME_OUT){
+			$this->orderRecord->updateObj(array('payStatus'=>-1));
+			return false;
+		}
+		//允许支付
+		return true;
 	}
 	//========================================
 	//申请支付
 	public function applyPay($payType,$appType){
-		//检测订单支付超时
-		$this->checkPayTimeOut();
-		//主订单才能支付
-		if($this->orderRecord->parentId) throw new SmartException("is not main order");
-		//订单支付状态必须为待支付
-		if($this->orderRecord->payStatus!=0) throw new SmartException("error payStatus");
+		//判断一笔订单能否被支付
+		if(!$this->canOrderPay()) throw new SmartException("can't pay");
 		//根据不同的支付渠道申请支付
 		if($payType=='wechat') return $this->applyWechatPay($appType);
 		//错误的支付渠道
