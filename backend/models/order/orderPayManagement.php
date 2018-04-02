@@ -45,8 +45,8 @@ class orderPayManagement extends Component{
 	public function applyWechatPay($appType){
 		//创建支付信息
 		$payCommand=array();
-        $payCommand['attach']="订单支付";
-        $payCommand['body']=$this->orderRecord->id;
+        $payCommand['attach']=$this->orderRecord->id;
+        $payCommand['body']="订单支付";
         $payCommand['out_trade_no']=Yii::$app->controller->runningId;
         $payCommand['total_fee']=$this->orderRecord->pay;
         //返回调用支付所需的数据
