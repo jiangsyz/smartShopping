@@ -19,6 +19,8 @@ class salesUnitExtraction{
 		$data['sourceId']=$this->salesUnit->getSourceId();
 		$data['productType']=$this->salesUnit->getProductType();
 		$data['productId']=$this->salesUnit->getProductId();
+		$data['productName']=$this->salesUnit->getProductName();
+		$data['cover']=$this->salesUnit->getCover();
 		$data['title']=$this->salesUnit->getSalesUnitName();
 		$data['price']=formatPrice::formatPrice($this->salesUnit->getLevelPrice(0));
 		$data['memberPrice']=formatPrice::formatPrice($this->salesUnit->getLevelPrice(1));
