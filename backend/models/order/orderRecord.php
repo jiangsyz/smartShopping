@@ -6,6 +6,7 @@ use yii\base\SmartException;
 use yii\db\SmartActiveRecord;
 use backend\models\model\source;
 use backend\models\member\address;
+use backend\models\member\member;
 //========================================
 class orderRecord extends source{
 	//创建订单时所需的外部命令
@@ -24,11 +25,18 @@ class orderRecord extends source{
 	public $buyingManagement=false;
 	//支付管理器
 	public $payManagement=false;
+	//状态管理器
+	public $statusManagement=false;
 	//检查器
 	public $checker=false;
+	//数据提取器
+	public $extraction=false;
 	//========================================
 	//返回资源类型
 	public function getSourceType(){return source::TYPE_ORDER_RECORD;}
+	//========================================
+	//返回会员
+	public function getMember(){return $this->hasOne(member::className(),array('id'=>'memberId'));}
 	//========================================
 	//初始化
 	public function init(){
@@ -40,7 +48,9 @@ class orderRecord extends source{
 		$this->relationManagement=new orderRelationshipManagement(array('orderRecord'=>$this));
 		$this->buyingManagement=new orderBuyingManagement(array('orderRecord'=>$this));
 		$this->payManagement=new orderPayManagement(array('orderRecord'=>$this));
+		$this->statusManagement=new orderStatusManagement(array('orderRecord'=>$this));
 		$this->checker=new orderRecordChecker(array('orderRecord'=>$this));
+		$this->extraction=new orderExtraction(array('orderRecord'=>$this));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initPayStatus"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCancelStatus"));
@@ -58,6 +68,9 @@ class orderRecord extends source{
 	//========================================
 	//初始化订单取消状态
 	public function initCancelStatus(){$this->cancelStatus=0;}
+	//========================================
+	//初始化订单关闭状态
+	public function initCloseStatus(){$this->closeStatus=0;}
 	//========================================
 	//初始化订单锁定状态
 	public function initLocked(){$this->locked=0;}
