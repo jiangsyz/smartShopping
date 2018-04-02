@@ -79,12 +79,15 @@ class MemberController extends SmartWebController{
 			//根据token获取会员
 			$token=Yii::$app->request->get('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取vip信息
+			$vip=$member->getVipInfo();
 			//获取数据
 			$data=array();
 			$data['phone']=$member->phone;
 			$data['nickName']=$member->getNickName();
 			$data['avatar']=$member->getAvatar();
-			$data['level']=$member->getLevel();
+			$data['level']=$vip==NULL?0:$vip->lv;
+			$data['vipEnd']=$vip==NULL?0:$vip->end;
 			$data['pushUniqueId']=$member->pushUniqueId;
 			$data['customServiceUniqueId']=$member->customServiceUniqueId;
 			$data['hash']=$member->hash();
