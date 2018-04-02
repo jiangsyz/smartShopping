@@ -28,14 +28,24 @@ class member extends source implements shop{
 	//========================================
 	//获取会员等级
 	public function getLevel(){
+		$vip=$this->getVipInfo();
+		if(!$vip) return 0; else return $vip->lv;
+	}
+	//========================================
+	//获取会员vip详情
+	public function getVipInfo(){
 		$now=time();
 		//查找在有效期内的会员等级记录
 		$where="`start`<='{$now}' AND `end`>='{$now}' AND `memberId`='{$this->id}'";
 		$memberLvs=memberLv::find()->where($where)->all();
-		//找出最高的等级
-		$level=0;
-		foreach($memberLvs as $v) if($v->lv>$level) $level=$v->lv;
-		return $level;
+		//以等级高的为准,等级相同以最晚截至时间为准
+		$vip=NULL;
+		foreach($memberLvs as $v){
+			if(!$vip) $vip=$v;
+			if($v->lv>$vip->lv) $vip=$v;
+			if($v->lv==$vip->lv && $v->end>$vip->end) $vip=$v;
+		}
+		return $vip;
 	}
 	//========================================
 	//获取地址簿
@@ -46,7 +56,7 @@ class member extends source implements shop{
 	//获取会员信息的hash
 	public function hash(){
 		$data=$this->getData();
-		$data['level']=$this->getLevel();
+		$data['vip']=$this->getVipInfo();
 		ksort($data);
 		return md5(json_encode($data));
 	}
