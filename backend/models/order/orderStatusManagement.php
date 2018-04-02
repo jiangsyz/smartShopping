@@ -38,6 +38,7 @@ class orderStatusManagement extends Component{
 		if($this->isRefunding()) return false;
 		elseif($this->orderRecord->cancelStatus==1) return true;
 		elseif($this->orderRecord->closeStatus==1) return true;
+		elseif($this->orderRecord->payStatus==-1) return true;
 		else return false;
 	}
 	//========================================
