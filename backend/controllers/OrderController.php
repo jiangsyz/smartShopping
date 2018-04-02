@@ -37,8 +37,8 @@ class OrderController extends SmartWebController{
 			$pageNum=Yii::$app->request->get('pageNum',0);
 			//根据不同状态取sql
 			$sql=false;
-			if($status=='all') $sql=$this->getAllOrders();
-			if($status=='unpaid') $sql=$this->getUnpaidOrders();
+			if($status=='all') $sql=$this->getAllOrders($member);
+			if($status=='unpaid') $sql=$this->getUnpaidOrders($member);
 			if(!$sql) throw new SmartException("error status");
 			//查询query
 			$query=orderRecord::findBySql($sql);
@@ -58,14 +58,14 @@ class OrderController extends SmartWebController{
 	}
 	//========================================
 	//获取待支付订单
-	public function getUnpaidOrders(){
+	public function getUnpaidOrders(member $m){
 		$table=orderRecord::tableName();
-		return "SELECT * FROM {$table} WHERE `parentId` is NULL AND `payStatus`='0' AND `cancelStatus`='0' ORDER BY `createTime` DESC";
+		return "SELECT * FROM {$table} WHERE `memberId`='{$m->id}' AND `parentId` is NULL AND `payStatus`='0' AND `cancelStatus`='0' ORDER BY `createTime` DESC";
 	}
 	//========================================
 	//获取全部订单
-	public function getAllOrders(){
+	public function getAllOrders(member $m){
 		$table=orderRecord::tableName();
-		return "SELECT * FROM {$table} WHERE `parentId` is NULL ORDER BY `createTime` DESC";
+		return "SELECT * FROM {$table} WHERE `memberId`='{$m->id}' AND `parentId` is NULL ORDER BY `createTime` DESC";
 	}
 }
