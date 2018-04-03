@@ -40,7 +40,7 @@ class member extends source implements shop{
 	//获取会员信息的hash
 	public function hash(){
 		$data=$this->getData();
-		$data['vip']=$this->getVipInfo();
+		$data['vip']=memberLv::getVipInfo($this);
 		ksort($data);
 		return md5(json_encode($data));
 	}
