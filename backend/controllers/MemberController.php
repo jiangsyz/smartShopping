@@ -6,6 +6,7 @@ use yii\base\SmartException;
 use yii\base\Exception;
 use backend\models\model\source;
 use backend\models\member\member;
+use backend\models\member\memberLv;
 use backend\models\token\tokenManagement;
 use backend\models\signInManagement\signInManagement;
 use backend\models\identifyingCode\identifyingCodeManagement;
@@ -80,7 +81,7 @@ class MemberController extends SmartWebController{
 			$token=Yii::$app->request->get('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取vip信息
-			$vip=$member->getVipInfo();
+			$vip=memberLv::getVipInfo($member);
 			//获取数据
 			$data=array();
 			$data['phone']=$member->phone;
