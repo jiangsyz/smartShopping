@@ -14,21 +14,13 @@ class orderPayManagement extends Component{
 	//========================================
 	//判断一笔订单能否被支付
 	public function canOrderPay(){
-		//不是主订单不能被处理
-		if($this->orderRecord->parentId) return false;
-		//已经被取消的不能被支付
-		if($this->orderRecord->cancelStatus==1) return false;
-		//支付状态不是未支付的不能被支付
-		if($this->orderRecord->payStatus!=0) return false;
-		//计算等待支付时常
-		$waiting=time()-$this->orderRecord->createTime;
-		//超时了修改支付状态,不能被支付
-		if($waiting>self::PAY_TIME_OUT){
-			$this->orderRecord->updateObj(array('payStatus'=>-1));
+		//获取订单状态
+		$status=$this->orderRecord->statusManagement->getStatus();
+		//待支付状态的订单允许支付,其他状态不允许
+		if($status==orderStatusManagement::STATUS_UNPAID) 
+			return true;
+		else
 			return false;
-		}
-		//允许支付
-		return true;
 	}
 	//========================================
 	//申请支付
@@ -51,5 +43,15 @@ class orderPayManagement extends Component{
         $payCommand['total_fee']=$this->orderRecord->pay;
         //返回调用支付所需的数据
         return Yii::$app->smartWechatPay->applyPay($appType,$payCommand);
+	}
+	//========================================
+	//支付成功
+	public function paySuccess($runningId){
+		//只有待支付状态的订单可以支付成功
+		if(!$this->canOrderPay()) throw new SmartException("can't pay");
+		//修改支付状态
+		$this->orderRecord->updateObj(array('payStatus'=>1));
+		//记录支付回调的runningId
+		$this->orderRecord->propertyManagement->addProperty("payRunningId",$runningId);
 	}
 }
