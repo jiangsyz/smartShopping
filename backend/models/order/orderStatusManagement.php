@@ -11,6 +11,7 @@ class orderStatusManagement extends Component{
 	const STATUS_UNPAID=1;//待支付状态
 	const STATUS_REFUNDING=2;//退款中状态
 	const STATUS_CLOSED=3;//交易关闭状态
+	const STATUS_UNDELIVERED=4;//待发货
 	//========================================
 	//订单记录
 	public $orderRecord=NULL;
@@ -43,6 +44,9 @@ class orderStatusManagement extends Component{
 		//未支付状态
 		elseif($this->isUnpaid()) 
 			return self::STATUS_UNPAID;
+		//待发货状态
+		elseif($this->isUndelivered()) 
+			return self::STATUS_UNDELIVERED;
 		else 
 			throw new SmartException("error order status");
 	}
@@ -65,4 +69,9 @@ class orderStatusManagement extends Component{
 	//========================================
 	//判断是否为退款中状态
 	public function isRefunding(){return false;}
+	//========================================
+	//判断是否为待发货状态
+	public function isUndelivered(){
+		if($this->orderRecord->payStatus==1) return true; else return false;
+	}
 }
