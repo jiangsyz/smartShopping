@@ -13,6 +13,7 @@ use backend\models\member\member;
 use backend\models\token\tokenManagement;
 use backend\models\order\orderRecord;
 use backend\models\pay\payCallback;
+use backend\models\order\orderBuyingRecord;
 class SiteController extends SmartWebController{
 	public $enableCsrfValidation=false;
 	//========================================
