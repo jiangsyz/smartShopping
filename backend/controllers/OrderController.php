@@ -24,6 +24,7 @@ class OrderController extends SmartWebController{
 		$this->response(1,array('error'=>0,'data'=>$data));
 	}
 	//========================================
+	//获取订单
 	public function actionApiGetOrders(){
 		try{
 			//根据token获取会员
