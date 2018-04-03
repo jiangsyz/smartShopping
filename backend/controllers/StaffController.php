@@ -11,10 +11,10 @@ class StaffController extends SmartWebController{
     public function actionApiGetToken(){
     	try{
 			//获取手机
-	    	$phone=Yii::$app->request->get('phone',false);
+	    	$phone=Yii::$app->request->post('phone',false);
 	    	if(!$phone) throw new SmartException("miss phone");
 	    	//获取密码
-	    	$pwd=Yii::$app->request->get('pwd',false);
+	    	$pwd=Yii::$app->request->post('pwd',false);
 	    	if(!$pwd) throw new SmartException("miss pwd");
 	    	//获取员工
 	    	$staff=staff::find()->where("`phone`='{$phone}' AND `locked`='0'")->one();
