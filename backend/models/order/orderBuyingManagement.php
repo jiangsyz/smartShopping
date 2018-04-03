@@ -23,8 +23,11 @@ class orderBuyingManagement extends Component{
 	//========================================
 	//获取购买行为列表
 	public function getBuyingList($lockFlag=false){
+		//获取直接购买行为
 		$buyingList=$this->getBuyingRecords($lockFlag);
+		//获取后代订单
 		$posterities=$this->orderRecord->relationManagement->getPosterities();
+		//获取后代购买行为
 		foreach($posterities as $p){
 			$buyingRecords=$p->buyingManagement->getBuyingRecords($lockFlag);
 			foreach($buyingRecords as $buyingRecord) $buyingList[]=$buyingRecord;
