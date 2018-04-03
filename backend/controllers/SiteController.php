@@ -43,7 +43,7 @@ class SiteController extends SmartWebController{
             $orderRecord=orderRecord::getLockedOrderById($data['attach']);
             if(!$orderRecord) throw new SmartException("miss orderRecord");
             //支付成功
-            $orderRecord->payManagement->paySuccess();
+            $orderRecord->payManagement->paySuccess($this->runningId);
             //修改日志中的状态信息
             $callbackLog->updateObj(array('status'=>1));
             //提交事务
@@ -53,7 +53,7 @@ class SiteController extends SmartWebController{
         }
         catch(Exception $e){
             //修改日志状态
-            if($callbackLog) $callbackLog->updateObj(array('status'=>1,'memo'=>$e->getMessage()));
+            if($callbackLog) $callbackLog->updateObj(array('status'=>-1,'memo'=>$e->getMessage()));
             //回滚
             $trascation->rollback();
             $this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
