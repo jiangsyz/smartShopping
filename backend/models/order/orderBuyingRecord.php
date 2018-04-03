@@ -8,11 +8,14 @@ use backend\models\model\source;
 use backend\models\order\orderRecord;
 //========================================
 class orderBuyingRecord extends SmartActiveRecord{
+	const EVENT_BUYING_SUCCESS=1;//购买成功后触发的时间
+	//========================================
 	//初始化
 	public function init(){
 		parent::init();
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"checkBuyingCount"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this,"updateKeepCount"));
+		$this->on(self::EVENT_BUYING_SUCCESS,array($this,"buyingSuccess"));
 	}
 	//========================================
 	//获取购买单元
@@ -41,4 +44,7 @@ class orderBuyingRecord extends SmartActiveRecord{
 		$keepCount=$salesUnit->getKeepCount()-$this->buyingCount;
 		$salesUnit->updateKeepCount($handlerType,$handlerId,$keepCount,$this->id);
 	}
+	//========================================
+	//购买成功
+	public function buyingSuccess(){$this->getSalesUnit()->buyingSuccess($this);}
 }
