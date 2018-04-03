@@ -6,6 +6,7 @@ use yii\base\SmartException;
 use yii\db\SmartActiveRecord;
 use backend\models\member\member;
 use backend\models\product\salesUnitExtraction;
+use backend\models\order\orderBuyingRecord;
 //========================================
 abstract class salesUnit extends product{
 	//获取售卖单元名称
@@ -23,6 +24,9 @@ abstract class salesUnit extends product{
 	//获取salesUnit数据提取器
 	public function getExtraction(){return new salesUnitExtraction($this);}
 	//========================================
+	//购买成功的处理
+	public function buyingSuccess(orderBuyingRecord $r){echo 123;}
+	//========================================
 	//获取会员最终成交价格
 	abstract public function getFinalPrice(member $member);
 	//========================================
@@ -31,4 +35,5 @@ abstract class salesUnit extends product{
 	//========================================
 	//更新库存
 	abstract public function updateKeepCount($handlerType,$handlerId,$keepCount,$memo=NULL);
+	//========================================
 }
