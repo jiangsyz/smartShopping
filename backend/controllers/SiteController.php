@@ -44,6 +44,10 @@ class SiteController extends SmartWebController{
             if(!$orderRecord) throw new SmartException("miss orderRecord");
             //支付成功
             $orderRecord->payManagement->paySuccess($this->runningId);
+            //获取购买行为
+            $buyingRecords=$orderRecord->buyingManagement->getBuyingList();
+            //触发购买成功后的收益
+            foreach($buyingRecords as $r) $r->trigger(orderBuyingRecord::EVENT_BUYING_SUCCESS);
             //修改日志中的状态信息
             $callbackLog->updateObj(array('status'=>1));
             //提交事务
