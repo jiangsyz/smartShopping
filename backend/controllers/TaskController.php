@@ -13,6 +13,7 @@ use backend\models\order\orderChecker;
 use backend\models\token\tokenManagement;
 use backend\models\shoppingCart\shoppingCart;
 use backend\models\order\orderRecord;
+use backend\models\order\orderBuyingRecord;
 class TaskController extends SmartWebController{
 	//检查订单支付超时
 	public function actionApiCheckPayTimeOutOrder(){
