@@ -52,8 +52,7 @@ class orderRecord extends source{
 		$this->checker=new orderRecordChecker(array('orderRecord'=>$this));
 		$this->extraction=new orderExtraction(array('orderRecord'=>$this));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
-		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initPayStatus"));
-		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCancelStatus"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initStatus"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initLocked"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this->addressManagement,"addAddress"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this->memoManagement,"addMemberMemo"));
@@ -63,14 +62,15 @@ class orderRecord extends source{
 	//初始化创建时间
 	public function initCreateTime(){$this->createTime=time();}
 	//========================================
-	//初始化订单支付状态
-	public function initPayStatus(){$this->payStatus=0;}
-	//========================================
-	//初始化订单取消状态
-	public function initCancelStatus(){$this->cancelStatus=0;}
-	//========================================
-	//初始化订单关闭状态
-	public function initCloseStatus(){$this->closeStatus=0;}
+	//初始化各类状态
+	public function initStatus(){
+		$this->payStatus=0;
+		$this->cancelStatus=0;
+		$this->closeStatus=0;
+		$this->deliverStatus=0;
+		$this->refundingStatus=0;
+		$this->finishStatus=0;
+	}
 	//========================================
 	//初始化订单锁定状态
 	public function initLocked(){$this->locked=0;}
