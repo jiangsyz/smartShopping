@@ -8,6 +8,7 @@ use backend\models\model\source;
 use backend\models\member\member;
 use backend\models\token\tokenManagement;
 use backend\models\order\orderRecord;
+use backend\models\order\orderStatusManagement;
 class OrderController extends SmartWebController{
 	//获取会员订单统计
 	public function actionApiGetOrderStatistics(){
@@ -90,6 +91,31 @@ class OrderController extends SmartWebController{
 		$table=orderRecord::tableName();
 		return "SELECT * FROM {$table} WHERE `memberId`='{$m->id}' AND `parentId` is NULL AND `refundingStatus`='1' ORDER BY `createTime` DESC";	
 	}
-
-
+	//========================================
+	//取消订单
+	public function actionApiCancel(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取订单id
+			$orderId=Yii::$app->request->get('orderId',0);
+			//获取订单
+			$orderRecord=orderRecord::getLockedOrderById($orderId);
+			if(!$orderRecord) throw new SmartException("miss orderRecord");
+			//取消订单
+			$orderRecord->statusManagement->cancel();
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
 }
