@@ -7,6 +7,8 @@ use yii\base\Exception;
 use backend\models\model\source;
 use backend\models\staff\staff;
 class StaffController extends SmartWebController{
+	public $enableCsrfValidation=false;
+	//========================================
     //获取员工令牌
     public function actionApiGetToken(){
     	try{
