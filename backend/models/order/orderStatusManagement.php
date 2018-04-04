@@ -83,4 +83,18 @@ class orderStatusManagement extends Component{
 		if($r->finishStatus==1 && $r->deliverStatus!=3) throw new SmartException("status error:5");
 		if($r->deliverStatus>0 && $r->payStatus!=1) throw new SmartException("status error:6");
 	}
+	//========================================
+	//取消订单
+	public function cancel(){
+		//获取状态
+		$status=$this->getStatus();
+		//处理
+		if($status==self::STATUS_UNPAID) 
+			$this->orderRecord->updateObj(array('cancelStatus'=>1));
+		elseif($status==self::STATUS_UNDELIVERED) 
+			$this->orderRecord->updateObj(array('cancelStatus'=>1));
+		//不允许处理
+		else 
+			throw new SmartException("error status");
+	}
 }
