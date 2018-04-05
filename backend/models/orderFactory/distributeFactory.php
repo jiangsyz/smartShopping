@@ -66,6 +66,7 @@ class distributeFactory extends orderFactory{
 			//计入总计
 			if($weight) $total+=$weight*$buyingRecord->buyCount;
 		}
+		return $total;
 	}
 	//========================================
 	//初始化订单
