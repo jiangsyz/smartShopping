@@ -6,7 +6,7 @@ use yii\base\SmartException;
 use yii\db\SmartActiveRecord;
 //========================================
 class distribute{
-	const TYPE_VIRTUAL="无需配送";
+	const TYPE_VIRTUAL="虚拟商品";
 	const TYPE_REFRIGERATION="冷链配送";
 	const TYPE_NORMAL="常规配送";
 }
