@@ -15,6 +15,8 @@ class orderConfirmation extends Component{
 		$data=$this->order->getOrderRecordData();
 		$data['price']=formatPrice::formatPrice($data['price']);
 		$data['memberPrice']=formatPrice::formatPrice($data['memberPrice']);
+		$data['finalPrice']=formatPrice::formatPrice($data['finalPrice']);
+		$data['freight']=formatPrice::formatPrice($data['freight']);
 		$data['reduction']=formatPrice::formatPrice($data['reduction']);
 		$data['pay']=formatPrice::formatPrice($data['pay']/100);
 		$data['isEffective']=$this->order->isEffective();
