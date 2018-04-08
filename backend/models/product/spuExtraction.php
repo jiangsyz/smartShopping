@@ -26,7 +26,7 @@ class spuExtraction{
 					<style>
 						body{ margin:0 auto; font-family: Arial,"微软雅黑","Helvetica Neue", Helvetica, sans-serif; color:#2c2c2c; background:#fff; padding:15px;}
 						div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,input,button,textarea,select,p,span{ margin:0;padding:0;}
-						img{ border:0; vertical-align:top; max-width:100% !important;}
+						img{ border:0; vertical-align:top;display: block;max-width:100% !important;}
 						ul,li,ol,ul {list-style:none;}
 						h1,h2,h3,h4,h5,h6 {font-weight:normal;list-style:none;}
 						i{font-style: italic;}
