@@ -104,4 +104,16 @@ class orderStatusManagement extends Component{
 		else 
 			throw new SmartException("error status");
 	}
+	//========================================
+	//确认收货
+	public function receipted(){
+		//获取状态
+		$status=$this->getStatus();
+		//处理
+		if($status==self::STATUS_UNRECEIPTED) 
+			$this->orderRecord->updateObj(array('deliverStatus'=>3));
+		//不允许处理
+		else 
+			throw new SmartException("error status");
+	}
 }
