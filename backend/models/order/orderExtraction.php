@@ -49,10 +49,6 @@ class orderExtraction extends Component{
 		$data['id']=$this->orderRecord->id;
 		//对外美化的订单编号
 		$data['showId']=$this->getShowId();
-		//订单标题
-		$data['title']=$this->orderRecord->title;
-		//父订单id
-		$data['parentId']=$this->orderRecord->parentId;
 		//支付价格
 		$data['pay']=formatPrice::formatPrice($this->orderRecord->pay/100);
 		//商品价格
@@ -61,6 +57,8 @@ class orderExtraction extends Component{
 		$data['freight']=formatPrice::formatPrice($this->orderRecord->freight);
 		//状态
 		$data['status']=$this->orderRecord->statusManagement->getStatus();
+		//支付剩余时间
+		$data['payRemainingTime']=$this->orderRecord->payManagement->getPayRemainingTime();
 		//是否需要地址
 		$data['isNeedAddress']=$this->orderRecord->isNeedAddress;
 		//地址信息
@@ -71,15 +69,16 @@ class orderExtraction extends Component{
 		$data['buyingRecords']=array();
 		$childOrders=$this->orderRecord->relationManagement->getChildren();
 		foreach($childOrders as $c){
-			$key=$c->title;
-			if(isset($data['buyingRecords'][$key])) throw new SmartException("title existed");
-			$data['buyingRecords'][$key]=array();
+			$bData=array();
+			$bData['title']=$c->title;
+			$bData['buyingRecords']=array();
 			$buyingRecords=$c->buyingManagement->getBuyingRecords();
 			foreach($buyingRecords as $b){
 				$bInfo=$b->getSalesUnit()->getExtraction()->getBasicData($this->orderRecord->member);
 				$bInfo['buyingCount']=$b->buyingCount;
-				$data['buyingRecords'][$key][]=$bInfo;
+				$bData['buyingRecords'][]=$bInfo;
 			}
+			$data['buyingRecords'][]=$bData;
 		}
 		//返回数据
 		return $data;
