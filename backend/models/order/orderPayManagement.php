@@ -54,4 +54,14 @@ class orderPayManagement extends Component{
 		//记录支付回调的runningId
 		$this->orderRecord->propertyManagement->addProperty("payRunningId",$runningId);
 	}
+	//========================================
+	//获取支付剩余时间
+	public function getPayRemainingTime(){
+		//支付过期时间戳
+		$timeOut=$this->orderRecord->createTime+self::PAY_TIME_OUT;
+		//剩余支付时间
+		$remainingTime=$timeOut-time();
+		//剩余时间不能是负数
+		return $remainingTime>0?$remainingTime:0;
+	}
 }
