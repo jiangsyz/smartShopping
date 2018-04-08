@@ -74,14 +74,21 @@ class orderStatusManagement extends Component{
 	public function checkStatus(){
 		$r=$this->orderRecord;
 		//只有主订单才有状态的概念
-		if($r->parentId) throw new SmartException("status error:0");
+		if($r->parentId) 
+			throw new SmartException("{$r->id} status error:0");
 		//不能共存的指标
-		if($r->finishStatus==1 && $r->refundingStatus==1) throw new SmartException("status error:1");
-		if($r->finishStatus==1 && $r->closeStatus==1) throw new SmartException("status error:2");
-		if($r->finishStatus==1 && $r->cancelStatus==1) throw new SmartException("status error:3");
-		if($r->finishStatus==1 && $r->payStatus==－1) throw new SmartException("status error:4");
-		if($r->finishStatus==1 && $r->deliverStatus!=3) throw new SmartException("status error:5");
-		if($r->deliverStatus>0 && $r->payStatus!=1) throw new SmartException("status error:6");
+		if($r->finishStatus==1 && $r->refundingStatus==1) 
+			throw new SmartException("{$r->id} status error:1");
+		if($r->finishStatus==1 && $r->closeStatus==1) 
+			throw new SmartException("{$r->id} status error:2");
+		if($r->finishStatus==1 && $r->cancelStatus==1) 
+			throw new SmartException("{$r->id} status error:3");
+		if($r->finishStatus==1 && $r->payStatus==－1) 
+			throw new SmartException("{$r->id} status error:4");
+		if($r->finishStatus==1 && $r->deliverStatus!=3) 
+			throw new SmartException("{$r->id} status error:5");
+		if($r->deliverStatus>0 && $r->payStatus!=1) 
+			throw new SmartException("{$r->id} status error:6");
 	}
 	//========================================
 	//取消订单
