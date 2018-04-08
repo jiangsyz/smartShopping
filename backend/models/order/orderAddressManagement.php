@@ -40,8 +40,8 @@ class orderAddressManagement extends Component{
 			//每个订单只能有一个地址
 			if(count($addressList)!=1) 
 				throw new SmartException("order {$oRecord->id} error address count");
-			//返回地址
-			return $addressList[0];
+			//提取地址
+			return json_decode($addressList[0]['val'],true);
 		}
 		//如果是主订单找不到地址,返回NULL
 		if(!$oRecord->parentId) return NULL;
