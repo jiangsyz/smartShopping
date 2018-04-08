@@ -10,13 +10,16 @@ class orderExtraction extends Component{
 	//订单记录
 	public $orderRecord=NULL;
 	//========================================
+	//获取订单的美化后的id
+	public function getShowId(){return 900000+$this->orderRecord->id;}
+	//========================================
 	//获取基础数据
 	public function getBasicData(){
 		$data=array();
 		//订单编号
 		$data['id']=$this->orderRecord->id;
 		//对外美化的订单编号
-		$data['showId']=900000+$this->orderRecord->id;
+		$data['showId']=$this->getShowId();
 		//支付价格
 		$data['pay']=formatPrice::formatPrice($this->orderRecord->pay/100);
 		//商品价格
