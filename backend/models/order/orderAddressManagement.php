@@ -5,6 +5,7 @@ use Yii;
 use yii\base\SmartException;
 use yii\base\Component;
 use backend\models\member\address;
+use backend\models\order\orderStatusManagement;
 //========================================
 class orderAddressManagement extends Component{
 	//订单记录
@@ -25,6 +26,28 @@ class orderAddressManagement extends Component{
 		$where.="AND `memberId`='{$oRecord->memberId}' AND `isDeled`='0'";
 		$address=address::find()->where($where)->one();
 		if(!$address) throw new SmartException("miss address");
+		//添加收货地址
+		$oRecord->propertyManagement->addProperty('address',json_encode($address->getData()));
+	}
+	//========================================
+	//修改收货地址
+	public function changeAddress($addressId){
+		//订单
+		$oRecord=$this->orderRecord;
+		//不需要收货地址的情况
+		if(!$oRecord->isNeedAddress) throw SmartException("is not need address");
+		//获取订单状态
+		$status=$oRecord->statusManagement->getStatus();
+		if($status!=orderStatusManagement::STATUS_UNPAID) throw SmartException("error status");
+		//获取地址
+		$where="`id`='{$addressId}' ";
+		$where.="AND `memberId`='{$oRecord->memberId}' AND `isDeled`='0'";
+		$address=address::find()->where($where)->one();
+		if(!$address) throw new SmartException("miss address");
+		//获取原有的地址
+		$oldAddress=$oRecord->propertyManagement->getProperty("address");
+		//删除原有地址
+		foreach($oldAddress as $old) $oRecord->propertyManagement->delProperty($old['obj']);
 		//添加收货地址
 		$oRecord->propertyManagement->addProperty('address',json_encode($address->getData()));
 	}
