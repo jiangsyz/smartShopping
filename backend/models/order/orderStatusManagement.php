@@ -32,7 +32,10 @@ class orderStatusManagement extends Component{
 		elseif($this->orderRecord->payStatus==-1) return self::STATUS_CLOSED;
 		//已完成
 		elseif($this->orderRecord->finishStatus==1) return self::STATUS_FINISHED;
-		elseif($this->orderRecord->deliverStatus==3) return self::STATUS_FINISHED;
+		elseif($this->orderRecord->deliverStatus==3){
+			$this->orderRecord->updateObj(array('finishStatus'=>1));
+			return self::STATUS_FINISHED;
+		}
 		//待收货
 		elseif($this->orderRecord->deliverStatus==1) return self::STATUS_UNRECEIPTED;
 		elseif($this->orderRecord->deliverStatus==2) return self::STATUS_UNRECEIPTED;
