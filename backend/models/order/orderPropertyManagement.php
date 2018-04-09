@@ -47,7 +47,7 @@ class orderPropertyManagement extends Component{
 			//初始化propertyKey为索引的小池
 			if(!isset($this->pList[$p->propertyKey])) $this->pList[$p->propertyKey]=array();
 			//将属性值加入池中
-			$data=array('val'=>$p->propertyVal,'time'=>$p->createTime);
+			$data=array('val'=>$p->propertyVal,'time'=>$p->createTime,'obj'=>$p);
 			$this->pList[$p->propertyKey][]=$data;
 		}
 	}
@@ -64,5 +64,13 @@ class orderPropertyManagement extends Component{
 		$pList=$this->getPropertyList();
 		//返回具体属性值
 		if(!isset($pList[$key])) return NULL; else return $pList[$key];
+	}
+	//========================================
+	//删除某个属性
+	public function delProperty(orderProperty $p){
+		//删除
+		$p->delete();
+		//触发事件,刷新属性池
+		$this->trigger(self::EVENT_PROPERTY_CHANGED);
 	}
 }
