@@ -35,10 +35,10 @@ class orderAddressManagement extends Component{
 		//订单
 		$oRecord=$this->orderRecord;
 		//不需要收货地址的情况
-		if(!$oRecord->isNeedAddress) throw SmartException("is not need address");
+		if(!$oRecord->isNeedAddress) throw new SmartException("is not need address");
 		//获取订单状态
 		$status=$oRecord->statusManagement->getStatus();
-		if($status!=orderStatusManagement::STATUS_UNPAID) throw SmartException("error status");
+		if($status!=orderStatusManagement::STATUS_UNPAID) throw new SmartException("error status");
 		//获取地址
 		$where="`id`='{$addressId}' ";
 		$where.="AND `memberId`='{$oRecord->memberId}' AND `isDeled`='0'";
