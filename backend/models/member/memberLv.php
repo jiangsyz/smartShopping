@@ -41,7 +41,13 @@ class memberLv extends SmartActiveRecord{
 		$sql="SELECT * FROM {$table} WHERE `memberId`='{$member->id}' AND `lv`='{$data['lv']}' ORDER BY `end` DESC;";
 		$memberLvRecord=self::findBySql($sql)->one();
 		//确定新纪录的开始时间
-		$start=$memberLvRecord?$memberLvRecord->end+1:time();
+		$now=time();
+		$start=NULL;
+		if($memberLvRecord && $memberLvRecord->end>=$now) 
+			$start=$memberLvRecord->end+1;
+		else 
+			$start=$now;
+		if(!$start) throw new SmartException("miss start");
 		//新增vip记录
 		$memberLv=array();
 		$memberLv['memberId']=$member->id;
