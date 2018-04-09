@@ -170,7 +170,7 @@ class OrderController extends SmartWebController{
 			//提交事务
 			$trascation->commit();
 			//返回
-			$this->response(1,array('error'=>0,'data'=>$data));
+			$this->response(1,array('error'=>0));
 		}
 		catch(Exception $e){
 			//回滚
@@ -201,7 +201,7 @@ class OrderController extends SmartWebController{
 			//提交事务
 			$trascation->commit();
 			//返回
-			$this->response(1,array('error'=>0,'data'=>$data));
+			$this->response(1,array('error'=>0));
 		}
 		catch(Exception $e){
 			//回滚
