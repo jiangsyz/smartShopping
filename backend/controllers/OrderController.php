@@ -149,4 +149,64 @@ class OrderController extends SmartWebController{
 			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
     	}
 	}
+	//========================================
+	//确认收货
+	public function actionApiReceipted(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取订单id
+			$orderId=Yii::$app->request->get('orderId',0);
+			//获取订单
+			$orderRecord=orderRecord::getLockedOrderById($orderId);
+			if(!$orderRecord) throw new SmartException("miss orderRecord");
+			//判断订单是否属于当前会员
+			if($orderRecord->memberId!=$member->id) throw new SmartException("error memberId");
+			//确认收货
+			$orderRecord->statusManagement->receipted();
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
+	//修改地址
+	public function actionApiChangeAddress(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取订单id
+			$orderId=Yii::$app->request->get('orderId',0);
+			//获取地址id
+			$addressId=Yii::$app->request->get('addressId',0);
+			//获取订单
+			$orderRecord=orderRecord::getLockedOrderById($orderId);
+			if(!$orderRecord) throw new SmartException("miss orderRecord");
+			//判断订单是否属于当前会员
+			if($orderRecord->memberId!=$member->id) throw new SmartException("error memberId");
+			//修改地址
+			$orderRecord->addressManagement->changeAddress($addressId);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
 }
