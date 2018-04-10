@@ -110,8 +110,14 @@ class orderStatusManagement extends Component{
 		//处理
 		if($status==self::STATUS_UNPAID) 
 			$this->orderRecord->updateObj(array('cancelStatus'=>1));
-		elseif($status==self::STATUS_UNDELIVERED) 
+		elseif($status==self::STATUS_UNDELIVERED){
 			$this->orderRecord->updateObj(array('cancelStatus'=>1));
+			$refund=array();
+			$refund['bid']=NULL;
+			$refund['price']=$this->orderRecord->pay;
+			$refund['applyMemo']="整单取消";
+			refund::applyRefund($this->orderRecord,$refund);
+		}
 		//不允许处理
 		else 
 			throw new SmartException("error status");
