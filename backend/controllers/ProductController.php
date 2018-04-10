@@ -108,8 +108,6 @@ class ProductController extends SmartWebController{
 	//搜索产品
 	public function actionApiSearchSpu(){
 		try{
-			//开启事务
-			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
 			$token=Yii::$app->request->post('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
@@ -127,20 +125,64 @@ class ProductController extends SmartWebController{
 			//组织数据
 			unset($data['objs']);
 			$data['search']=$search;
-			$data['products']=array();
+			$data['spus']=array();
 			foreach($result['objs'] as $spu){
 				$spuExtraction=new spuExtraction($spu);
 				$data['spus'][]=$spuExtraction->getBasicData();
 			}
-			//提交事务
-			$trascation->commit();
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
 		}
-		catch(Exception $e){
-			//回滚
-			$trascation->rollback();
-			$this->response(1,array('error'=>$e->getCode(),'msg'=>$e->getMessage()));
-    	}
+		catch(Exception $e){$this->response(1,array('error'=>$e->getCode(),'msg'=>$e->getMessage()));}
+	}
+	//========================================
+	//我的收藏
+	public function actionApiGetMarkSpu(){
+		try{
+			//根据token获取会员
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取标签id
+			$markType=Yii::$app->request->get('markType',0);
+			if(!$markType) throw new SmartException("非法的标记类型",-2);
+			//获取每页多少条
+			$pageSize=Yii::$app->request->get('pageSize',0);
+			//获取当前第几页
+			$pageNum=Yii::$app->request->get('pageNum',0);
+			//获取sql
+			$sourceType=source::TYPE_SPU;
+			$mTable=mark::tableName();
+			$sTable=spu::tableName();
+			$sql="
+				SELECT {$mTable}.* 
+					FROM 
+						{$mTable} 
+					JOIN 
+						{$sTable}
+					ON 
+						{$mTable}.`sourceId`={$sTable}.`id` 
+					WHERE 
+						{$mTable}.`sourceType`='{$sourceType}' AND 
+						{$mTable}.`memberId`='{$member->id}' AND 
+						{$mTable}.`markType`='{$markType}' AND
+						{$sTable}.`closed`='0' AND
+						{$sTable}.`locked`='0'
+				";
+			//获取query
+			$query=mark::findBySql($sql)->with('source');
+			//获取分页数据
+			$result=Yii::$app->smartPagination->getData($query,$pageSize,$pageNum);
+			//组织数据
+			$data=$result;
+			unset($data['objs']);
+			$data['spus']=array();
+			foreach($result['objs'] as $mark){
+				$spuExtraction=new spuExtraction($mark->source);
+				$data['spus'][]=$spuExtraction->getBasicData();
+			}
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+		}
+		catch(Exception $e){$this->response(1,array('error'=>$e->getCode(),'msg'=>$e->getMessage()));}
 	}
 }
