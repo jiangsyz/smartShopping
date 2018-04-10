@@ -100,8 +100,8 @@ class CategoryController extends SmartWebController{
 			$data=$result;
 			unset($data['objs']);
 			$data['spus']=array();
-			foreach($result['objs'] as $recommendRecord){
-				$spuExtraction=new spuExtraction($recommendRecord->source);
+			foreach($result['objs'] as $categoryRecord){
+				$spuExtraction=new spuExtraction($categoryRecord->source);
 				$data['spus'][]=$spuExtraction->getBasicData();
 			}
 			//返回
