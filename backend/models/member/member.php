@@ -70,7 +70,7 @@ class member extends source implements shop{
 	//上传推送平台id
 	public function uploadPushUniqueId($pushUniqueId){
 		if(!$pushUniqueId) throw new SmartException("miss pushUniqueId");
-		if($this->pushUniqueId) throw new SmartException("pushUniqueId existed");
+		//if($this->pushUniqueId) throw new SmartException("pushUniqueId existed");
 		$this->updateObj(array('pushUniqueId'=>$pushUniqueId));		
 	}
 	//========================================
