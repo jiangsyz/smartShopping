@@ -12,6 +12,8 @@ use backend\models\model\source;
 use backend\models\mark\mark;
 use backend\models\product\spuExtraction;
 class ProductController extends SmartWebController{
+	public $enableCsrfValidation=false;
+	//========================================
 	//获取spu的信息
 	public function actionApiGetSpuDetail(){
 		try{
@@ -100,6 +102,45 @@ class ProductController extends SmartWebController{
 			//回滚
 			$trascation->rollback();
 			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
+	//搜索产品
+	public function actionApiSearchSpu(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=Yii::$app->request->post('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取标签id
+			$search=Yii::$app->request->post('search',false);
+			if(!$search) throw new SmartException("搜索词为空",-2);
+			//获取每页多少条
+			$pageSize=Yii::$app->request->post('pageSize',0);
+			//获取当前第几页
+			$pageNum=Yii::$app->request->post('pageNum',0);
+			//获取query
+			$query=spu::find()->where("`title` LIKE '%{$search}%' AND `closed`='0' AND `locked`='0'");
+			//获取分页数据
+			$data=$result=Yii::$app->smartPagination->getData($query,$pageSize,$pageNum);
+			//组织数据
+			unset($data['objs']);
+			$data['search']=$search;
+			$data['products']=array();
+			foreach($result['objs'] as $spu){
+				$spuExtraction=new spuExtraction($spu);
+				$data['spus'][]=$spuExtraction->getBasicData();
+			}
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>$e->getCode(),'msg'=>$e->getMessage()));
     	}
 	}
 }
