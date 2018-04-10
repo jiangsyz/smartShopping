@@ -48,16 +48,16 @@ class AddressController extends SmartWebController{
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取收件人姓名
 			$name=Yii::$app->request->post('name',false); 
-			if(!$name) throw new SmartException("miss name");
+			if(!$name) throw new SmartException("收货人姓名缺失",-2);
 			//获取收件人手机
 			$phone=Yii::$app->request->post('phone',false); 
-			if(!$phone) throw new SmartException("miss phone");
+			if(!$phone) throw new SmartException("收货人手机缺失",-2);
 			//获取地域id
 			$areaId=Yii::$app->request->post('areaId',false); 
-			if(!$areaId) throw new SmartException("miss areaId");
+			if(!$areaId) throw new SmartException("收件区域编号缺失",-2);
 			//获取详细地址
 			$detail=Yii::$app->request->post('detail',false); 
-			if(!$detail) throw new SmartException("miss detail");
+			if(!$detail) throw new SmartException("详细地址缺失",-2);
 			//获取邮编
 			$postCode=Yii::$app->request->post('postCode',NULL);
 			//添加
@@ -91,10 +91,11 @@ class AddressController extends SmartWebController{
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取地址id
 			$addressId=Yii::$app->request->get('addressId',0);
+			if(!$addressId) throw new SmartException("收货地址编号缺失",-2);
 			//获取地址
 			$where="`id`='{$addressId}' AND `memberId`='{$member->id}'";
 			$address=address::find()->where($where)->one();
-			if(!$address) throw new SmartException("miss member address");
+			if(!$address) throw new SmartException("找不到当前收货地址",-2);
 			//删除地址
 			$address->delete();
 			//提交事务
@@ -119,24 +120,25 @@ class AddressController extends SmartWebController{
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取地址id
 			$addressId=Yii::$app->request->post('addressId',0);
+			if(!$addressId) throw new SmartException("收货地址编号缺失",-2);
 			//获取收件人姓名
 			$name=Yii::$app->request->post('name',false); 
-			if(!$name) throw new SmartException("miss name");
+			if(!$name) throw new SmartException("收货人姓名缺失",-2);
 			//获取收件人手机
 			$phone=Yii::$app->request->post('phone',false); 
-			if(!$phone) throw new SmartException("miss phone");
+			if(!$phone) throw new SmartException("收货人手机缺失",-2);
 			//获取地域id
 			$areaId=Yii::$app->request->post('areaId',false); 
-			if(!$areaId) throw new SmartException("miss areaId");
+			if(!$areaId) throw new SmartException("收件区域编号缺失",-2);
 			//获取详细地址
 			$detail=Yii::$app->request->post('detail',false); 
-			if(!$detail) throw new SmartException("miss detail");
+			if(!$detail) throw new SmartException("详细地址缺失",-2);
 			//获取邮编
 			$postCode=Yii::$app->request->post('postCode',NULL);
 			//获取地址
 			$where="`id`='{$addressId}' AND `memberId`='{$member->id}' AND `isDeled`='0'";
 			$address=address::find()->where($where)->one();
-			if(!$address) throw new SmartException("miss member address");
+			if(!$address) throw new SmartException("找不到当前收货地址",-2);
 			//修改
 			$addressData=array();
 			$addressData['name']=$name;
