@@ -9,6 +9,7 @@ use backend\models\token\tokenManagement;
 use backend\models\category\category;
 use backend\models\category\categoryRecord;
 use backend\models\product\spuExtraction;
+use backend\models\product\spu;
 class CategoryController extends SmartWebController{
 	//获取所有的顶级分类
 	public function actionApiGetTopCategories(){
@@ -71,12 +72,28 @@ class CategoryController extends SmartWebController{
 			if(!$category) throw new SmartException("miss category");
 			//获取后代分类
 			$posterities=$category->getPosterities();
-			//查询query
+			//获取sql
 			$sourceType=source::TYPE_SPU;
-			$where="`sourceType`='{$sourceType}' AND `categoryId` IN ('{$category->id}'";
-			foreach($posterities as $p) $where.=",{$p->id}";
-			$where.=")";
-			$query=categoryRecord::find()->where($where)->with('source');
+			$cTable=categoryRecord::tableName();
+			$sTable=spu::tableName();
+			$categoryIds="'{$category->id}'";
+			foreach($posterities as $p) $categoryIds.=",{$p->id}";
+			$sql="
+				SELECT {$cTable}.* 
+					FROM 
+						{$cTable} 
+					JOIN 
+						{$sTable}
+					ON 
+						{$cTable}.`sourceId`={$sTable}.`id` 
+					WHERE 
+						{$cTable}.`sourceType`='{$sourceType}' AND 
+						{$cTable}.`categoryId` IN ({$categoryIds}) AND
+						{$sTable}.`closed`='0' AND
+						{$sTable}.`locked`='0'
+				";
+			//获取query
+			$query=categoryRecord::findBySql($sql)->with('source');
 			//获取分页数据
 			$result=Yii::$app->smartPagination->getData($query,$pageSize,$pageNum);
 			//组织数据
