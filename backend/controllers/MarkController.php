@@ -7,6 +7,8 @@ use yii\base\Exception;
 use backend\models\model\source;
 use backend\models\token\tokenManagement;
 use backend\models\mark\mark;
+use backend\models\product\spu;
+use backend\models\product\spuExtraction;
 class MarkController extends SmartWebController{
 	//标记
 	public function actionApiMark(){
@@ -97,5 +99,55 @@ class MarkController extends SmartWebController{
 			$this->response(1,array('error'=>0,'data'=>$data));
 		}
 		catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+	}
+	//========================================
+	//获取会员标记的spu
+	public function actionApiGetMarkSpu(){
+		try{
+			//根据token获取会员
+			$token=Yii::$app->request->get('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取标签id
+			$markType=Yii::$app->request->get('markType',0);
+			if(!$markType) throw new SmartException("非法的标记类型",-2);
+			//获取每页多少条
+			$pageSize=Yii::$app->request->get('pageSize',0);
+			//获取当前第几页
+			$pageNum=Yii::$app->request->get('pageNum',0);
+			//获取sql
+			$sourceType=source::TYPE_SPU;
+			$mTable=mark::tableName();
+			$sTable=spu::tableName();
+			$sql="
+				SELECT {$mTable}.* 
+					FROM 
+						{$mTable} 
+					JOIN 
+						{$sTable}
+					ON 
+						{$mTable}.`sourceId`={$sTable}.`id` 
+					WHERE 
+						{$mTable}.`sourceType`='{$sourceType}' AND 
+						{$mTable}.`memberId`='{$member->id}' AND 
+						{$mTable}.`markType`='{$markType}' AND
+						{$sTable}.`closed`='0' AND
+						{$sTable}.`locked`='0'
+				";
+			//获取query
+			$query=mark::findBySql($sql)->with('source');
+			//获取分页数据
+			$result=Yii::$app->smartPagination->getData($query,$pageSize,$pageNum);
+			//组织数据
+			$data=$result;
+			unset($data['objs']);
+			$data['spus']=array();
+			foreach($result['objs'] as $mark){
+				$spuExtraction=new spuExtraction($mark->source);
+				$data['spus'][]=$spuExtraction->getBasicData();
+			}
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+		}
+		catch(Exception $e){$this->response(1,array('error'=>$e->getCode(),'msg'=>$e->getMessage()));}
 	}
 }
