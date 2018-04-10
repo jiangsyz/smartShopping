@@ -14,6 +14,13 @@ class orderStatusManagement extends Component{
 	const STATUS_UNDELIVERED=4;//待发货
 	const STATUS_UNRECEIPTED=5;//待收货
 	const STATUS_FINISHED=6;//已完成
+	const STATUS_ERROR1=-1;//异常
+	const STATUS_ERROR2=-2;//异常
+	const STATUS_ERROR3=-3;//异常
+	const STATUS_ERROR4=-4;//异常
+	const STATUS_ERROR5=-5;//异常
+	const STATUS_ERROR6=-6;//异常
+	const STATUS_ERROR7=-7;//异常
 	//========================================
 	//订单记录
 	public $orderRecord=NULL;
@@ -22,8 +29,8 @@ class orderStatusManagement extends Component{
 	public function getStatus(){
 		//检查支付状态
 		$this->checkPayTimeout();
-		//检查状态
-		$this->checkStatus();
+		//检查状态,检查错误返回错误状态
+		$result=$this->checkStatus(); if($result!==true) return $result;
 		//退款中
 		if($this->orderRecord->refundingStatus==1) return self::STATUS_REFUNDING;
 		//交易关闭
@@ -78,20 +85,22 @@ class orderStatusManagement extends Component{
 		$r=$this->orderRecord;
 		//只有主订单才有状态的概念
 		if($r->parentId) 
-			throw new SmartException("{$r->id} status error:0");
+			return self::STATUS_ERROR1;
 		//不能共存的指标
 		if($r->finishStatus==1 && $r->refundingStatus==1) 
-			throw new SmartException("{$r->id} status error:1");
+			return self::STATUS_ERROR2;
 		if($r->finishStatus==1 && $r->closeStatus==1) 
-			throw new SmartException("{$r->id} status error:2");
+			return self::STATUS_ERROR3;
 		if($r->finishStatus==1 && $r->cancelStatus==1) 
-			throw new SmartException("{$r->id} status error:3");
+			return self::STATUS_ERROR4;
 		if($r->finishStatus==1 && $r->payStatus==－1) 
-			throw new SmartException("{$r->id} status error:4");
+			return self::STATUS_ERROR5;
 		if($r->finishStatus==1 && $r->deliverStatus!=3) 
-			throw new SmartException("{$r->id} status error:5");
+			return self::STATUS_ERROR6;
 		if($r->deliverStatus>0 && $r->payStatus!=1) 
-			throw new SmartException("{$r->id} status error:6");
+			return self::STATUS_ERROR7;
+		//没有错误
+		return true;
 	}
 	//========================================
 	//取消订单
