@@ -48,7 +48,8 @@ class OrderController extends SmartWebController{
 			//查询query
 			$query=orderRecord::findBySql($sql);
 			//获取分页数据
-			$result=Yii::$app->smartPagination->getData($query,$pageSize,$pageNum);
+			$class=orderRecord::className();
+			$result=Yii::$app->smartPagination->getDataBySql($class,$sql,$pageSize,$pageNum);
 			//组织数据
 			$data=$result;
 			unset($data['objs']);
