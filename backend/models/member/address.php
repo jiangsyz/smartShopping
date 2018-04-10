@@ -57,17 +57,17 @@ class address extends SmartActiveRecord{
 	//检查区域
 	public function checkArea(){
 		//区域必须存在
-		if(!$this->area) throw new SmartException("miss area");
+		if(!$this->area) throw new SmartException("找不到收货区域",-2);
 		//必须是第三级区域
-		if($this->area->level!=3) throw new SmartException("error area level");
+		if($this->area->level!=3) throw new SmartException("错误的收货区域等级",-2);
 	}
 	//========================================
 	//检查会员
-	public function checkMember(){if(!$this->member) throw new SmartException("miss member");}
+	public function checkMember(){if(!$this->member) throw new SmartException("找不到会员",-2);}
 	//========================================
 	//检查软删除状态
 	public function checkIsDeled(){
-		if($this->oldAttributes['isDeled']) throw new SmartException("address is deled");
+		if($this->oldAttributes['isDeled']) throw new SmartException("当前收货地址已删除",-2);
 	}
 	//========================================
 	//重载delete进行软删除
