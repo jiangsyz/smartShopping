@@ -143,7 +143,9 @@ class MarkController extends SmartWebController{
 			$data['spus']=array();
 			foreach($result['objs'] as $mark){
 				$spuExtraction=new spuExtraction($mark->source);
-				$data['spus'][]=$spuExtraction->getBasicData();
+				$spuData=$spuExtraction->getBasicData();
+				$spuData['markId']=$mark->id;
+				$data['spus'][]=$spuData;
 			}
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
