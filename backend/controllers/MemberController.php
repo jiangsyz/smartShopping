@@ -10,6 +10,7 @@ use backend\models\member\memberLv;
 use backend\models\token\tokenManagement;
 use backend\models\signInManagement\signInManagement;
 use backend\models\identifyingCode\identifyingCodeManagement;
+use backend\models\product\formatPrice;
 class MemberController extends SmartWebController{
 	//通过手机拿令牌
     public function actionApiGetTokenByPhone(){
@@ -91,6 +92,7 @@ class MemberController extends SmartWebController{
 			$data['vipEnd']=$vip==NULL?0:$vip->end;
 			$data['pushUniqueId']=$member->pushUniqueId;
 			$data['customServiceUniqueId']=$member->customServiceUniqueId;
+			$data['reduction']=formatPrice::formatPrice(11.11);
 			$data['hash']=$member->hash();
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
