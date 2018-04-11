@@ -14,6 +14,7 @@ use backend\models\token\tokenManagement;
 use backend\models\order\orderRecord;
 use backend\models\pay\payCallback;
 use backend\models\order\orderBuyingRecord;
+use backend\models\notice\notice;
 class SiteController extends SmartWebController{
 	public $enableCsrfValidation=false;
 	//========================================
@@ -51,6 +52,12 @@ class SiteController extends SmartWebController{
             foreach($buyingRecords as $r) $r->trigger(orderBuyingRecord::EVENT_BUYING_SUCCESS);
             //修改日志中的状态信息
             $callbackLog->updateObj(array('status'=>1));
+            //发送通知
+            $notice=array();
+            $notice['memberId']=$orderRecord->member->id;
+            $notice['type']=notice::TYPE_PAY;
+            $notice['content']="您的订单{$orderRecord->id}已经支付成功!";
+            notice::addObj($notice);
             //提交事务
             $trascation->commit();
             //返回验证码订单号
