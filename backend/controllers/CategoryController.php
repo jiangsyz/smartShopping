@@ -92,10 +92,9 @@ class CategoryController extends SmartWebController{
 						{$sTable}.`closed`='0' AND
 						{$sTable}.`locked`='0'
 				";
-			//获取query
-			$query=categoryRecord::findBySql($sql)->with('source');
 			//获取分页数据
-			$result=Yii::$app->smartPagination->getData($query,$pageSize,$pageNum);
+			$class=categoryRecord::className();
+			$result=Yii::$app->smartPagination->getDataBySql($class,$sql,$pageSize,$pageNum);
 			//组织数据
 			$data=$result;
 			unset($data['objs']);
