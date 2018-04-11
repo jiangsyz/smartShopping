@@ -103,26 +103,6 @@ class orderStatusManagement extends Component{
 		return true;
 	}
 	//========================================
-	//取消订单
-	public function cancel(){
-		//获取状态
-		$status=$this->getStatus();
-		//处理
-		if($status==self::STATUS_UNPAID) 
-			$this->orderRecord->updateObj(array('cancelStatus'=>1));
-		elseif($status==self::STATUS_UNDELIVERED){
-			$this->orderRecord->updateObj(array('cancelStatus'=>1));
-			$refund=array();
-			$refund['bid']=0;
-			$refund['price']=$this->orderRecord->pay;
-			$refund['applyMemo']="整单取消";
-			refund::applyRefund($this->orderRecord,$refund);
-		}
-		//不允许处理
-		else 
-			throw new SmartException("error status");
-	}
-	//========================================
 	//确认收货
 	public function receipted(){
 		//获取状态
