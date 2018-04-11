@@ -109,7 +109,7 @@ class OrderController extends SmartWebController{
 			//判断订单是否属于当前会员
 			if($orderRecord->memberId!=$member->id) throw new SmartException("error memberId");
 			//取消订单
-			$orderRecord->statusManagement->cancel();
+			$orderRecord->cancelManagement->cancel();
 			//提交事务
 			$trascation->commit();
 			//返回
