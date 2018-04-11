@@ -27,6 +27,8 @@ class orderRecord extends source{
 	public $payManagement=false;
 	//状态管理器
 	public $statusManagement=false;
+	//取消管理器
+	public $cancelManagement=false;
 	//检查器
 	public $checker=false;
 	//数据提取器
@@ -49,6 +51,7 @@ class orderRecord extends source{
 		$this->buyingManagement=new orderBuyingManagement(array('orderRecord'=>$this));
 		$this->payManagement=new orderPayManagement(array('orderRecord'=>$this));
 		$this->statusManagement=new orderStatusManagement(array('orderRecord'=>$this));
+		$this->cancelManagement=new orderCancelManagement(array('orderRecord'=>$this));
 		$this->checker=new orderRecordChecker(array('orderRecord'=>$this));
 		$this->extraction=new orderExtraction(array('orderRecord'=>$this));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
