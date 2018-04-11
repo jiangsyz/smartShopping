@@ -65,6 +65,8 @@ class orderExtraction extends Component{
 		$data['address']=$this->orderRecord->addressManagement->getAddress();
 		//备注信息
 		$data['memo']=$this->orderRecord->memoManagement->getMemo(1);
+		//创建时间
+		$data['createTime']=$this->orderRecord->createTime;
 		//获取购买行为
 		$data['buyingRecords']=array();
 		$childOrders=$this->orderRecord->relationManagement->getChildren();
