@@ -66,18 +66,4 @@ class member extends source implements shop{
 		//保存
 		$this->updateObj(array('nickName'=>$nickName));
 	}
-	//========================================
-	//上传推送平台id
-	public function uploadPushUniqueId($pushUniqueId){
-		if(!$pushUniqueId) throw new SmartException("miss pushUniqueId");
-		//if($this->pushUniqueId) throw new SmartException("pushUniqueId existed");
-		$this->updateObj(array('pushUniqueId'=>$pushUniqueId));		
-	}
-	//========================================
-	//上传客服平台id
-	public function uploadCustomServiceUniqueId($customServiceUniqueId){
-		if(!$customServiceUniqueId) throw new SmartException("miss customServiceUniqueId");
-		if($this->customServiceUniqueId) throw new SmartException("customServiceUniqueId existed");
-		$this->updateObj(array('customServiceUniqueId'=>$customServiceUniqueId));		
-	}
 }
