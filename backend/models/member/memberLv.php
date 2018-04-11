@@ -5,13 +5,14 @@ use Yii;
 use yii\base\SmartException;
 use yii\db\SmartActiveRecord;
 use backend\models\order\orderBuyingRecord;
+use backend\models\notice\notice;
 //========================================
 class memberLv extends SmartActiveRecord{
 	//获取会员的vip详情
 	public static function getVipInfo(member $member){
 		$now=time();
 		//查找在有效期内的会员等级记录
-		$where="`start`<='{$now}' AND `end`>='{$now}' AND `memberId`='{$member->id}'";
+		$where="`end`>='{$now}' AND `memberId`='{$member->id}'";
 		$memberLvs=self::find()->where($where)->all();
 		//以等级高的为准,等级相同以最晚截至时间为准
 		$vip=NULL;
@@ -38,7 +39,7 @@ class memberLv extends SmartActiveRecord{
 		if(!$member) throw new SmartException("addVip miss member");
 		//找到该会员需要开通等级的最晚到期的记录
 		$table=self::tableName();
-		$sql="SELECT * FROM {$table} WHERE `memberId`='{$member->id}' AND `lv`='{$data['lv']}' ORDER BY `end` DESC;";
+		$sql="SELECT * FROM {$table} WHERE `memberId`='{$member->id}' AND `lv`='{$data['lv']}' ORDER BY `end` DESC FOR UPDATE;";
 		$memberLvRecord=self::findBySql($sql)->one();
 		//确定新纪录的开始时间
 		$now=time();
@@ -56,5 +57,13 @@ class memberLv extends SmartActiveRecord{
 		$memberLv['end']=$memberLv['start']+$data['len'];
 		$memberLv['orderId']=$orderRecord->id;
 		self::addObj($memberLv);
+		//格式化到期时间
+		$endDate=date("Y-m-d",$memberLv['end']);
+		//发送通知
+        $notice=array();
+        $notice['memberId']=$member->id;
+        $notice['type']=notice::TYPE_VIP;
+        $notice['content']="您的超级会员身份最新截至日期为{$endDate}!";
+        notice::addObj($notice);
 	}
 }
