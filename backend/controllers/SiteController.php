@@ -53,10 +53,11 @@ class SiteController extends SmartWebController{
             //修改日志中的状态信息
             $callbackLog->updateObj(array('status'=>1));
             //发送通知
+            $orderShowId=$orderRecord->extraction->getShowId();
             $notice=array();
             $notice['memberId']=$orderRecord->member->id;
             $notice['type']=notice::TYPE_PAY;
-            $notice['content']="您的订单{$orderRecord->id}已经支付成功!";
+            $notice['content']="您的订单{$orderShowId}已经支付成功!";
             notice::addObj($notice);
             //提交事务
             $trascation->commit();
