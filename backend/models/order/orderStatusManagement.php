@@ -6,8 +6,6 @@ use yii\base\SmartException;
 use yii\base\Component;
 //========================================
 class orderStatusManagement extends Component{
-	const PAY_TIME_OUT=60*5;//支付超时秒数
-	//========================================
 	const STATUS_UNPAID=1;//待支付
 	const STATUS_REFUNDING=2;//退款中
 	const STATUS_CLOSED=3;//交易关闭
@@ -67,17 +65,18 @@ class orderStatusManagement extends Component{
 	//========================================
 	//检查支付是否超时
 	public function checkPayTimeout(){
+		$r=$this->orderRecord;
 		//不是主订单不处理
-		if($this->orderRecord->parentId) return;
+		if($r->parentId) return;
 		//不是未支付不处理
-		if($this->orderRecord->payStatus!=0) return;
+		if($r->payStatus!=0) return;
 		//取消或关闭的不处理
-		if($this->orderRecord->cancelStatus==1) return;
-		if($this->orderRecord->closeStatus==1) return;
+		if($r->cancelStatus==1) return;
+		if($r->closeStatus==1) return;
 		//计算等待支付时常
-		$waiting=time()-$this->orderRecord->createTime;
+		$waiting=time()-$r->createTime;
 		//超时了修改支付状态
-		if($waiting>self::PAY_TIME_OUT) $this->orderRecord->updateObj(array('payStatus'=>-1));
+		if($waiting>Yii::$app->params["payTimeOut"]) $r->updateObj(array('payStatus'=>-1));
 	}
 	//========================================
 	//检查状态
