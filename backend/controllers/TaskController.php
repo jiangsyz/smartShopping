@@ -14,6 +14,7 @@ use backend\models\token\tokenManagement;
 use backend\models\shoppingCart\shoppingCart;
 use backend\models\order\orderRecord;
 use backend\models\order\orderBuyingRecord;
+use backend\models\notice\notice;
 class TaskController extends SmartWebController{
 	//检查订单支付超时
 	public function actionApiCheckPayTimeOutOrder(){
@@ -93,6 +94,21 @@ class TaskController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
+			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
+	//推送
+	public function actionApiPushNotice(){
+		try{
+			$notice=notice::find()->where("`sendStatus`='0'")->orderBy("createTime ASC")->one();
+			if(!$notice) throw new SmartException("miss notice");
+			$notice->push();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$notice->id));
+		}
+		catch(Exception $e){
+			//回滚
 			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
     	}
 	}
