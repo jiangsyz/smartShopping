@@ -6,9 +6,6 @@ use yii\base\SmartException;
 use yii\base\Component;
 //========================================
 class orderPayManagement extends Component{
-	//支付超时秒数
-	const PAY_TIME_OUT=60*5;
-	//========================================
 	//订单记录
 	public $orderRecord=NULL;
 	//========================================
@@ -58,7 +55,7 @@ class orderPayManagement extends Component{
 	//获取支付剩余时间
 	public function getPayRemainingTime(){
 		//支付过期时间戳
-		$timeOut=$this->orderRecord->createTime+self::PAY_TIME_OUT;
+		$timeOut=$this->orderRecord->createTime+Yii::$app->params["payTimeOut"];
 		//剩余支付时间
 		$remainingTime=$timeOut-time();
 		//剩余时间不能是负数
