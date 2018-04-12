@@ -14,7 +14,7 @@ class orderBuyingRecord extends SmartActiveRecord{
 	public function init(){
 		parent::init();
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"checkBuyingCount"));
-		$this->on(self::EVENT_AFTER_INSERT,array($this,"updateKeepCount"));
+		$this->on(self::EVENT_AFTER_INSERT,array($this,"deductKeepCount"));
 		$this->on(self::EVENT_BUYING_SUCCESS,array($this,"buyingSuccess"));
 	}
 	//========================================
@@ -33,8 +33,8 @@ class orderBuyingRecord extends SmartActiveRecord{
 		if($this->buyingCount<1) throw new SmartException("buyingCount < 1");	
 	}
 	//========================================
-	//修改库存
-	public function updateKeepCount(){
+	//扣除库存
+	public function deductKeepCount(){
 		//获取购买单元
 		$salesUnit=$this->getSalesUnit();
 		if(!$salesUnit) throw new SmartException("miss salesUnit");
@@ -42,6 +42,18 @@ class orderBuyingRecord extends SmartActiveRecord{
 		$handlerType=$this->orderRecord->getSourceType();
 		$handlerId=$this->orderRecord->getSourceId();
 		$keepCount=$salesUnit->getKeepCount()-$this->buyingCount;
+		$salesUnit->updateKeepCount($handlerType,$handlerId,$keepCount,$this->id);
+	}
+	//========================================
+	//返回库存
+	public function backKeepCount(){
+		//获取购买单元
+		$salesUnit=$this->getSalesUnit();
+		if(!$salesUnit) throw new SmartException("miss salesUnit");
+		//修改库存
+		$handlerType=$this->orderRecord->getSourceType();
+		$handlerId=$this->orderRecord->getSourceId();
+		$keepCount=$salesUnit->getKeepCount()+$this->buyingCount;
 		$salesUnit->updateKeepCount($handlerType,$handlerId,$keepCount,$this->id);
 	}
 	//========================================
