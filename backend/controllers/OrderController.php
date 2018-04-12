@@ -66,31 +66,109 @@ class OrderController extends SmartWebController{
 	//获取全部订单
 	public function getAllOrders(member $m){
 		$table=orderRecord::tableName();
-		return "SELECT * FROM {$table} WHERE `memberId`='{$m->id}' AND `parentId` is NULL ORDER BY `createTime` DESC";
+		return 
+		"
+			SELECT * FROM {$table} 
+			WHERE 
+				`memberId`='{$m->id}' 
+				AND 
+				`parentId` is NULL 
+			ORDER BY `createTime` DESC
+		";
 	}
 	//========================================
 	//获取待支付订单
 	public function getUnpaidOrders(member $m){
 		$table=orderRecord::tableName();
-		return "SELECT * FROM {$table} WHERE `memberId`='{$m->id}' AND `parentId` is NULL AND `payStatus`='0' AND `cancelStatus`='0' AND `closeStatus`='0' AND `deliverStatus`='0' AND `refundingStatus`='0' AND `finishStatus`='0' ORDER BY `createTime` DESC";
+		return 
+		"
+			SELECT * FROM {$table} 
+			WHERE 
+				`memberId`='{$m->id}' 
+				AND 
+				`parentId` is NULL 
+				AND 
+				`payStatus`='0' 
+				AND 
+				`cancelStatus`='0' 
+				AND 
+				`closeStatus`='0' 
+				AND 
+				`deliverStatus`='0' 
+				AND 
+				`refundingStatus`='0' 
+				AND 
+				`finishStatus`='0' 
+			ORDER BY `createTime` DESC
+		";
 	}
 	//========================================
 	//获取待发货订单
 	public function getUndeliveredOrders(member $m){
 		$table=orderRecord::tableName();
-		return "SELECT * FROM {$table} WHERE `memberId`='{$m->id}' AND `parentId` is NULL AND `payStatus`='1' AND `cancelStatus`='0' AND `closeStatus`='0' AND `deliverStatus`='0' AND `refundingStatus`='0' AND `finishStatus`='0' ORDER BY `createTime` DESC";
+		return 
+		"
+			SELECT * FROM {$table} 
+			WHERE 
+				`memberId`='{$m->id}' 
+				AND 
+				`parentId` is NULL 
+				AND 
+				`payStatus`='1' 
+				AND 
+				`cancelStatus`='0' 
+				AND 
+				`closeStatus`='0' 
+				AND 
+				`deliverStatus`='0' 
+				AND 
+				`refundingStatus`='0' 
+				AND 
+				`finishStatus`='0' 
+			ORDER BY `createTime` DESC
+		";
 	}
 	//========================================
 	//获取待收货订单
 	public function getUnreceiptedOrders(member $m){
 		$table=orderRecord::tableName();
-		return "SELECT * FROM {$table} WHERE `memberId`='{$m->id}' AND `parentId` is NULL AND `payStatus`='1' AND `cancelStatus`='0' AND `closeStatus`='0' AND `deliverStatus` IN('1','2') AND `refundingStatus`='0' AND `finishStatus`='0' ORDER BY `createTime` DESC";
+		return 
+		"
+			SELECT * FROM {$table} 
+			WHERE 
+				`memberId`='{$m->id}' 
+				AND 
+				`parentId` is NULL 
+				AND 
+				`payStatus`='1' 
+				AND 
+				`cancelStatus`='0' 
+				AND 
+				`closeStatus`='0' 
+				AND 
+				`deliverStatus` IN('1','2') 
+				AND 
+				`refundingStatus`='0' 
+				AND 
+				`finishStatus`='0' 
+			ORDER BY `createTime` DESC
+		";
 	}
 	//========================================
 	//获取售后订单
 	public function getRefundingOrders(member $m){
 		$table=orderRecord::tableName();
-		return "SELECT * FROM {$table} WHERE `memberId`='{$m->id}' AND `parentId` is NULL AND `refundingStatus`='1' ORDER BY `createTime` DESC";	
+		return 
+		"
+			SELECT * FROM {$table} 
+			WHERE 
+				`memberId`='{$m->id}' 
+				AND 
+				`parentId` is NULL 
+				AND 
+				`refundingStatus`='1' 
+			ORDER BY `createTime` DESC
+		";
 	}
 	//========================================
 	//取消订单
