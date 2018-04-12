@@ -135,7 +135,7 @@ class MarkController extends SmartWebController{
 				";
 			//获取分页数据
 			$class=mark::className();
-			$result=Yii::$app->smartPagination->getData($class,$sql,$pageSize,$pageNum);
+			$result=Yii::$app->smartPagination->getDataBySql($class,$sql,$pageSize,$pageNum);
 			//组织数据
 			$data=$result;
 			unset($data['objs']);
