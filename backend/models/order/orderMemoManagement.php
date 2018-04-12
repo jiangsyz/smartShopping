@@ -19,6 +19,8 @@ class orderMemoManagement extends Component{
 		if(!isset($oRecord->command[$memoIndex])) return;
 		//添加会员备注
 		$oRecord->propertyManagement->addProperty('memberMemo',$oRecord->command[$memoIndex]);
+		//将订单状态改为锁定
+		$oRecord->updateObj(array('locked'=>1));
 	}
 	//========================================
 	//获取备注
