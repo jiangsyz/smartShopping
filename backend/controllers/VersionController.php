@@ -10,6 +10,9 @@ class VersionController extends SmartWebController{
         try{
             //开启事务
             $trascation=Yii::$app->db->beginTransaction();
+            //根据token获取会员
+            $token=Yii::$app->request->get('token',false);
+            $member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
             //获取客户端类型
             $type=Yii::$app->request->get('type',false);
             //获取最新版本信息
