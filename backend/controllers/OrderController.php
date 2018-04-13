@@ -17,10 +17,10 @@ class OrderController extends SmartWebController{
 		$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 		//组织数据
 		$data=array();
-		$data['unpaid']=100;
-		$data['undelivered']=200;
-		$data['unreceipted']=300;
-		$data['refunding']=400;
+		$data['unpaid']=orderRecord::findBySql($this->getUnpaidOrders($member))->count();
+		$data['undelivered']=orderRecord::findBySql($this->getUndeliveredOrders($member))->count();
+		$data['unreceipted']=orderRecord::findBySql($this->getUnreceiptedOrders($member))->count();
+		$data['refunding']=orderRecord::findBySql($this->getRefundingOrders($member))->count();
 		//返回
 		$this->response(1,array('error'=>0,'data'=>$data));
 	}
