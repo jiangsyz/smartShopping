@@ -15,6 +15,7 @@ class AddressController extends SmartWebController{
 		try{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
 			$token=Yii::$app->request->get('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取地址簿
