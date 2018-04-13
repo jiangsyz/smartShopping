@@ -20,8 +20,16 @@ class orderStatusManagement extends Component{
 	const STATUS_ERROR6=-6;//异常
 	const STATUS_ERROR7=-7;//异常
 	//========================================
+	const EVENT_STATUS_CHANGED=1;//状态更改事件
+	//========================================
 	//订单记录
 	public $orderRecord=NULL;
+	//========================================
+	//初始化
+	public function init(){
+		parent::init();
+		$this->on(self::EVENT_STATUS_CHANGED,array($this,"getStatus"));
+	}
 	//========================================
 	//获取订单状态
 	public function getStatus(){
