@@ -1,0 +1,34 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+/* 会员服务协议  */
+.fwxy { padding:1rem;}
+.fwxy h2 { font-size:1.4rem; color:#000; text-align:center; margin-top:1rem; line-height:2rem;}
+.fwxy h4{ font-size:1.2rem;  line-height:2.6rem; margin-top:1rem; font-weight:bold;}
+.fwxy p{ font-size:1.15rem; line-height:1.6rem; text-indent:1em; margin-bottom:0.5rem; padding-left:1rem; position:relative;}
+.fwxy p:before { content:"•"; position:absolute; left:0;  top:0; font-size:1.3rem; line-height:1.6rem; color:#fe5946; }
+.fwxy p:last-child { text-align:right; }
+.fwxy p:last-child:before { display:none;}
+
+/* 配送规则  */
+.psgz{ padding:1rem;}
+.psgz p{ text-align:center;}
+.psgz p img{ padding:2rem 0 0 0;}
+.psgz_img img{ width:100%; }
+.xb_kuang { padding:0.3rem; margin-top:2.5rem; background: url(http://p33mnuvro.bkt.clouddn.com/image/webimg/xbian_03.jpg); background-size:0.4rem auto; position:relative; z-index:1;}
+.xb_kuang span{ position:absolute; left:50%; font-size:1.2rem; -webkit-transform:translateX(-50%) translateY(-60%);transform: translateX(-50%)  translateY(-60%); background:#fff; }
+.xbk_nr { background:#fff; padding:1rem; padding-top:2rem; font-size:1.1rem; line-height:1.6rem;} 
+.xbk_nr small{ font-size:1.1rem; line-height:1.6rem; color:#d6b76b;}
+.xbk_nr a { background:#fc5e44; font-size:1.2rem; line-height:2.2rem; padding:0 1rem; color:#fff; display:inline-block;}
+.fgline { line-height:0; font-size:0; margin-top:2.5rem; border-bottom:1px solid #efefef; height:0.1rem; position:relative; z-index:1;}
+.fgline span{ background:#efefef; position: absolute; left:50%; top:0; width:0.6rem; height:0.6rem; border:0.4rem solid #fff; display:inline-block; -webkit-border-radius:50%;border-radius:50%; -webkit-transform:translateX(-50%) translateY(-40%);transform: translateX(-50%)  translateY(-40%);}
+.fgline span:nth-child(1) { left:45%;} 
+.fgline span:nth-child(3) { left:55%;} 
+
+/* 注册协议（复用会员服务协议）  */
+.zcxy .qcdian { text-indent:0; padding-left:2rem;}
+.zcxy .qcdian:before { display:none;}
+.zcxy p:last-child { text-align:left; }
+.zcxy p:last-child:before { display: inline-block;}
+
+.sfgm img { width:100%;}
