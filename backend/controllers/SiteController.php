@@ -15,9 +15,11 @@ use backend\models\order\orderRecord;
 use backend\models\pay\payCallback;
 use backend\models\order\orderBuyingRecord;
 use backend\models\notice\notice;
+use backend\models\order\orderStatusManagement;
 class SiteController extends SmartWebController{
 	public $enableCsrfValidation=false;
 	//========================================
+    //支付
     public function actionIndex(){
         try{
             $callbackLog=false;
@@ -52,6 +54,8 @@ class SiteController extends SmartWebController{
             foreach($buyingRecords as $r) $r->trigger(orderBuyingRecord::EVENT_BUYING_SUCCESS);
             //修改日志中的状态信息
             $callbackLog->updateObj(array('status'=>1));
+            //触发状态更改事件
+            $orderRecord->statusManagement->trigger(orderStatusManagement::EVENT_STATUS_CHANGED);
             //发送通知
             $orderShowId=$orderRecord->extraction->getShowId();
             $notice=array();
