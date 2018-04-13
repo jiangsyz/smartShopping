@@ -4,8 +4,10 @@
 /* 会员服务协议  */
 .fwxy { padding:1rem;}
 .fwxy h2 { font-size:1.4rem; color:#000; text-align:center; margin-top:1rem; line-height:2rem;}
+.fwxy img{ width:100%; height:1px;}
 .fwxy h4{ font-size:1.2rem;  line-height:2.6rem; margin-top:1rem; font-weight:bold;}
 .fwxy p{ font-size:1.15rem; line-height:1.6rem; text-indent:1em; margin-bottom:0.5rem; padding-left:1rem; position:relative;}
+.fwxy p:nth-child(1):before{ display:none;}
 .fwxy p:before { content:"•"; position:absolute; left:0;  top:0; font-size:1.3rem; line-height:1.6rem; color:#fe5946; }
 .fwxy p:last-child { text-align:right; }
 .fwxy p:last-child:before { display:none;}
