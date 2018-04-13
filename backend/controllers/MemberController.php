@@ -91,7 +91,7 @@ class MemberController extends SmartWebController{
 			$data['level']=$vip==NULL?0:$vip->lv;
 			$data['vipEnd']=$vip==NULL?0:$vip->end;
 			$data['pushUniqueId']=$member->pushUniqueId;
-			$data['customServiceUniqueId']="77043";//77484
+			$data['customServiceUniqueId']=rand(0,1)==0?"77043":"77484";
 			$data['reduction']=$member->getReduction();
 			$data['hash']=$member->hash();
 			//返回
