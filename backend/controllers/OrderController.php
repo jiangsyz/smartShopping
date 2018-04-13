@@ -188,6 +188,8 @@ class OrderController extends SmartWebController{
 			if($orderRecord->memberId!=$member->id) throw new SmartException("error memberId");
 			//取消订单
 			$orderRecord->cancelManagement->cancel();
+			//触发状态更改事件
+            $orderRecord->statusManagement->trigger(orderStatusManagement::EVENT_STATUS_CHANGED);
 			//提交事务
 			$trascation->commit();
 			//返回
@@ -246,6 +248,8 @@ class OrderController extends SmartWebController{
 			if($orderRecord->memberId!=$member->id) throw new SmartException("error memberId");
 			//确认收货
 			$orderRecord->statusManagement->receipted();
+			//触发状态更改事件
+            $orderRecord->statusManagement->trigger(orderStatusManagement::EVENT_STATUS_CHANGED);
 			//提交事务
 			$trascation->commit();
 			//返回
