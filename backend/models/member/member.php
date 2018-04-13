@@ -6,6 +6,8 @@ use yii\base\SmartException;
 use yii\db\SmartActiveRecord;
 use backend\models\model\source;
 use backend\models\model\shop;
+use backend\models\order\orderRecord;
+use backend\models\product\formatPrice;
 //========================================
 class member extends source implements shop{
 	//初始化
@@ -65,5 +67,34 @@ class member extends source implements shop{
 		$nickName=base64_decode($nickName); if(!$nickName) throw new SmartException("error nickName");
 		//保存
 		$this->updateObj(array('nickName'=>$nickName));
+	}
+	//========================================
+	//获取节省金额
+	public function getReduction(){
+		//统计
+		$table=orderRecord::tableName();
+		$sql=
+		"
+		SELECT SUM(`reduction`) FROM {$table}
+		WHERE 
+			`memberId`='{$this->id}' 
+			AND 
+			`parentId` is NULL 
+			AND 
+			`payStatus`='1' 
+			AND 
+			`cancelStatus`='0' 
+			AND 
+			`closeStatus`='0'
+		";
+		$result=Yii::$app->db->createCommand($sql)->queryOne();
+		//没有节省的情况
+		if(!$result) return "0";
+		if(!isset($result['SUM(`reduction`)'])) return "0";
+		if(!$result['SUM(`reduction`)']) return "0";
+		if($result['SUM(`reduction`)']=="0") return "0";
+		//返回节省金额
+		return formatPrice::formatPrice($result['SUM(`reduction`)']);
+
 	}
 }
