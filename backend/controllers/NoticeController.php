@@ -34,6 +34,6 @@ class NoticeController extends SmartWebController{
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
     	}
-    	catch(SmartException $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}	
+    	catch(SmartException $e){$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));}	
 	}
 }

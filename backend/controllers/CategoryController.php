@@ -25,7 +25,7 @@ class CategoryController extends SmartWebController{
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
     	}
-    	catch(SmartException $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+    	catch(SmartException $e){$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));}
 	}
 	//========================================
 	//获取一个分类的子分类
@@ -51,7 +51,7 @@ class CategoryController extends SmartWebController{
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
     	}
-    	catch(SmartException $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+    	catch(SmartException $e){$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));}
 	}
 	//========================================
 	//获取某个分类下的所有spu(递归搜索后代分类下的spu)
@@ -106,6 +106,6 @@ class CategoryController extends SmartWebController{
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
     	}
-    	catch(SmartException $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}	
+    	catch(SmartException $e){$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));}	
 	}
 }

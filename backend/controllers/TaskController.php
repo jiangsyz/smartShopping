@@ -53,7 +53,7 @@ class TaskController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -94,7 +94,7 @@ class TaskController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -109,7 +109,7 @@ class TaskController extends SmartWebController{
 		}
 		catch(Exception $e){
 			//回滚
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 }

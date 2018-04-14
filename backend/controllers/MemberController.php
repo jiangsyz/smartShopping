@@ -28,7 +28,7 @@ class MemberController extends SmartWebController{
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
         }
-        catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+        catch(Exception $e){$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));}
     }
 	//========================================
     //通过手机号申请登陆
@@ -48,7 +48,7 @@ class MemberController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
 		}
 	}
 	//========================================
@@ -71,7 +71,7 @@ class MemberController extends SmartWebController{
         catch(SmartException $e){
             //回滚
             $trascation->rollback();
-            $this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+            $this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
         }
     }
 	//========================================
@@ -97,7 +97,7 @@ class MemberController extends SmartWebController{
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
 		}
-		catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+		catch(Exception $e){$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));}
 	}
 	//========================================
 	//添加会员头像
@@ -120,7 +120,7 @@ class MemberController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -144,7 +144,7 @@ class MemberController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -169,7 +169,7 @@ class MemberController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -191,7 +191,7 @@ class MemberController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 }

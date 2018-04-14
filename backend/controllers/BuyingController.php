@@ -55,7 +55,7 @@ class BuyingController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -87,7 +87,7 @@ class BuyingController extends SmartWebController{
 		catch(SmartException $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -134,7 +134,7 @@ class BuyingController extends SmartWebController{
 		catch(SmartException $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -182,7 +182,7 @@ class BuyingController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -211,7 +211,7 @@ class BuyingController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 }

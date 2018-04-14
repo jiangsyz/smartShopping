@@ -60,7 +60,7 @@ class OrderController extends SmartWebController{
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
     	}
-    	catch(Exception $e){$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));}
+    	catch(Exception $e){$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));}
 	}
 	//========================================
 	//获取全部订单
@@ -198,7 +198,7 @@ class OrderController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -227,7 +227,7 @@ class OrderController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -258,7 +258,7 @@ class OrderController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 	//========================================
@@ -289,7 +289,7 @@ class OrderController extends SmartWebController{
 		catch(Exception $e){
 			//回滚
 			$trascation->rollback();
-			$this->response(1,array('error'=>-1,'msg'=>$e->getMessage()));
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
 }
