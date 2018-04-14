@@ -49,6 +49,7 @@ class orderConfirmation extends Component{
 			$salesUnitInfo['totalPrice']=formatPrice::formatPrice($record->getPrice());
 			$salesUnitInfo['totalFinalPrice']=formatPrice::formatPrice($record->getFinalPrice());
 			$salesUnitInfo['isSelected']=$record->isSelected;
+			$salesUnitInfo['isAllowSale']=$salesUnit->isAllowSale();
 			$data['salesUnits'][]=$salesUnitInfo;
 		}
 		//hash
