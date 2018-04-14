@@ -25,7 +25,7 @@ class orderChecker extends Component{
 	//========================================
 	//检查订单有效性
 	private function checkEffect(){
-		if(!$this->order->isEffective()) throw new SmartException("checkEffect return false");
+		if(!$this->order->isEffective()) throw new SmartException("无效空订单",-2);
 	}
 	//========================================
 	//检查订单下的购买目标的库存
@@ -40,7 +40,7 @@ class orderChecker extends Component{
 			//库存为NULL,代表没有库存限制
 			if($keepCount===NULL) continue;
 			//如果购买数量大于库存,报错
-			if($r->buyCount>$keepCount) throw new SmartException("{$salesUnitNo} need more keepCount");
+			if($r->buyCount>$keepCount) throw new SmartException("销售单元({$salesUnitNo})库存不足",-2);
 		}
 	}
 	//========================================
@@ -52,7 +52,7 @@ class orderChecker extends Component{
 			//获取购买对象全局编号
 			$salesUnitNo=$salesUnit->getSourceNo();
 			//如果购买对象不允许销售,报错
-			if(!$salesUnit->isAllowSale()) throw new SmartException("{$salesUnitNo} is not allow sale");
+			if(!$salesUnit->isAllowSale()) throw new SmartException("销售单元({$salesUnitNo})未允许销售",-2);
 		}
 	}
 	//========================================
