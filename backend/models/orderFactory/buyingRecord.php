@@ -26,7 +26,7 @@ class buyingRecord extends Component{
 	public function init(){
 		parent::init();
 		//购买数量必须>0
-		if($this->buyCount<=0) throw new SmartException("error buyCount");
+		if($this->buyCount<=0) throw new SmartException("购买数量错误",-2);
 		//获取购买目标
 		$this->salesUnit=source::getSource($this->sourceType,$this->sourceId);
 		if(!$this->salesUnit) throw new SmartException("miss salesUnit");
