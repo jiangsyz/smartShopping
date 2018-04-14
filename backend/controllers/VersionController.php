@@ -17,7 +17,7 @@ class VersionController extends SmartWebController{
             $type=Yii::$app->request->get('type',false);
             //获取最新版本信息
             $version=version::find()->where("`type`='Android'")->orderBy("`versionTime` DESC")->one();
-            if(!$version) throw new SmartException("版本信息异常",-2);
+            if(!$version) throw new SmartException("版本信息异常",-3);
             //提交事务
             $trascation->commit();
             $this->response(1,array('error'=>0,'data'=>$version->getData(array('type','versionName','memo'))));
