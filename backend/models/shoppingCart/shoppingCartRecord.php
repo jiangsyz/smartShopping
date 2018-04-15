@@ -61,9 +61,11 @@ class shoppingCartRecord extends SmartActiveRecord{
 	//检查售卖对象
 	public function checkSalesUnit(){
 		//是否存在
-		if(!$this->salesUnit) throw new SmartException("miss salesUnit");
+		if(!$this->salesUnit) 
+			throw new SmartException("miss salesUnit");
 		//是否允许销售
-		if(!$this->salesUnit->isAllowSale()) throw new SmartException("isAllowSale return false");
+		if(!$this->salesUnit->isAllowSale()) 
+			throw new SmartException("销售单元({$this->salesUnit->getSourceNo()})不允许销售",-2);
 	}
 	//========================================
 	//检查购买数量是否合法
@@ -73,6 +75,7 @@ class shoppingCartRecord extends SmartActiveRecord{
 		$salesUnitCount=$this->salesUnit->getKeepCount();
 		//加入购物车数量不得超过售卖单元库存($salesUnitCount=NULL意味着没有库存限制)
 		if($salesUnitCount===NULL) return;
-		if($this->count>$salesUnitCount) throw new SmartException("error count");	
+		if($this->count>$salesUnitCount)
+			throw new SmartException("销售单元({$this->salesUnit->getSourceNo()})库存不足",-2);	
 	}
 }
