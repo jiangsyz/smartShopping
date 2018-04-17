@@ -46,6 +46,10 @@ class SiteController extends SmartWebController{
             //取订单
             $orderRecord=orderRecord::getLockedOrderById($data['attach']);
             if(!$orderRecord) throw new SmartException("miss orderRecord");
+            //取微信支付的支付价格
+            if(!isset($data['cash_fee'])) throw new SmartException("miss cash_fee");
+            //和本地订单做对比
+            if($orderRecord->pay!=$data['cash_fee']) throw new SmartException("pay <> cash_fee");
             //支付成功
             $orderRecord->payManagement->paySuccess($this->runningId);
             //获取购买行为
