@@ -10,6 +10,8 @@ use backend\models\token\tokenManagement;
 use backend\models\order\orderRecord;
 use backend\models\order\orderStatusManagement;
 class OrderController extends SmartWebController{
+	public $enableCsrfValidation=false;
+	//========================================
 	//获取会员订单统计
 	public function actionApiGetOrderStatistics(){
 		//根据token获取会员
@@ -281,6 +283,68 @@ class OrderController extends SmartWebController{
 			if($orderRecord->memberId!=$member->id) throw new SmartException("error memberId");
 			//修改地址
 			$orderRecord->addressManagement->changeAddress($addressId);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
+	//修改订单的商品价格
+	public function actionApiChangePrice(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取员工
+			$token=Yii::$app->request->post('token',false);
+			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();	
+			//获取订单id
+			$orderId=Yii::$app->request->post('orderId',0);
+			//获取备注
+			$memo=Yii::$app->request->post('memo',"");
+			//获取修改后的价格
+			$price=Yii::$app->request->post('price',0);
+			//获取订单
+			$orderRecord=orderRecord::getLockedOrderById($orderId);
+			if(!$orderRecord) throw new SmartException("miss orderRecord");
+			//修改商品价格
+			$orderRecord->payManagement->changePrice($staff,$price,$memo);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
+	//修改订单的商品价格
+	public function actionApiChangeFreight(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取员工
+			$token=Yii::$app->request->post('token',false);
+			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();	
+			//获取订单id
+			$orderId=Yii::$app->request->post('orderId',0);
+			//获取备注
+			$memo=Yii::$app->request->post('memo',"");
+			//获取修改后的价格
+			$freight=Yii::$app->request->post('freight',0);
+			//获取订单
+			$orderRecord=orderRecord::getLockedOrderById($orderId);
+			if(!$orderRecord) throw new SmartException("miss orderRecord");
+			//修改商品运费
+			$orderRecord->payManagement->changeFreight($staff,$freight,$memo);
 			//提交事务
 			$trascation->commit();
 			//返回
