@@ -17,6 +17,8 @@ class orderMemoManagement extends Component{
 		$memoIndex='memo_'.$oRecord->index;
 		//客服端没有为该订单指定备注
 		if(!isset($oRecord->command[$memoIndex])) return;
+		//备注为空不处理
+		if(!$oRecord->command[$memoIndex]) return;
 		//添加会员备注
 		$oRecord->propertyManagement->addProperty('memberMemo',$oRecord->command[$memoIndex]);
 		//将订单状态改为锁定
