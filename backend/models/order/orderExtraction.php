@@ -11,7 +11,7 @@ class orderExtraction extends Component{
 	public $orderRecord=NULL;
 	//========================================
 	//获取订单的美化后的id
-	public function getShowId(){return 900000+$this->orderRecord->id;}
+	public function getShowId(){return $this->orderRecord->code;}
 	//========================================
 	//获取基础数据
 	public function getBasicData(){
