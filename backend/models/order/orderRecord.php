@@ -57,6 +57,7 @@ class orderRecord extends source{
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initStatus"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initLocked"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initOrderCode"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this->addressManagement,"addAddress"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this->memoManagement,"addMemberMemo"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this->dateManagement,"addDate"));
@@ -77,6 +78,11 @@ class orderRecord extends source{
 	//========================================
 	//初始化订单锁定状态
 	public function initLocked(){$this->locked=0;}
+	//========================================
+	//初始化订单编号
+	public function initOrderCode(){
+		$this->code=3*pow(10,15)+$this->createTime*pow(10,5)+rand(11111,99999);
+	}
 	//========================================
 	//获取通过订单id获取一个锁住的订单
 	public static function getLockedOrderById($id){
