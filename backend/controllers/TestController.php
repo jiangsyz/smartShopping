@@ -11,16 +11,30 @@ use backend\models\member\member;
 use backend\models\token\tokenManagement;
 use backend\models\notice\notice;
 use yii\base\Exception;
+use backend\models\order\orderRecord;
 class TestController extends SmartWebController{
     public function actionIndex(){echo time();}
     //========================================
     public function actionTest(){
-    	$get=array("phone"=>"13402155751","requestTime"=>time());
-    	$get['requestTime']=(string)$get['requestTime'];
-    	ksort($get);
-    	var_dump(json_encode($get)."^ZS2018LCJ");
-    	$signature=md5(json_encode($get)."^ZS2018LCJ");
-    	$url="http://localhost/smartShopping/backend/web/index.php?r=member/api-get-token-by-phone&phone={$get['phone']}&requestTime={$get['requestTime']}&signature={$signature}";
-    	echo $url;
+        try{
+            //开启事务
+            $trascation=Yii::$app->db->beginTransaction();
+            //初始化订单号
+            $orders=orderRecord::find()->where("`parentId` IS NULL")->all();
+            foreach($orders as $o){
+                if(!$o->code)
+                $o->initOrderCode();
+                $o->save();
+            }
+            //提交事务
+            $trascation->commit();
+            //返回
+            $this->response(1,array('error'=>0));
+        }
+        catch(Exception $e){
+            //回滚
+            $trascation->rollback();
+            $this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
+        }
     }
 }
