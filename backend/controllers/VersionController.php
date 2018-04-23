@@ -5,6 +5,8 @@ use yii\web\SmartWebController;
 use yii\base\Exception;
 use yii\base\SmartException;
 use backend\models\version\version;
+use backend\models\token\tokenManagement;
+use backend\models\model\source;
 class VersionController extends SmartWebController{
     public function actionApiGetVersion(){
         try{
