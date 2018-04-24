@@ -81,7 +81,11 @@ class orderRecord extends source{
 	//========================================
 	//初始化订单编号
 	public function initOrderCode(){
-		$this->code=3*pow(10,15)+$this->createTime*pow(10,5)+rand(11111,99999);
+		//只有主订单有编号
+		if(!$this->parentId)
+			$this->code=3*pow(10,15)+$this->createTime*pow(10,5)+rand(11111,99999);
+		else
+			$this->code=NULL;
 	}
 	//========================================
 	//获取通过订单id获取一个锁住的订单
