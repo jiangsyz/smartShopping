@@ -9,6 +9,7 @@ use backend\models\member\member;
 class notice extends SmartActiveRecord{
 	const TYPE_PAY=1;
 	const TYPE_VIP=2;
+	const TYPE_ORDER=3;
 	//========================================
 	//初始化
 	public function init(){
