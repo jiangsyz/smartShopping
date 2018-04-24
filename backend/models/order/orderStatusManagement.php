@@ -4,6 +4,7 @@ namespace backend\models\order;
 use Yii;
 use yii\base\SmartException;
 use yii\base\Component;
+use backend\models\notice\notice;
 //========================================
 class orderStatusManagement extends Component{
 	const STATUS_UNPAID=1;//待支付
@@ -120,5 +121,36 @@ class orderStatusManagement extends Component{
 		//不允许处理
 		else 
 			throw new SmartException("error status");
+	}
+	//========================================
+	//发货
+	public function delivered(){
+		$r=$this->orderRecord;
+		//获取状态
+		$status=$this->getStatus();
+		//不是待收货和退款中状态不处理
+		if(!($status==self::STATUS_UNRECEIPTED || $status==self::STATUS_REFUNDING)) 
+			throw new SmartException("error status");
+		//不是已配货不处理
+		if($r->deliverStatus!=1) 
+			throw new SmartException("error deliverStatus");
+		//获取所有购买行为
+		$buyingRecords=$r->buyingManagement->getBuyingList();
+		//如果任意一条购买行为有物流单号,则进行发货处理
+		foreach($buyingRecords as $b){
+			if($b->logisticsCode){
+				//将deliverStatus改为已发货
+				$r->updateObj(array('deliverStatus'=>2));
+				//发送通知
+				$orderShowId=$r->extraction->getShowId();
+		        $notice=array();
+		        $notice['memberId']=$r->memberId;
+		        $notice['type']=notice::TYPE_ORDER;
+		        $notice['content']="您的订单{$orderShowId}已经发货,请注意查收!";
+		        notice::addObj($notice);
+		        //结束处理
+		        return;
+			}
+		}
 	}
 }
