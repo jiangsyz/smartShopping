@@ -112,4 +112,44 @@ class TaskController extends SmartWebController{
 			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
+	//========================================
+	//待发货切换待收货
+	public function actionApiDelivered(){
+		//获取所有已配货的订单列表
+		$table=orderRecord::tableName();
+		$sql=
+		"
+				SELECT 
+					`id` 
+				FROM 
+					{$table} 
+				WHERE 
+					`parentId` is NULL AND `deliverStatus`='1';
+		";
+		$rows=Yii::$app->db->createCommand($sql)->queryAll();
+		//处理成功的数量
+		$success=0;
+		//逐个处理订单
+		foreach($rows as $row){
+			try{
+				//开启事务
+				$trascation=Yii::$app->db->beginTransaction();
+				//加锁取订单
+				$orderRecord=orderRecord::getLockedOrderById($row['id']);
+				if(!$orderRecord) throw new SmartException("miss order {$row['id']}");
+				//发货
+				$orderRecord->statusManagement->delivered();
+				//提交事务
+				$trascation->commit();
+				//记录成功数
+				$success++;
+			}
+			catch(Exception $e){
+				//回滚
+				$trascation->rollback();
+    		}
+		}
+		//返回成功数量
+		$this->response(1,array('error'=>0,'data'=>$success));
+	}
 }
