@@ -11,6 +11,8 @@ class refund extends SmartActiveRecord{
 	public function init(){
 		parent::init();
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initData"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"checkPrice"));
+		$this->on(self::EVENT_BEFORE_UPDATE,array($this,"checkPrice"));
 	}
 	//========================================
 	//初始化数据
@@ -26,4 +28,7 @@ class refund extends SmartActiveRecord{
 		$this->refundMemo=NULL;
 		$this->status=0;
 	}
+	//========================================
+	//校验价格
+	public function checkPrice(){if($this->price<=0) throw new SmartException("退款金额错误",2);}
 }
