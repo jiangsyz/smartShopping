@@ -73,7 +73,7 @@ class TaskController extends SmartWebController{
 					WHERE 
 						`parentId` is NULL 
 						AND 
-						(`payStatus`='-1' OR `cancelStatus`='1') 
+						(`payStatus`='-1' OR `cancelStatus`='1' OR `closeStatus`='1') 
 						AND 
 						`backKeepCountStatus`='0' 
 					ORDER BY `createTime` ASC LIMIT 1;
