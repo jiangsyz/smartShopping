@@ -34,7 +34,7 @@ class orderRefundManagement extends Component{
 		$refundData['price']=$price;
 		$refundData['applyHandlerType']=$handler->getSourceType();
 		$refundData['applyHandlerId']=$handler->getSourceId();
-		$refundData['applytMemo']=$memo;
+		$refundData['applyMemo']=$memo;
 		refund::addObj($refundData);
 		//修改订单相关数据
 		$this->orderRecord->updateObj(array('refundingStatus'=>1,'finishStatus'=>0));
@@ -64,7 +64,7 @@ class orderRefundManagement extends Component{
 		$refundData['price']=$price;
 		$refundData['applyHandlerType']=$handler->getSourceType();
 		$refundData['applyHandlerId']=$handler->getSourceId();
-		$refundData['applytMemo']=$memo;
+		$refundData['applyMemo']=$memo;
 		refund::addObj($refundData);
 		//修改订单相关数据
 		$this->orderRecord->updateObj(array('refundingStatus'=>1,'finishStatus'=>0));
