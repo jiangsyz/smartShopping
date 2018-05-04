@@ -27,6 +27,8 @@ class orderRefundManagement extends Component{
 		//只有关闭状态能整单退
 		$orderStatus=$this->orderRecord->statusManagement->getStatus();
 		if($orderStatus!=orderStatusManagement::STATUS_CLOSED) throw new SmartException("订单状态错误",-2);
+		//必须要备注
+		if(!$memo) throw new SmartException("必须要备注",-2);
 		//添加退款记录
 		$refundData=array();
 		$refundData['oid']=$this->orderRecord->id;
@@ -57,6 +59,8 @@ class orderRefundManagement extends Component{
 		$allowStatusList[]=orderStatusManagement::STATUS_UNRECEIPTED;
 		$allowStatusList[]=orderStatusManagement::STATUS_FINISHED;
 		if(!in_array($orderStatus,$allowStatusList)) throw new SmartException("订单状态错误",-2);
+		//必须要备注
+		if(!$memo) throw new SmartException("必须要备注",-2);
 		//添加退款记录
 		$refundData=array();
 		$refundData['oid']=$this->orderRecord->id;
@@ -68,5 +72,29 @@ class orderRefundManagement extends Component{
 		refund::addObj($refundData);
 		//修改订单相关数据
 		$this->orderRecord->updateObj(array('refundingStatus'=>1,'finishStatus'=>0));
+	}
+	//========================================
+	//驳回
+	public function reject(source $handler,$refundId,$memo){
+		//获取退款记录
+		$tableName=refund::tableName();
+		$refund=refund::findBySql("SELECT * FROM {$tableName} WHERE `id`='{$refundId}' FOR UPDATE")->one();
+		//找不到
+		if(!$refund) throw new SmartException("找不到该退款记录",-2);
+		//订单不对
+		if($refund->oid!=$this->orderRecord->id) throw new SmartException("订单关系错误",-2);
+		//状态错误
+		if($refund->status!=0) throw new SmartException("退款记录状态错误",-2);
+		//必须要备注
+		if(!$memo) throw new SmartException("必须要备注",-2);
+		//驳回
+		$update=array();
+		$update['rejectHandlerType']=$handler->getSourceType();
+		$update['rejectHandlerId']=$handler->getSourceId();
+		$update['rejectTime']=time();
+		$update['rejectMemo']=$memo;
+		$refund->updateObj($update);
+		//如果驳回后订单没有进行中的退款,将订单的退款中标示位置为不在退款中
+		if(!$this->getActiveRefunds()) $this->orderRecord->updateObj(array('refundingStatus'=>0));
 	}
 }
