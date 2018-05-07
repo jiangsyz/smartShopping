@@ -48,12 +48,18 @@ class orderRefundManagement extends Component{
 	public function allpyRefundByBuyingRecord(source $handler,orderBuyingRecord $orderBuyingRecord,$price,$memo){
 		//未支付订单不能申请退款
 		if($this->orderRecord->payStatus!=1) throw new SmartException("未支付订单不能申请退款",-2);
-		//不能有重复的退款记录
+		//在确保不能有重复的退款记录的同时,统计该订单的退款总额
+		$totalRefundPrice=0;
 		$activeRefunds=$this->getActiveRefunds();
 		foreach($activeRefunds as $activeRefund){
 			if($activeRefund->bid==0) throw new SmartException("重复退款",-2);
 			if($activeRefund->bid==$orderBuyingRecord->id) throw new SmartException("重复退款",-2);
+			//统计该订单的退款总额
+			$totalRefundPrice+=$activeRefund->price;
 		}
+		//退款总额不能超过订单总价
+		$totalRefundPrice+=$price;
+		if($totalRefundPrice>$this->orderRecord->pay) throw new SmartException("退款总额大于订单支付金额",-2);
 		//只有在退款中/待收货/已完成状态能单个退
 		$orderStatus=$this->orderRecord->statusManagement->getStatus();
 		$allowStatusList=array();
