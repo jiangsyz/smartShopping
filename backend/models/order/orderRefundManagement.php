@@ -93,6 +93,7 @@ class orderRefundManagement extends Component{
 		$update['rejectHandlerId']=$handler->getSourceId();
 		$update['rejectTime']=time();
 		$update['rejectMemo']=$memo;
+		$update['status']=-1;
 		$refund->updateObj($update);
 		//如果驳回后订单没有进行中的退款,将订单的退款中标示位置为不在退款中
 		if(!$this->getActiveRefunds()) $this->orderRecord->updateObj(array('refundingStatus'=>0));
