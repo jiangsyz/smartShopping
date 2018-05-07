@@ -6,7 +6,10 @@ use yii\base\SmartException;
 use yii\base\Exception;
 use backend\models\model\source;
 use backend\models\token\tokenManagement;
+use backend\models\order\orderRecord;
 class RefundController extends SmartWebController{
+	public $enableCsrfValidation=false;
+	//========================================
 	//驳回退款
 	public function actionApiReject(){
 		try{
