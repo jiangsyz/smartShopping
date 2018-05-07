@@ -24,6 +24,8 @@ class orderRefundManagement extends Component{
 		if($this->orderRecord->payStatus!=1) throw new SmartException("未支付订单不能申请退款",-2);
 		//不能有重复的退款记录
 		if($this->getActiveRefunds()) throw new SmartException("重复退款",-2);
+		//退款总额不能超过订单总价
+		if($price>$this->orderRecord->pay) throw new SmartException("退款总额大于订单支付金额",-2);
 		//只有关闭状态能整单退
 		$orderStatus=$this->orderRecord->statusManagement->getStatus();
 		if($orderStatus!=orderStatusManagement::STATUS_CLOSED) throw new SmartException("订单状态错误",-2);
