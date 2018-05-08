@@ -89,10 +89,16 @@ class RefundController extends SmartWebController{
 			$memo=Yii::$app->request->post('memo',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
-			if(!$orderRecord) throw new SmartException("miss orderRecord");
+			if(!$orderRecord) throw new SmartException("订单不存在",2);
 			//获取购物行为
-			$buyingRecord=orderBuyingRecord::find()->where("`orderId`='{$orderId}' AND `id`='{$buyingRecordId}'")->one();
-			if(!$buyingRecord) throw new SmartException("miss orderRecord");
+			$buyingRecord=orderBuyingRecord::find()->where("`id`='{$buyingRecordId}'")->one();
+			if(!$buyingRecord) throw new SmartException("购物行为不存在",2);
+			//获取订单的所有购物行为
+			$buyingRecords=$orderRecord->buyingManagement->getBuyingList();
+			//判断退款的购物行为是否是该订单的
+			$flag=false;
+			foreach($buyingRecords as $v) if($v->id==$buyingRecord->id) $flag=true;
+			if(!$flag) throw new SmartException("退款购物行为不属于该订单",2);
 			//退款
 			$orderRecord->refundManagement->allpyRefundByBuyingRecord($staff,$buyingRecord,$price,$memo);
 			//提交事务
