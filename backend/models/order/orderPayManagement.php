@@ -5,6 +5,7 @@ use Yii;
 use yii\base\SmartException;
 use yii\base\Component;
 use backend\models\model\source;
+use backend\models\pay\payCallback;
 //========================================
 class orderPayManagement extends Component{
 	//订单记录
@@ -130,5 +131,19 @@ class orderPayManagement extends Component{
 		$log['data']=json_encode($data);
 		$log['memo']=$memo;
 		changeOrderPriceLog::addObj($log);
+	}
+	//========================================
+	//获取支付回调
+	public function getTransactionCallack(){
+		//查找回调的httpId
+		$payRunningId=$this->orderRecord->propertyManagement->getProperty("payRunningId");
+		if(!isset($payRunningId[0])) throw new SmartException("miss payRunningId");
+		$payRunningId=$payRunningId[0]['val'];
+		//根据回调的httpId查找具体回调信息
+		$payCallback=payCallback::find()->where("`runningId`='{$payRunningId}'")->one();
+		if(!$payCallback) throw new SmartException("miss payCallback");
+		//回调信息必须为成功状态
+		if($payCallback->status!=1) throw new SmartException("error payCallback status");
+		return $payCallback;
 	}
 }
