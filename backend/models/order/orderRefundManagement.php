@@ -6,6 +6,7 @@ use yii\base\SmartException;
 use yii\base\Component;
 use backend\models\model\source;
 use backend\models\order\refund;
+use backend\models\pay\payCallback;
 //========================================
 class orderRefundManagement extends Component{
 	//订单记录
@@ -110,7 +111,7 @@ class orderRefundManagement extends Component{
 		$this->checkRefunds();
 	}
 	//========================================
-	//增加退款后的检查(新增和重开都算增加)
+	//检查退款池
 	public function checkRefunds(){
 		//初始化退款总金额
 		$totalRefundPrice=0;
@@ -136,5 +137,50 @@ class orderRefundManagement extends Component{
 		}
 		//修改订单相关数据
 		if(!empty($refunds)) $this->orderRecord->updateObj(array('refundingStatus'=>1,'finishStatus'=>0));
+	}
+	//========================================
+	//退款
+	public function refund($refundId){
+		//获取退款记录
+		$tableName=refund::tableName();
+		$refund=refund::findBySql("SELECT * FROM {$tableName} WHERE `id`='{$refundId}' FOR UPDATE")->one();
+		//找不到
+		if(!$refund) throw new SmartException("找不到该退款记录",-2);
+		//订单不对
+		if($refund->oid!=$this->orderRecord->id) throw new SmartException("订单关系错误",-2);
+		//状态错误
+		if($refund->status!=0) throw new SmartException("退款记录状态错误",-2);
+		//检查退款池
+		$this->checkRefunds();
+		//查找支付回调
+		$callback=$this->orderRecord->payManagement->getTransactionCallack();
+		//根据不同的渠道
+		if($callback->payType=="wechat") 
+			$this->wechatRefund($callback,$refund->price);
+		else 
+			throw new SmartException("error payType");
+	}
+	//========================================
+	//微信退款
+	public function wechatRefund(payCallback $callback,$refundPrice){
+		//校验支付方式
+		if($callback->payType!="wechat") throw new SmartException("error payType");
+		//解码回调信息
+		$callbackData=json_decode($callback->callBackData,true);
+		if(!isset($callbackData['attach'])) throw new SmartException("miss attach");
+		if(!isset($callbackData['total_fee'])) throw new SmartException("miss total_fee");
+		if(!isset($callbackData['transaction_id'])) throw new SmartException("miss transaction_id");
+		if(!isset($callbackData['mch_id'])) throw new SmartException("miss mch_id");
+		if(!isset($callbackData['appid'])) throw new SmartException("miss appid");
+		//完善指令集
+		$command=array();
+		$command['appid']=$callbackData['appid'];
+		$command['mch_id']=$callbackData['mch_id'];
+		$command['transaction_id']=$callbackData['transaction_id'];
+		$command['out_refund_no']=Yii::$app->controller->runningId;
+		$command['total_fee']=$callbackData['total_fee'];
+		$command['refund_fee']=$refundPrice;
+		//返回调用支付所需的数据
+        return Yii::$app->smartWechatPay->refund($command);
 	}
 }
