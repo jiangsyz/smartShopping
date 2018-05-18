@@ -35,4 +35,11 @@ class orderBuyingManagement extends Component{
 		return $buyingList;
 
 	}
+	//========================================
+	//判断是否是该订单的购买行为
+	public function isMyBuyingRecord(orderBuyingRecord $orderBuyingRecord){
+		foreach($this->getBuyingList() as $v) 
+			if($v->id==$orderBuyingRecord->id) return true;
+		return false;
+	}
 }
