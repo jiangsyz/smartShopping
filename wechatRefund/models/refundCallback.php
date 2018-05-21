@@ -1,6 +1,6 @@
 <?php
 //退款回调
-namespace wechatRefund\models\pay;
+namespace wechatRefund\models;
 use Yii;
 use yii\base\SmartException;
 use yii\db\SmartActiveRecord;
