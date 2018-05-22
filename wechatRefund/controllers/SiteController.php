@@ -3,7 +3,9 @@ namespace wechatRefund\controllers;
 use Yii;
 use yii\web\SmartWebController;
 use wechatRefund\models\refundCallback;
+use backend\models\order\orderRecord;
 use backend\models\order\refund;
+use backend\models\order\refundTransaction;
 class SiteController extends SmartWebController{
     public $enableCsrfValidation=false;
     //========================================
@@ -43,17 +45,17 @@ class SiteController extends SmartWebController{
             //判断退款结果
             if(!isset($result['refund_status'])) throw new SmartException("result miss refund_status");
             //通过流水号查找打款中的退款
-            $table=refund::tableName();
-            $sql="SELECT * FROM {$table} WHERE `refundMemo`='{$result['out_refund_no']}' AND `status`='1' FOR UPDATE";
-            $refund=refund::findBySql($sql)->one();
-            if(!$refund) throw new SmartException("miss refund");
+            $table=refundTransaction::tableName();
+            $sql="SELECT * FROM {$table} WHERE `transactionId`='{$result['out_refund_no']}' AND `status`='0' FOR UPDATE";
+            $refundTransaction=refundTransaction::findBySql($sql)->one();
+            if(!$refundTransaction) throw new SmartException("miss refundTransaction");
             //修改状态
             if($result['refund_status']=='SUCCESS'){
-                $refund->updateObj(array('status'=>refund::STATUS_REFUND_SUCCESS));
+                $refundTransaction->transactionSuccess();
                 $callbackLog->updateObj(array('status'=>1,'memo'=>json_encode($result)));
             }
             else{
-                $refund->updateObj(array('status'=>refund::STATUS_REFUND_FAIL));
+                $refundTransaction->transactionFail();
                 $callbackLog->updateObj(array('status'=>-1,'memo'=>json_encode($result)));
             }
             //提交事务
