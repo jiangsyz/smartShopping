@@ -174,14 +174,15 @@ class orderRefundManagement extends Component{
 		if($refund->oid!=$this->orderRecord->id) throw new SmartException("订单关系错误",-2);
 		//状态错误
 		if($refund->status!=refund::STATUS_TODO) throw new SmartException("退款记录状态错误",-2);
-		//退款
-		$update=array();
-		$update['refundHandlerType']=$handler->getSourceType();
-		$update['refundHandlerId']=$handler->getSourceId();
-		$update['refundTime']=time();
-		$update['refundMemo']=Yii::$app->controller->runningId;;
-		$update['status']=refund::STATUS_REFUNDING;
-		$refund->updateObj($update);
+		//修改退款
+		$refund->updateObj(array('status'=>refund::STATUS_REFUNDING));
+		//增加退款交易
+		$refundTransaction=array();
+		$refundTransaction['transactionType']='wechat';
+		$refundTransaction['transactionId']=Yii::$app->controller->runningId;
+		$refundTransaction['refundId']=$refund->id;
+		$refundTransaction['transactionHandlerType']=$handler->getSourceType();
+		$refundTransaction['transactionHandlerId']=$handler->getSourceId();
 		//检查退款池
 		$this->checkRefunds();
 		//查找支付回调
