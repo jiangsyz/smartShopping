@@ -153,4 +153,18 @@ class orderStatusManagement extends Component{
 			}
 		}
 	}
+	//========================================
+	//退款
+	public function refunding(){
+		if($this->orderRecord->refundingStatus==1) return;
+		$this->orderRecord->updateObj(array('refundingStatus'=>1,'finishStatus'=>0));
+	}
+	//========================================
+	//退款完成
+	public function refunded(){
+		if($this->orderRecord->refundingStatus!=1) return;
+		$this->orderRecord->updateObj(array('refundingStatus'=>0));
+		//退款状态去除后,一些订单应该修改finishStatus,getStatus()会完成这一操作
+		$this->getStatus();
+	}
 }
