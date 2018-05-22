@@ -142,6 +142,20 @@ class orderRefundManagement extends Component{
 		$this->checkRefunds();
 	}
 	//========================================
+	//重置
+	public function reset($refundId){
+		//获取退款记录
+		$refund=refund::getRefund($refundId); if(!$refund) throw new SmartException("找不到该退款记录",-2);
+		//订单不对
+		if($refund->oid!=$this->orderRecord->id) throw new SmartException("订单关系错误",-2);
+		//状态错误
+		if($refund->status!=refund::STATUS_REFUND_FAIL) throw new SmartException("退款记录状态错误",-2);
+		//重开
+		$refund->updateObj(array('status'=>refund::STATUS_TODO));
+		//检查订单的退款情况
+		$this->checkRefunds();
+	}
+	//========================================
 	//退款
 	public function refund(source $handler,$refundId){
 		//获取退款记录
