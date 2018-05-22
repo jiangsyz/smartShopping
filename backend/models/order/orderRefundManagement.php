@@ -11,70 +11,46 @@ use backend\models\pay\payCallback;
 class orderRefundManagement extends Component{
 	//订单记录
 	public $orderRecord=NULL;
-	//退款池
-	public $refunds=false;
-	//========================================
-	//初始化退款池
-	public function initRefunds(){
-		//只初始化一次
-		if($this->refunds!==false) return;
-		//加锁获取某个订单的所有退款记录
-		$this->refunds=refund::getRefundsOfOrder($this->orderRecord->id);;
-	}
 	//========================================
 	//获取退款池
-	public function getRefunds(){
-		$this->initRefunds();
-		return $this->refunds;
-	}
-	//========================================
-	//获取有效的退款(剔除驳回的)
-	public function getActiveRefunds(){
-		$refunds=array();
-		foreach($this->getRefunds() as $refund) 
-			if($refund->status!=refund::STATUS_REJECT) $refunds[]=$refund;
-		return $refunds;
-	}
-	//========================================
-	//按购买行为id作为线索获取有效的退款(剔除驳回的)
-	public function getActiveRefundsByBid(){
-		$refunds=array();
-		foreach($this->getActiveRefunds() as $refund) $refunds[$refund->bid][]=$refund;
-		return $refunds;
-	}
-	//========================================
-	//获取总退款金额
-	public function getTotalPrice(){
-		$totalPrice=0;
-		foreach($this->getActiveRefunds() as $refund) $totalPrice+=$refund->price;
-		return $totalPrice;
-	}
-	//========================================
-	//刷新
-	public function flushRefunds(){$this->refunds=false;}
+	public function getRefunds(){return refund::getRefundsOfOrder($this->orderRecord->id);}
 	//========================================
 	//检查
 	public function checkRefunds(){
-		//刷新
-		$this->flushRefunds();
 		//未支付订单不能涉及退款相关操作
 		if($this->orderRecord->payStatus!=1) throw new SmartException("未支付订单不能涉及退款相关操作",-2);
+		//获取退款池
+		$refunds=$this->getRefunds();
+		//获取总退款金额(所有非驳回状态的退款都计算在内)
+		$totalPrice=0;
+		foreach($refunds as $refund)
+			if($refund->status!=refund::STATUS_REJECT) $totalPrice+=$refund->price;
 		//退款总额不能超过订单支付总金额
-		if($this->getTotalPrice()>$this->orderRecord->pay) throw new SmartException("退款总额大于订单支付金额",-2);
-		//获取有效的退款
-		$activeRefunds=$this->getActiveRefundsByBid();
+		if($totalPrice>$this->orderRecord->pay) throw new SmartException("退款总额大于订单支付金额",-2);
+		//根据购物行为id统计非驳回的退款
+		$refundsByBid=array();
+		foreach($refunds as $refund)
+			if($refund->status!=refund::STATUS_REJECT) $refundsByBid[$refund->bid][]=$refund;
 		//校验互斥
-		foreach($activeRefunds as $bid => $v){
+		foreach($refundsByBid as $bid => $v){
 			//每个bid只允许有一个有效退款
 			if(count($v)!=1) throw new SmartException("bid重复",-2);
 			//整单退款和单个购物行为退款互斥
-			if($bid!="0" && isset($refunds["0"])) throw new SmartException("bid互斥",-2);
+			if($bid!="0" && isset($refundsByBid["0"])) throw new SmartException("bid互斥",-2);
 		}
-		//修改订单相关数据
-		if(!empty($activeRefunds)) 
-			$this->orderRecord->updateObj(array('refundingStatus'=>1,'finishStatus'=>0));
+		//判断整个订单是否在退款中
+		$isRefunding=false;
+		foreach($refunds as $refund){
+			if($refund->status==refund::STATUS_REJECT) continue;
+			if($refund->status==refund::STATUS_REFUND_SUCCESS) continue;
+			$isRefunding=true;
+			break;
+		}
+		if($isRefunding)
+			$this->orderRecord->statusManagement->refunding();
 		else
-			$this->orderRecord->updateObj(array('refundingStatus'=>0));
+			$this->orderRecord->statusManagement->refunded();
+		//var_dump($isRefunding);
 	}
 	//========================================
 	//申请针对整单的退款
@@ -183,6 +159,7 @@ class orderRefundManagement extends Component{
 		$refundTransaction['refundId']=$refund->id;
 		$refundTransaction['transactionHandlerType']=$handler->getSourceType();
 		$refundTransaction['transactionHandlerId']=$handler->getSourceId();
+		refundTransaction::addObj($refundTransaction);
 		//检查退款池
 		$this->checkRefunds();
 		//查找支付回调
