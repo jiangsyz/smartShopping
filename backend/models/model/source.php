@@ -44,6 +44,16 @@ abstract class source extends SmartActiveRecord{
 		if(!$sourceProperty) return NULL; else return $sourceProperty->propertyVal;
 	}
 	//========================================
+	//增加资源的属性
+	public function addProperty($propertyKey,$propertyVal){
+		$property=array();
+		$property['sourceType']=$this->getSourceType();
+		$property['sourceId']=$this->getSourceId();
+		$property['propertyKey']=$propertyKey;
+		$property['propertyVal']=$propertyVal;
+		sourceProperty::addObj($property);
+	}
+	//========================================
 	//获取该资源在购物车中的记录
 	public function getShoppingCartRecord(member $member){
 		$mId=$member->getSourceId();
