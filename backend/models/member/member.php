@@ -95,6 +95,10 @@ class member extends source implements shop{
 		if($result['SUM(`reduction`)']=="0") return "0";
 		//返回节省金额
 		return formatPrice::formatPrice($result['SUM(`reduction`)']);
-
+	}
+	//========================================
+	//绑定openid
+	public function bindOpenid(){
+		
 	}
 }
