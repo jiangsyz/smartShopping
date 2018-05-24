@@ -68,9 +68,11 @@ class orderRefundManagement extends Component{
 		$refundData['applyHandlerType']=$handler->getSourceType();
 		$refundData['applyHandlerId']=$handler->getSourceId();
 		$refundData['applyMemo']=$memo;
-		refund::addObj($refundData);
+		$refund=refund::addObj($refundData);
 		//检查订单的退款情况
 		$this->checkRefunds();
+		//直接同意
+		$this->refund($handler,$refund->id);
 	}
 	//========================================
 	//申请针对单个购买目标退款
