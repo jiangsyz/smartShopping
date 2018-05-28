@@ -17,14 +17,14 @@ class RefundController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
-			$token=Yii::$app->request->post('token',false);
+			$token=$this->requestPost('token',false);
 			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
 			//获取订单id
-			$orderId=Yii::$app->request->post('orderId',0);
+			$orderId=$this->requestPost('orderId',0);
 			//获取退款记录id
-			$refundId=Yii::$app->request->post('refundId',0);
+			$refundId=$this->requestPost('refundId',0);
 			//获取备注
-			$memo=Yii::$app->request->post('memo',0);
+			$memo=$this->requestPost('memo',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");
@@ -48,12 +48,12 @@ class RefundController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
 			//获取订单id
-			$orderId=Yii::$app->request->get('orderId',0);
+			$orderId=$this->requestGet('orderId',0);
 			//获取退款记录id
-			$refundId=Yii::$app->request->get('refundId',0);
+			$refundId=$this->requestGet('refundId',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");
@@ -77,16 +77,16 @@ class RefundController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
-			$token=Yii::$app->request->post('token',false);
+			$token=$this->requestPost('token',false);
 			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
 			//获取订单id
-			$orderId=Yii::$app->request->post('orderId',0);
+			$orderId=$this->requestPost('orderId',0);
 			//获取退款记录id
-			$buyingRecordId=Yii::$app->request->post('buyingRecordId',0);
+			$buyingRecordId=$this->requestPost('buyingRecordId',0);
 			//获取退款价格
-			$price=Yii::$app->request->post('price',0);
+			$price=$this->requestPost('price',0);
 			//获取备注
-			$memo=Yii::$app->request->post('memo',0);
+			$memo=$this->requestPost('memo',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("订单不存在",2);
@@ -113,12 +113,12 @@ class RefundController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
 			//获取订单id
-			$orderId=Yii::$app->request->get('orderId',0);
+			$orderId=$this->requestGet('orderId',0);
 			//获取退款记录id
-			$refundId=Yii::$app->request->get('refundId',0);
+			$refundId=$this->requestGet('refundId',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");
@@ -142,12 +142,12 @@ class RefundController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
 			//获取订单id
-			$orderId=Yii::$app->request->get('orderId',0);
+			$orderId=$this->requestGet('orderId',0);
 			//获取退款记录id
-			$refundId=Yii::$app->request->get('refundId',0);
+			$refundId=$this->requestGet('refundId',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");

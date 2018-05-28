@@ -22,14 +22,14 @@ class BuyingController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取资源类型
-			$sourceType=Yii::$app->request->get('sourceType',0);
+			$sourceType=$this->requestGet('sourceType',0);
 			//获取资源id
-			$sourceId=Yii::$app->request->get('sourceId',0);
+			$sourceId=$this->requestGet('sourceId',0);
 			//获取购买数量
-			$buyCount=Yii::$app->request->get('buyCount',0);
+			$buyCount=$this->requestGet('buyCount',0);
 			//构建快速购买行为
 			$fastBuyingData=array();
 			$fastBuyingData['member']=$member;
@@ -65,7 +65,7 @@ class BuyingController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取购物车
 			$shoppingCart=new shoppingCart(array('member'=>$member));
@@ -97,10 +97,10 @@ class BuyingController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->post('token',false);
+			$token=$this->requestPost('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取app类型(android/ios/web)
-			$appType=Yii::$app->request->post('appType',false);
+			$appType=$this->requestPost('appType',false);
 			//获取购物车
 			$shoppingCart=new shoppingCart(array('member'=>$member));
 			//获取购物车记录
@@ -144,16 +144,16 @@ class BuyingController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->post('token',false);
+			$token=$this->requestPost('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取资源类型
-			$sourceType=Yii::$app->request->post('sourceType',0);
+			$sourceType=$this->requestPost('sourceType',0);
 			//获取资源id
-			$sourceId=Yii::$app->request->post('sourceId',0);
+			$sourceId=$this->requestPost('sourceId',0);
 			//获取购买数量
-			$buyCount=Yii::$app->request->post('buyCount',0);
+			$buyCount=$this->requestPost('buyCount',0);
 			//获取app类型(android/ios/web)
-			$appType=Yii::$app->request->post('appType',false);
+			$appType=$this->requestPost('appType',false);
 			//构建快速购买行为
 			$fastBuyingData=array();
 			$fastBuyingData['member']=$member;
@@ -192,12 +192,12 @@ class BuyingController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取app类型(android/ios/web)
-			$appType=Yii::$app->request->get('appType',false);
+			$appType=$this->requestGet('appType',false);
 			//获取订单id
-			$orderId=Yii::$app->request->get('orderId',0);
+			$orderId=$this->requestGet('orderId',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");

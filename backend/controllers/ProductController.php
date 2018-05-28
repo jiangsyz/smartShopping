@@ -18,10 +18,10 @@ class ProductController extends SmartWebController{
 	public function actionApiGetSpuDetail(){
 		try{
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取产品id
-			$spuId=Yii::$app->request->get('spuId',0);
+			$spuId=$this->requestGet('spuId',0);
 			//获取产品
 			$spu=spu::find()->where("`id`='{$spuId}'")->one();
 			if(!$spu) throw new SmartException("miss spu");
@@ -49,14 +49,14 @@ class ProductController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
 			//获取skuId
-			$skuId=Yii::$app->request->get('skuId',0);
+			$skuId=$this->requestGet('skuId',0);
 			//获取等级
-			$level=Yii::$app->request->get('level',-1);
+			$level=$this->requestGet('level',-1);
 			//获取价格
-			$price=Yii::$app->request->get('price',-1);
+			$price=$this->requestGet('price',-1);
 			//获取sku(加锁)
 			$sku=source::getSource(source::TYPE_SKU,$skuId,true);
 			if(!$sku) throw new SmartException("miss sku");
@@ -82,12 +82,12 @@ class ProductController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
 			//获取skuId
-			$skuId=Yii::$app->request->get('skuId',0);
+			$skuId=$this->requestGet('skuId',0);
 			//获取库存
-			$keepCount=Yii::$app->request->get('keepCount',0);
+			$keepCount=$this->requestGet('keepCount',0);
 			//获取sku(加锁)
 			$sku=source::getSource(source::TYPE_SKU,$skuId,true);
 			if(!$sku) throw new SmartException("miss sku");
@@ -109,15 +109,15 @@ class ProductController extends SmartWebController{
 	public function actionApiSearchSpu(){
 		try{
 			//根据token获取会员
-			$token=Yii::$app->request->post('token',false);
+			$token=$this->requestPost('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取标签id
-			$search=Yii::$app->request->post('search',false);
+			$search=$this->requestPost('search',false);
 			if(!$search) throw new SmartException("搜索词为空",-2);
 			//获取每页多少条
-			$pageSize=Yii::$app->request->post('pageSize',0);
+			$pageSize=$this->requestPost('pageSize',0);
 			//获取当前第几页
-			$pageNum=Yii::$app->request->post('pageNum',0);
+			$pageNum=$this->requestPost('pageNum',0);
 			//获取query
 			$query=spu::find()->where("`title` LIKE '%{$search}%' AND `closed`='0' AND `locked`='0'");
 			//获取分页数据

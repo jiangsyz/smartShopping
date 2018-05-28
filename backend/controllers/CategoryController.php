@@ -16,7 +16,7 @@ class CategoryController extends SmartWebController{
 		try{
 			$data=array();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取顶级分类
 			$categories=category::getTopCategories();
@@ -33,12 +33,12 @@ class CategoryController extends SmartWebController{
 		try{
 			$data=array();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取分类id
-			$categoryId=Yii::$app->request->get('categoryId',0);
+			$categoryId=$this->requestGet('categoryId',0);
 			//获取是否包含父分类
-			$includeSelf=Yii::$app->request->get('includeSelf',0);
+			$includeSelf=$this->requestGet('includeSelf',0);
 			//获取分类
 			$category=category::find()->where("`id`='{$categoryId}'")->one();
 			if(!$category) throw new SmartException("miss category");
@@ -59,14 +59,14 @@ class CategoryController extends SmartWebController{
 		try{
 			$data=array();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取分类id
-			$categoryId=Yii::$app->request->get('categoryId',0);
+			$categoryId=$this->requestGet('categoryId',0);
 			//获取每页多少条
-			$pageSize=Yii::$app->request->get('pageSize',0);
+			$pageSize=$this->requestGet('pageSize',0);
 			//获取当前第几页
-			$pageNum=Yii::$app->request->get('pageNum',0);
+			$pageNum=$this->requestGet('pageNum',0);
 			//获取分类
 			$category=category::find()->where("`id`='{$categoryId}'")->one();
 			if(!$category) throw new SmartException("miss category");

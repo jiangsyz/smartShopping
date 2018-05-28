@@ -16,14 +16,14 @@ class MarkController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取标记类型
-			$markType=Yii::$app->request->get('markType',0);
+			$markType=$this->requestGet('markType',0);
 			//获取资源类型
-			$sourceType=Yii::$app->request->get('sourceType',0);
+			$sourceType=$this->requestGet('sourceType',0);
 			//获取资源id
-			$sourceId=Yii::$app->request->get('sourceId',0);
+			$sourceId=$this->requestGet('sourceId',0);
 			//增加标记
 			$markInfo=array();
 			$markInfo['memberId']=$member->id;
@@ -49,10 +49,10 @@ class MarkController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取标记id
-			$markId=Yii::$app->request->get('markId',0);
+			$markId=$this->requestGet('markId',0);
 			//获取标记
 			$where="`id`='{$markId}' AND `memberId`='{$member->id}'";
 			$mark=mark::find()->where($where)->one(); if(!$mark) throw new SmartException("miss mark");
@@ -74,14 +74,14 @@ class MarkController extends SmartWebController{
 	public function actionApiGetCollectors(){
 		try{
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取标记类型
-			$markType=Yii::$app->request->get('markType',0);
+			$markType=$this->requestGet('markType',0);
 			//获取资源类型
-			$sourceType=Yii::$app->request->get('sourceType',0);
+			$sourceType=$this->requestGet('sourceType',0);
 			//获取资源id
-			$sourceId=Yii::$app->request->get('sourceId',0);
+			$sourceId=$this->requestGet('sourceId',0);
 			//获取标记记录
 			$where="`markType`='{$markType}' AND `sourceType`='{$sourceType}' AND `sourceId`='{$sourceId}'";
 			$marks=mark::find()->where($where)->with("member")->all();
@@ -105,15 +105,15 @@ class MarkController extends SmartWebController{
 	public function actionApiGetMarkSpu(){
 		try{
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取标签id
-			$markType=Yii::$app->request->get('markType',0);
+			$markType=$this->requestGet('markType',0);
 			if(!$markType) throw new SmartException("非法的标记类型",-2);
 			//获取每页多少条
-			$pageSize=Yii::$app->request->get('pageSize',0);
+			$pageSize=$this->requestGet('pageSize',0);
 			//获取当前第几页
-			$pageNum=Yii::$app->request->get('pageNum',0);
+			$pageNum=$this->requestGet('pageNum',0);
 			//获取sql
 			$sourceType=source::TYPE_SPU;
 			$mTable=mark::tableName();

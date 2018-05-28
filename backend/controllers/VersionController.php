@@ -13,10 +13,10 @@ class VersionController extends SmartWebController{
             //开启事务
             $trascation=Yii::$app->db->beginTransaction();
             //根据token获取会员
-            $token=Yii::$app->request->get('token',false);
+            $token=$this->requestGet('token',false);
             $member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
             //获取客户端类型
-            $type=Yii::$app->request->get('type',false);
+            $type=$this->requestGet('type',false);
             //获取最新版本信息
             $version=version::find()->where("`type`='Android'")->orderBy("`versionTime` DESC")->one();
             if(!$version) throw new SmartException("版本信息异常",-3);

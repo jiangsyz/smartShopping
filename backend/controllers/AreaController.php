@@ -13,7 +13,7 @@ class AreaController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//获取父级地域id
-			$parentId=Yii::$app->request->get('parentId',0);
+			$parentId=$this->requestGet('parentId',0);
 			//获取子地域
 			$childAreas=Yii::$app->smartArea->getChildAreas($parentId);
 			//组织数据
@@ -35,7 +35,7 @@ class AreaController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//获取父级地域id
-			$areaId=Yii::$app->request->get('areaId',0);
+			$areaId=$this->requestGet('areaId',0);
 			//获取地域
 			$area=Yii::$app->smartArea->getArea($areaId); if(!$area) throw new SmartException("miss area");
 			//提交事务

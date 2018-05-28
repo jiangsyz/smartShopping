@@ -14,7 +14,7 @@ class VirtualItemController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取虚拟产品
 			$virtualItems=virtualItem::find()->where("`closed`='0' AND `locked`='0'")->all();

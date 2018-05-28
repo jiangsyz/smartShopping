@@ -15,7 +15,7 @@ class OrderController extends SmartWebController{
 	//获取会员订单统计
 	public function actionApiGetOrderStatistics(){
 		//根据token获取会员
-		$token=Yii::$app->request->get('token',false);
+		$token=$this->requestGet('token',false);
 		$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 		//组织数据
 		$data=array();
@@ -31,14 +31,14 @@ class OrderController extends SmartWebController{
 	public function actionApiGetOrders(){
 		try{
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取状态
-			$status=Yii::$app->request->get('status',0);
+			$status=$this->requestGet('status',0);
 			//获取每页多少条
-			$pageSize=Yii::$app->request->get('pageSize',0);
+			$pageSize=$this->requestGet('pageSize',0);
 			//获取当前第几页
-			$pageNum=Yii::$app->request->get('pageNum',0);
+			$pageNum=$this->requestGet('pageNum',0);
 			//根据不同状态取sql
 			$sql=false;
 			if($status=='all') $sql=$this->getAllOrders($member);
@@ -179,10 +179,10 @@ class OrderController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取订单id
-			$orderId=Yii::$app->request->get('orderId',0);
+			$orderId=$this->requestGet('orderId',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");
@@ -210,10 +210,10 @@ class OrderController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
 			//获取订单id
-			$orderId=Yii::$app->request->get('orderId',0);
+			$orderId=$this->requestGet('orderId',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");
@@ -239,10 +239,10 @@ class OrderController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取订单id
-			$orderId=Yii::$app->request->get('orderId',0);
+			$orderId=$this->requestGet('orderId',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");
@@ -268,10 +268,10 @@ class OrderController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取订单id
-			$orderId=Yii::$app->request->get('orderId',0);
+			$orderId=$this->requestGet('orderId',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");
@@ -299,12 +299,12 @@ class OrderController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取订单id
-			$orderId=Yii::$app->request->get('orderId',0);
+			$orderId=$this->requestGet('orderId',0);
 			//获取地址id
-			$addressId=Yii::$app->request->get('addressId',0);
+			$addressId=$this->requestGet('addressId',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");
@@ -330,14 +330,14 @@ class OrderController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
-			$token=Yii::$app->request->post('token',false);
+			$token=$this->requestPost('token',false);
 			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();	
 			//获取订单id
-			$orderId=Yii::$app->request->post('orderId',0);
+			$orderId=$this->requestPost('orderId',0);
 			//获取备注
-			$memo=Yii::$app->request->post('memo',"");
+			$memo=$this->requestPost('memo',"");
 			//获取修改后的价格
-			$price=Yii::$app->request->post('price',0);
+			$price=$this->requestPost('price',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");
@@ -361,14 +361,14 @@ class OrderController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
-			$token=Yii::$app->request->post('token',false);
+			$token=$this->requestPost('token',false);
 			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();	
 			//获取订单id
-			$orderId=Yii::$app->request->post('orderId',0);
+			$orderId=$this->requestPost('orderId',0);
 			//获取备注
-			$memo=Yii::$app->request->post('memo',"");
+			$memo=$this->requestPost('memo',"");
 			//获取修改后的价格
-			$freight=Yii::$app->request->post('freight',0);
+			$freight=$this->requestPost('freight',0);
 			//获取订单
 			$orderRecord=orderRecord::getLockedOrderById($orderId);
 			if(!$orderRecord) throw new SmartException("miss orderRecord");

@@ -20,7 +20,7 @@ class ShoppingCartController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取购物车
 			$shoppingCart=new shoppingCart(array('member'=>$member));
@@ -50,14 +50,14 @@ class ShoppingCartController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取资源类型
-			$sourceType=Yii::$app->request->get('sourceType',0);
+			$sourceType=$this->requestGet('sourceType',0);
 			//获取售卖单元id
-			$sourceId=Yii::$app->request->get('sourceId',0);
+			$sourceId=$this->requestGet('sourceId',0);
 			//获取添加数量
-			$count=Yii::$app->request->get('count',0);
+			$count=$this->requestGet('count',0);
 			//查询该购买对象的购物车记录是否存在
 			$where="`memberId`='{$member->id}' AND `sourceType`='{$sourceType}' AND `sourceId`='{$sourceId}'";
 			$shoppingCartRecord=shoppingCartRecord::find()->where($where)->one();
@@ -91,10 +91,10 @@ class ShoppingCartController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->post('token',false);
+			$token=$this->requestPost('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取资源列表
-			$sourceList=Yii::$app->request->post('sourceList',false);
+			$sourceList=$this->requestPost('sourceList',false);
 			//处理资源列表
 			$sourceList=json_decode($sourceList,true);
 			if(!is_array($sourceList)) throw new SmartException("error sourceList");

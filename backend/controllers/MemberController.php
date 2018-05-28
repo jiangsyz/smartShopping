@@ -16,7 +16,7 @@ class MemberController extends SmartWebController{
     public function actionApiGetTokenByPhone(){
 		try{
 			//获取手机
-			$phone=Yii::$app->request->get('phone',"");
+			$phone=$this->requestGet('phone',"");
 			//获取会员
 			$member=member::find()->where("`phone`='{$phone}'")->one();
 			//不是会员
@@ -37,7 +37,7 @@ class MemberController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//获取手机号
-			$phone=Yii::$app->request->get('phone',false);
+			$phone=$this->requestGet('phone',false);
 			//申请注册,获取验证码订单号
 			$orderId=signInManagement::memberApplySignInByPhone($phone);
 			//提交事务
@@ -58,9 +58,9 @@ class MemberController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//获取验证码订单号
-			$orderId=Yii::$app->request->get('orderId',false); 
+			$orderId=$this->requestGet('orderId',false); 
 			//获取验证码
-			$identifyingCode=Yii::$app->request->get('identifyingCode',false);
+			$identifyingCode=$this->requestGet('identifyingCode',false);
             //注册,并获取令牌
             $token=identifyingCodeManagement::getManagement($orderId,$identifyingCode)->handle();
             //提交事务
@@ -79,7 +79,7 @@ class MemberController extends SmartWebController{
 	public function actionApiGetInfo(){
 		try{
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取vip信息
 			$vip=memberLv::getVipInfo($member);
@@ -106,10 +106,10 @@ class MemberController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取图像
-			$avatar=Yii::$app->request->get('avatar',false);
+			$avatar=$this->requestGet('avatar',false);
 			//上传头像
 			$member->uploadAvatar($avatar);
 			//提交事务
@@ -130,10 +130,10 @@ class MemberController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取昵称
-			$nickName=Yii::$app->request->get('nickName',false);
+			$nickName=$this->requestGet('nickName',false);
 			//上传昵称
 			$member->uploadNickName($nickName);
 			//提交事务
@@ -154,10 +154,10 @@ class MemberController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取平台id
-			$pushUniqueId=Yii::$app->request->get('pushUniqueId',false);
+			$pushUniqueId=$this->requestGet('pushUniqueId',false);
 			if(!$pushUniqueId) throw new SmartException("推送uid缺失",-2);
 			//上传推送平台id
 			$member->updateObj(array('pushUniqueId'=>$pushUniqueId));
@@ -179,7 +179,7 @@ class MemberController extends SmartWebController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//清空推送平台id
 			$member->updateObj(array('pushUniqueId'=>NULL));

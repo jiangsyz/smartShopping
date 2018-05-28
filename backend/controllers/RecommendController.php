@@ -13,14 +13,14 @@ class RecommendController extends SmartWebController{
 	public function actionApiGetSpus(){
 		try{
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取推荐类型
-			$recommendType=Yii::$app->request->get('recommendType',0);
+			$recommendType=$this->requestGet('recommendType',0);
 			//获取每页多少条
-			$pageSize=Yii::$app->request->get('pageSize',0);
+			$pageSize=$this->requestGet('pageSize',0);
 			//获取当前第几页
-			$pageNum=Yii::$app->request->get('pageNum',0);
+			$pageNum=$this->requestGet('pageNum',0);
 			//查询query
 			$sourceType=source::TYPE_SPU;
 			$where="`recommendType`='{$recommendType}' AND `sourceType`='{$sourceType}'";

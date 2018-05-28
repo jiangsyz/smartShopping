@@ -13,10 +13,10 @@ class BannerController extends SmartWebController{
 		try{
 			$data=array();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取广告位编号
-			$siteNo=Yii::$app->request->get('siteNo',false); 
+			$siteNo=$this->requestGet('siteNo',false); 
 			if(!$siteNo) throw new SmartException("miss siteNo");
 			//获取推荐内容
 			$banners=banner::find()->where("`siteNo`='{$siteNo}'")->orderBy("`sort` ASC")->all();

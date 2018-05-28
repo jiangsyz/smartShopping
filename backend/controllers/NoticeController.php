@@ -13,12 +13,12 @@ class NoticeController extends SmartWebController{
 		try{
 			$data=array();
 			//根据token获取会员
-			$token=Yii::$app->request->get('token',false);
+			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取每页多少条
-			$pageSize=Yii::$app->request->get('pageSize',0);
+			$pageSize=$this->requestGet('pageSize',0);
 			//获取当前第几页
-			$pageNum=Yii::$app->request->get('pageNum',0);
+			$pageNum=$this->requestGet('pageNum',0);
 			//获取sql
 			$table=notice::tableName();
 			$sql="SELECT * FROM {$table} WHERE `memberId`='{$member->id}' ORDER BY `createTime` DESC";

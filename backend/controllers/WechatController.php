@@ -14,11 +14,11 @@ class WechatController extends SmartWebController{
             //开启事务
             $trascation=Yii::$app->db->beginTransaction();
             //获取jscode
-            $jscode=Yii::$app->request->post('jscode',"");
+            $jscode=$this->requestPost('jscode',"");
             //获取加密的用户数据
-            $encryptedData=Yii::$app->request->post('encryptedData',"");
+            $encryptedData=$this->requestPost('encryptedData',"");
             //获取加密算法的初始向量
-            $iv=Yii::$app->request->post('iv',"");
+            $iv=$this->requestPost('iv',"");
             //通过jscode获取sessionKey和openid
             $data=Yii::$app->smartWechat->jscode2session($jscode);
             //获取sessionKey
