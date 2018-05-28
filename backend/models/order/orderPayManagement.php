@@ -40,6 +40,9 @@ class orderPayManagement extends Component{
         $payCommand['body']="订单支付";
         $payCommand['out_trade_no']=Yii::$app->controller->runningId;
         $payCommand['total_fee']=$this->orderRecord->pay;
+        $payCommand['openid']=$this->orderRecord->member->getProperty("openid");
+        //日志
+        //Yii::$app->smartLog->debugLog(json_encode($paySuccess));
         //返回调用支付所需的数据
         return Yii::$app->smartWechatPay->applyPay($appType,$payCommand);
 	}
