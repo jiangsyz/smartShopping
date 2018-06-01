@@ -30,6 +30,9 @@ abstract class salesUnit extends product{
 	//获取会员最终成交价格
 	abstract public function getFinalPrice(member $member);
 	//========================================
+	//获取物流渠道
+	abstract public function getLogistics();
+	//========================================
 	//获取库存(无库存限制返回NULL)
 	abstract public function getKeepCount();
 	//========================================
