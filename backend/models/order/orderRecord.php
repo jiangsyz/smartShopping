@@ -31,6 +31,8 @@ class orderRecord extends source{
 	public $cancelManagement=false;
 	//退款管理器
 	public $refundManagement=false;
+	//物流管理器
+	public $logisticsManagement=false;
 	//检查器
 	public $checker=false;
 	//数据提取器
@@ -55,6 +57,7 @@ class orderRecord extends source{
 		$this->statusManagement=new orderStatusManagement(array('orderRecord'=>$this));
 		$this->cancelManagement=new orderCancelManagement(array('orderRecord'=>$this));
 		$this->refundManagement=new orderRefundManagement(array('orderRecord'=>$this));
+		$this->logisticsManagement=new orderLogisticsManagement(array('orderRecord'=>$this));
 		$this->checker=new orderRecordChecker(array('orderRecord'=>$this));
 		$this->extraction=new orderExtraction(array('orderRecord'=>$this));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initCreateTime"));
