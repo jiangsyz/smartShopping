@@ -385,4 +385,48 @@ class OrderController extends SmartWebController{
 			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
+	//========================================
+	//获取订单的物流列表
+	public function actionApiGetLogisticsList(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=$this->requestGet('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//$member=member::find()->where("`id`='1'")->one();
+			//获取订单id
+			$orderId=$this->requestGet('orderId',0);
+			//获取订单
+			$orderRecord=orderRecord::getLockedOrderById($orderId);
+			if(!$orderRecord) throw new SmartException("miss orderRecord");
+			//判断订单是否属于当前会员
+			if($orderRecord->memberId!=$member->id) throw new SmartException("error memberId");
+			//获取物流列表
+			$logisticsList=$orderRecord->logisticsManagement->getLogisticsList();
+			//组织数据
+			$data=array();
+			foreach($logisticsList as $v){
+				$info=array();
+				$info['logisticsCode']=$v['logisticsCode'];
+				$info['logistics']=$v['logistics']->getData();
+				$info['buyingRecords']=array();
+				foreach($v['buyingRecords'] as $b){
+					$bInfo=$b->getSalesUnit()->getExtraction()->getBasicData($member);
+					$bInfo['buyingCount']=$b->buyingCount;
+					$info['buyingRecords'][]=$bInfo;
+				}
+				$data[]=$info;
+			}
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
+    	}
+	}
 }
