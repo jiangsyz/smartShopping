@@ -77,4 +77,7 @@ class sku extends salesUnit{
 	//========================================
 	//获取spu
 	public function getSpu(){return $this->hasOne(spu::className(),array('id'=>'spuId'));}
+	//========================================
+	//获取物流
+	public function getLogistics(){return $this->spu->logistics;}
 }
