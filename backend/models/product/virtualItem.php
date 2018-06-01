@@ -25,9 +25,10 @@ class virtualItem extends salesUnit{
 	public function getDistributeType(){return distribute::TYPE_VIRTUAL;}
 	//========================================
 	//获取虚拟产品详情
-	public function getDetails(){
-		return $this->hasMany(virtualItemDetail::className(),array('vid'=>'id'));
-	}
+	public function getDetails(){return $this->hasMany(virtualItemDetail::className(),array('vid'=>'id'));}
+	//========================================
+	//获取物流
+	public function getLogistics(){return NULL;}
 	//========================================
 	//更新库存
 	public function updateKeepCount($handlerType,$handlerId,$keepCount,$memo=NULL){return;}
