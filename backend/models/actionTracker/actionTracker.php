@@ -33,6 +33,7 @@ class actionTracker extends SmartActiveRecord{
 			'order/api-get-detail'=>'获取订单详情',
 			'order/api-receipted'=>'订单确认收货',
 			'order/api-change-address'=>'订单修改地址',
+			'order/api-get-logistics-list'=>'获取订单物流列表',
 			//分类模块
 			'category/api-get-top-categories'=>'获取所有顶级分类',
 			'category/api-get-children'=>'获取某个分类的子分类',
