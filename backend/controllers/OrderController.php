@@ -331,7 +331,7 @@ class OrderController extends SmartWebController{
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
 			$token=$this->requestPost('token',false);
-			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();	
+			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
 			//获取订单id
 			$orderId=$this->requestPost('orderId',0);
 			//获取备注
@@ -362,7 +362,7 @@ class OrderController extends SmartWebController{
 			$trascation=Yii::$app->db->beginTransaction();
 			//根据token获取员工
 			$token=$this->requestPost('token',false);
-			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();	
+			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
 			//获取订单id
 			$orderId=$this->requestPost('orderId',0);
 			//获取备注
@@ -418,6 +418,63 @@ class OrderController extends SmartWebController{
 				}
 				$data[]=$info;
 			}
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
+    	}
+	}
+	//========================================
+	//获取订单详情
+	public function actionApiGetLogisticsDetail(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取会员
+			$token=$this->requestGet('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//$member=member::find()->where("`id`='2'")->one();
+			//获取订单id
+			$orderId=$this->requestGet('orderId',0);
+			//获取物流渠道id
+			$logisticsId=$this->requestGet('logisticsId',"");
+			//获取物流编号
+			$logisticsCode=$this->requestGet('logisticsCode',"");
+			//获取索引
+			$index=$logisticsId.'_'.$logisticsCode;
+			//获取订单
+			$orderRecord=orderRecord::getLockedOrderById($orderId);
+			if(!$orderRecord) throw new SmartException("miss orderRecord");
+			//判断订单是否属于当前会员
+			if($orderRecord->memberId!=$member->id) throw new SmartException("error memberId");
+			//获取物流列表
+			$logisticsList=$orderRecord->logisticsManagement->getLogisticsList();
+			if(!isset($logisticsList[$index])) throw new SmartException("error logistics index");
+			//拼接api的uri
+			$gmApi=Yii::$app->params["gmApi"];
+			$uri=$gmApi."?r=zs-api/get-logistics-trace&com={$logisticsList[$index]['logistics']['code']}&num={$logisticsCode}";
+			//调用api
+			$response=Yii::$app->smartApi->get($uri);
+			if(!$response['state']) throw new SmartException("call api error");
+			//分析结果
+			$response=json_decode($response['response'],true);
+			if(!is_array($response)) throw new SmartException("error response");
+			if(!isset($response['error'])) throw new SmartException("response miss error");
+			if($response['error']!=0)
+				if(!isset($response['msg'])) 
+					throw new SmartException("response miss msg");
+				else 
+					throw new SmartException($response['msg']);
+			else
+				if(!isset($response['data']))
+					throw new SmartException("response miss data");
+				else
+					$data=$response['data'];
 			//提交事务
 			$trascation->commit();
 			//返回
