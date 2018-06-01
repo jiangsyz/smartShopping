@@ -430,7 +430,7 @@ class OrderController extends SmartWebController{
     	}
 	}
 	//========================================
-	//获取订单详情
+	//获取详情
 	public function actionApiGetLogisticsDetail(){
 		try{
 			//开启事务
