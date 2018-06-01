@@ -39,4 +39,7 @@ class spu extends product{
 	//========================================
 	//获取数据提取器
 	public function getExtraction(){return new spuExtraction($this);}
+	//========================================
+	//获取物流渠道
+	public function getLogistics(){return $this->hasOne(logistics::className(),array('id'=>'logisticsId'));}
 }
