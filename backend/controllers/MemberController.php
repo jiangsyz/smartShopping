@@ -85,6 +85,7 @@ class MemberController extends SmartWebController{
 			$vip=memberLv::getVipInfo($member);
 			//获取数据
 			$data=array();
+			$data['memberId']=$member->id;
 			$data['phone']=$member->phone;
 			$data['nickName']=$member->getNickName();
 			$data['avatar']=$member->getAvatar();
