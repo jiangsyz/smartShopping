@@ -34,6 +34,7 @@ class actionTracker extends SmartActiveRecord{
 			'order/api-receipted'=>'订单确认收货',
 			'order/api-change-address'=>'订单修改地址',
 			'order/api-get-logistics-list'=>'获取订单物流列表',
+			'order/api-get-logistics-detail'=>'获取订单物流详情',
 			//分类模块
 			'category/api-get-top-categories'=>'获取所有顶级分类',
 			'category/api-get-children'=>'获取某个分类的子分类',
@@ -82,7 +83,6 @@ class actionTracker extends SmartActiveRecord{
 	//========================================
 	//行为追踪
 	public static function actionTrack($startId=1){
-		echo "actionTrack startId={$startId}\n";
 		//查询一条日志
 		$sql="SELECT * FROM `smart_log_record` WHERE `id`>='{$startId}' ORDER BY `id`";
 		$logs=Yii::$app->log_db->createCommand($sql)->queryAll();
