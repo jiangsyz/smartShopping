@@ -9,7 +9,7 @@ class LogController extends Controller{
 	//用户行为追踪
     public function actionActionTracker(){
     	//记录日志
-    	Yii::$app->smartLog->consoleLog('start running');
+    	Yii::$app->smartLog->consoleLog('begin');
     	//循环处理
     	while(1){
     		try{
