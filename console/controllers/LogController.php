@@ -2,16 +2,17 @@
 namespace console\controllers;
 use Yii;
 use yii\console\Controller;
+use yii\console\SmartDaemonController;
 use yii\base\SmartException;
 use yii\base\Exception;
 use backend\models\actionTracker\actionTracker;
-class LogController extends Controller{
+class LogController extends SmartDaemonController{
 	//用户行为追踪
     public function actionActionTracker(){
-    	//记录日志
-    	Yii::$app->smartLog->consoleLog('begin');
+    	$this->begin();
     	//循环处理
     	while(1){
+    		$this->alive();
     		try{
 				//开启事务
 				$trascation=Yii::$app->db->beginTransaction();
@@ -31,7 +32,7 @@ class LogController extends Controller{
 				$trascation->rollback();
 	    	}
 	    	//休息一下
-			sleep(Yii::$app->params["consoleSleep"]);
+			$this->sleep();
     	}
     }
 }
