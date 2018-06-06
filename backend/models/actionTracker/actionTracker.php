@@ -138,7 +138,4 @@ class actionTracker extends SmartActiveRecord{
 			}
 		}
 	}
-	//========================================
-	//追踪失败
-	public static function trackError($log,$error){return true;}
 }
