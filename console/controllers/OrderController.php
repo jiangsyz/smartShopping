@@ -45,7 +45,10 @@ class OrderController extends SmartDaemonController{
 					//检查超时
 					$orderRecord->payManagement->canOrderPay();
 					//记录日志
-					Yii::$app->smartLog->consoleLog("check order {$orderRecord->id}");
+					if($orderRecord->payStatus==-1) 
+						Yii::$app->smartLog->consoleLog("order {$orderRecord->id} pay timeout");
+					else
+						Yii::$app->smartLog->consoleLog("check order {$orderRecord->id}");
 					//提交事务
 					$trascation->commit();
 				}
