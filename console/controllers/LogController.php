@@ -33,6 +33,8 @@ class LogController extends SmartDaemonController{
 	    	}
 	    	//休息一下
 			$this->sleep();
+			//报告存活
+			$this->alive();
     	}
     }
 }
