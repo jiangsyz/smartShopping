@@ -12,7 +12,6 @@ class LogController extends SmartDaemonController{
     	$this->begin();
     	//循环处理
     	while(1){
-    		$this->alive();
     		try{
 				//开启事务
 				$trascation=Yii::$app->db->beginTransaction();
