@@ -8,7 +8,7 @@ use yii\base\Exception;
 use backend\models\actionTracker\actionTracker;
 class LogController extends SmartDaemonController{
 	//用户行为追踪
-    public function actionActionTracker(){
+    public function actionDaemonActionTracker(){
     	$this->begin();
     	//循环处理
     	while(1){
