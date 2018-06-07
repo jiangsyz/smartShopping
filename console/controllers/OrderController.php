@@ -123,6 +123,11 @@ class OrderController extends SmartDaemonController{
 					$orderRecord=orderRecord::getLockedOrderById($row['id']);
 					//发货
 					$orderRecord->statusManagement->delivered();
+					//记录日志
+					if($orderRecord->deliverStatus!=1)
+						Yii::$app->smartLog->consoleLog("order {$orderRecord->id} delivered");
+					else
+						Yii::$app->smartLog->consoleLog("check order {$orderRecord->id}");
 					//提交事务
 					$trascation->commit();
 				}
