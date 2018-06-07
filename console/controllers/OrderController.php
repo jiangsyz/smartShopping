@@ -89,7 +89,10 @@ class OrderController extends SmartDaemonController{
 					//返库存
 					$orderRecord->cancelManagement->backKeepCount();
 					//记录日志
-					Yii::$app->smartLog->consoleLog("check order {$orderRecord->id}");
+					if($orderRecord->backKeepCountStatus==1)
+						Yii::$app->smartLog->consoleLog("order {$orderRecord->id} backKeepCount");
+					else
+						Yii::$app->smartLog->consoleLog("check order {$orderRecord->id}");
 					//提交事务
 					$trascation->commit();
 				}
