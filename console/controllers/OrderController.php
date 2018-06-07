@@ -16,7 +16,7 @@ use backend\models\notice\notice;
 use backend\models\order\orderRecord;
 class OrderController extends SmartDaemonController{
 	//订单支付超时检测
-    public function actionCheckPayTimeout(){
+    public function actionDaemonCheckPayTimeout(){
     	$this->begin();
     	//循环处理
     	while(1){
@@ -59,7 +59,7 @@ class OrderController extends SmartDaemonController{
     }
     //========================================
 	//订单支付超时或取消或关闭返库存
-	public function actionBackKeepCount(){
+	public function actionDaemonBackKeepCount(){
 		$this->begin();
     	//循环处理
     	while(1){
@@ -99,5 +99,34 @@ class OrderController extends SmartDaemonController{
     	}
 	}
 	//========================================
+	//待发货切换为待收货
+	public function actionDaemonDelivered(){
+		$this->begin();
+    	//循环处理
+    	while(1){
+    		//获取所有已配货的订单列表
+			$table=orderRecord::tableName();
+			$sql="SELECT `id` FROM {$table} WHERE `parentId` is NULL AND `deliverStatus`='1';";
+			$rows=Yii::$app->db->createCommand($sql)->queryAll();
+			//逐个处理订单
+			foreach($rows as $row){
+				try{
+					//开启事务
+					$trascation=Yii::$app->db->beginTransaction();
+					//加锁取订单
+					$orderRecord=orderRecord::getLockedOrderById($row['id']);
+					//发货
+					$orderRecord->statusManagement->delivered();
+					//提交事务
+					$trascation->commit();
+				}
+				catch(Exception $e){$trascation->rollback();}
+			}
+	    	//休息一下
+			$this->sleep();
+			//报告存活
+			$this->alive();
+    	}
+	}
 }
 ?>
