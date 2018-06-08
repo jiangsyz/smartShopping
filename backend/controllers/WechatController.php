@@ -20,7 +20,9 @@ class WechatController extends SmartWebController{
             //获取加密算法的初始向量
             $iv=$this->requestPost('iv',"");
             //通过jscode获取sessionKey和openid
-            $data=Yii::$app->smartWechat->jscode2session($jscode);
+            $appId=Yii::$app->params["app1"]["appId"];
+            $appSecret=Yii::$app->params["app1"]["appSecret"];
+            $data=Yii::$app->smartWechat->jscode2session($appId,$appSecret,$jscode);
             //获取sessionKey
             $sessionKey=$data['sessionKey'];
             //获取openid
@@ -50,14 +52,5 @@ class WechatController extends SmartWebController{
             $trascation->rollback();
             $this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
         }
-    }
-    //========================================
-    public function actionIndex(){
-        $encryptedData="5D6p5giaozmyFyh2AtPGuGxM0Vj9deY5V2LG+xN6wppy870N+dtP2o+QQ9BY\/Fhx0rT+Ogg2f8elCIfdQ5b0CCbU107lfcQ0sG2cza7nO2WeLQi6o0JwoReUw0llBQ68HbhiLS3ZB1Y6aE8KiRnqgQiYtcNhQE2Yq\/96QMy6w0E19u\/1tXDlSJa725RReLzw\/TyMZJagIqApDzZTaVMOIA==";
-        $iv="jZkcHgGUEQIS7fnp9BlYFQ==";
-        $sessionKey="gAIbqA642JtOJZJuNm1nMQ==";
-        $data=Yii::$app->smartWechat->encrypteData($sessionKey,$iv,$encryptedData);
-
-        var_dump($data);
     }
 }
