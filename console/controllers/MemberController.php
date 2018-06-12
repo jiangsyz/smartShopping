@@ -89,7 +89,7 @@ class MemberController extends SmartDaemonController{
 				$trascation->rollback();
 	    	}
 	    	//休息一下
-			$this->sleep(30);
+			$this->sleep(5);
 			//报告存活
 			$this->alive();
     	}
