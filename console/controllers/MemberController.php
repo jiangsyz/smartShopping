@@ -7,7 +7,7 @@ use yii\base\SmartException;
 use yii\base\Exception;
 use backend\models\member\publicAccountUser;
 class MemberController extends SmartDaemonController{
-	//获取公众号的全部用户(openid)
+	//获取公众号用户的openid
     public function actionDaemonGetOpenidFromPublicAccount(){
     	$this->begin();
     	//循环处理
@@ -15,9 +15,10 @@ class MemberController extends SmartDaemonController{
     		try{
 				//开启事务
 				$trascation=Yii::$app->db->beginTransaction();
-				//获取全量用户
+				//获取公众号相关配置
 				$appId=Yii::$app->params["app2"]["appId"];
 				$appSecret=Yii::$app->params["app2"]["appSecret"];
+				//获取全量用户
 				$openids=Yii::$app->smartWechat->getOpenidsFromPublicAccount($appId,$appSecret);
 				//新增用户量
 				$increment=0;
@@ -52,7 +53,46 @@ class MemberController extends SmartDaemonController{
     //========================================
     //获取公众号用户的unionid
     public function actionDaemonGetUnionidFromPublicAccount(){
-    	
+    	$this->begin();
+    	//循环处理
+    	while(1){
+    		try{
+				//开启事务
+				$trascation=Yii::$app->db->beginTransaction();
+				//获取公众号相关配置
+				$appId=Yii::$app->params["app2"]["appId"];
+				$appSecret=Yii::$app->params["app2"]["appSecret"];
+				//获取缺失unionid信息的用户
+				$rows=publicAccountUser::find()->where("`appid`='{$appId}' AND `unionid` IS NULL")->orderBy("`id` ASC")->offset(0)->limit(100)->all();
+				//组织数据
+				$openids=array();
+				$users=array();
+				foreach($rows as $row){
+					$openids[]=$row->openid;
+					$users[$row->openid]=$row;
+				}
+				//获取unionids
+				$unionids=Yii::$app->smartWechat->getUnionidsFromPublicAccount($appId,$appSecret,$openids);
+				//更新数据
+				foreach($unionids as $openid=>$unionid)
+					if(isset($users[$openid])) $users[$openid]->updateObj(array('unionid'=>$unionid));
+				//计算剩余unionid缺失的用户数量
+				$remaining=publicAccountUser::find()->where("`appid`='{$appId}' AND `unionid` IS NULL")->count();
+				//记录日志
+				Yii::$app->smartLog->consoleLog('remaining='.$remaining);
+				var_dump($remaining);
+				//提交事务
+				$trascation->commit();
+    		}
+	    	catch(Exception $e){
+	    		//回滚
+				$trascation->rollback();
+	    	}
+	    	//休息一下
+			$this->sleep(30);
+			//报告存活
+			$this->alive();
+    	}
     }
 }
 ?>
