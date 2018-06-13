@@ -20,6 +20,8 @@ class WechatController extends SmartWebController{
             $encryptedData=$this->requestPost('encryptedData',"");
             //获取加密算法的初始向量
             $iv=$this->requestPost('iv',"");
+            //获取上线id
+            $referenceId=$this->requestPost('referenceId',"");
             //通过jscode获取sessionKey和openid
             $appId=Yii::$app->params["app1"]["appId"];
             $appSecret=Yii::$app->params["app1"]["appSecret"];
@@ -39,8 +41,11 @@ class WechatController extends SmartWebController{
             $tableName=member::tableName();
             $sql="SELECT * FROM {$tableName} where `phone`='{$phone}' FOR UPDATE";
             $member=member::findBySql($sql)->one();
-            //用户不存在创建用户
-            if(!$member) $member=member::addObj(array('phone'=>$phone));
+            //用户不存在创建用户,并绑定上线
+            if(!$member){
+                $member=member::addObj(array('phone'=>$phone));
+                $member->addProperty("referenceId",$referenceId);
+            }
             //绑定openid
             if($member->getProperty("openid")===NULL) $member->addProperty("openid",$openid);
             //提交事务
