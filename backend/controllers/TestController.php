@@ -16,25 +16,24 @@ class TestController extends SmartWebController{
     public function actionIndex(){echo time();}
     //========================================
     public function actionTest(){
-        try{
-            //开启事务
-            $trascation=Yii::$app->db->beginTransaction();
-            //初始化订单号
-            $orders=orderRecord::find()->where("`parentId` IS NULL")->all();
-            foreach($orders as $o){
-                if(!$o->code)
-                $o->initOrderCode();
-                $o->save();
-            }
-            //提交事务
-            $trascation->commit();
-            //返回
-            $this->response(1,array('error'=>0));
-        }
-        catch(Exception $e){
-            //回滚
-            $trascation->rollback();
-            $this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
-        }
+		$appId1=Yii::$app->params["app1"]["appId"];
+		$appSecret2=Yii::$app->params["app1"]["appSecret"];
+		$appId2=Yii::$app->params["app2"]["appId"];
+		$appSecret2=Yii::$app->params["app2"]["appSecret"];
+
+		$data=array();
+		$data['openid']='oy1Thsj7A0EQ9i8GWz9KtnZWygRI';
+		$data['templateId']='5fT3a_mLXelmzODom-wQAr5mUsPNP5K68me7khqs_os';
+		$data['msgData']=array();
+		$data['msgData']['first']=array("value"=>"恭喜你购买成功！","color"=>"#173177");
+		$data['msgData']['keyword1']=array("value"=>"1","color"=>"#173177");
+		$data['msgData']['keyword2']=array("value"=>date("Y_m_d_H_i_s",time()),"color"=>"#173177");
+		$data['msgData']['keyword3']=array("value"=>"100.11","color"=>"#173177");
+		$data['msgData']['keyword4']=array("value"=>"微信支付","color"=>"#173177");
+		$data['msgData']['remark']=array("value"=>"感谢您的惠顾","color"=>"#173177");
+		$data['miniAppId']=$appId1;
+		$data['miniPagepath']='';
+
+		Yii::$app->smartWechat->pushTemplateMsg($appId2,$appSecret2,$data);
     }
 }
