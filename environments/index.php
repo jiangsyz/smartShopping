@@ -40,6 +40,8 @@ return [
             'wechatRefund/web/assets',
             'wechatPay/runtime',
             'wechatPay/web/assets',
+            'wechatPublicAccount/runtime',
+            'wechatPublicAccount/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -50,6 +52,7 @@ return [
             'frontend/config/main-local.php',
             'wechatRefund/config/main-local.php',
             'wechatPay/config/main-local.php',
+            'wechatPublicAccount/config/main-local.php',
         ],
     ],
     'Production' => [
@@ -63,6 +66,8 @@ return [
             'wechatRefund/web/assets',
             'wechatPay/runtime',
             'wechatPay/web/assets',
+            'wechatPublicAccount/runtime',
+            'wechatPublicAccount/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -72,6 +77,7 @@ return [
             'frontend/config/main-local.php',
             'wechatRefund/config/main-local.php',
             'wechatPay/config/main-local.php',
+            'wechatPublicAccount/config/main-local.php',
         ],
     ],
 ];
