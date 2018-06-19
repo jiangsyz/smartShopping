@@ -1,11 +1,11 @@
 <?php
 
-namespace wechatPay\assets;
+namespace wechatPublicAccount\assets;
 
 use yii\web\AssetBundle;
 
 /**
- * Main wechatPay application asset bundle.
+ * Main wechatPublicAccount application asset bundle.
  */
 class AppAsset extends AssetBundle
 {

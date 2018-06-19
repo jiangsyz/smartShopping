@@ -1,16 +1,16 @@
 <?php
 
-namespace wechatPay\tests\unit\models;
+namespace wechatPublicAccount\tests\unit\models;
 
 use Yii;
-use wechatPay\models\PasswordResetRequestForm;
+use wechatPublicAccount\models\PasswordResetRequestForm;
 use common\fixtures\UserFixture as UserFixture;
 use common\models\User;
 
 class PasswordResetRequestFormTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \wechatPay\tests\UnitTester
+     * @var \wechatPublicAccount\tests\UnitTester
      */
     protected $tester;
 

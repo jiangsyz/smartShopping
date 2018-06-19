@@ -1,8 +1,8 @@
 <?php
 
-namespace wechatPay\tests\functional;
+namespace wechatPublicAccount\tests\functional;
 
-use wechatPay\tests\FunctionalTester;
+use wechatPublicAccount\tests\FunctionalTester;
 
 class HomeCest
 {

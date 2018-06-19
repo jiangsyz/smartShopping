@@ -1,7 +1,7 @@
 <?php
-namespace wechatPay\tests\acceptance;
+namespace wechatPublicAccount\tests\acceptance;
 
-use wechatPay\tests\AcceptanceTester;
+use wechatPublicAccount\tests\AcceptanceTester;
 use yii\helpers\Url;
 
 class HomeCest

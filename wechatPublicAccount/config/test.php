@@ -1,6 +1,6 @@
 <?php
 return [
-    'id' => 'app-wechatPay-tests',
+    'id' => 'app-wechatPublicAccount-tests',
     'components' => [
         'assetManager' => [
             'basePath' => __DIR__ . '/../web/assets',

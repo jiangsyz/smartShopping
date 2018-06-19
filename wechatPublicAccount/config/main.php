@@ -7,22 +7,22 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'app-wechatPay',
+    'id' => 'app-wechatPublicAccount',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'controllerNamespace' => 'wechatPay\controllers',
+    'controllerNamespace' => 'wechatPublicAccount\controllers',
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-wechatPay',
+            'csrfParam' => '_csrf-wechatPublicAccount',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-wechatPay', 'httpOnly' => true],
+            'identityCookie' => ['name' => '_identity-wechatPublicAccount', 'httpOnly' => true],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the wechatPay
-            'name' => 'advanced-wechatPay',
+            // this is the name of the session cookie used for login on the wechatPublicAccount
+            'name' => 'advanced-wechatPublicAccount',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

@@ -1,8 +1,8 @@
 <?php
-namespace wechatPay\tests\unit\models;
+namespace wechatPublicAccount\tests\unit\models;
 
 use Yii;
-use wechatPay\models\ContactForm;
+use wechatPublicAccount\models\ContactForm;
 
 class ContactFormTest extends \Codeception\Test\Unit
 {

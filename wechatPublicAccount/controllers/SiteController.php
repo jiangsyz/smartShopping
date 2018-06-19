@@ -1,5 +1,5 @@
 <?php
-namespace wechatPay\controllers;
+namespace wechatPublicAccount\controllers;
 use Yii;
 use yii\web\SmartWebController;
 use yii\base\Exception;

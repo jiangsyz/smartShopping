@@ -1,14 +1,14 @@
 <?php
 
-namespace wechatPay\tests\unit\models;
+namespace wechatPublicAccount\tests\unit\models;
 
 use common\fixtures\UserFixture;
-use wechatPay\models\ResetPasswordForm;
+use wechatPublicAccount\models\ResetPasswordForm;
 
 class ResetPasswordFormTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \wechatPay\tests\UnitTester
+     * @var \wechatPublicAccount\tests\UnitTester
      */
     protected $tester;
 

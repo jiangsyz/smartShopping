@@ -1,5 +1,5 @@
 <?php
-namespace wechatPay\tests;
+namespace wechatPublicAccount\tests;
 
 /**
  * Inherited Methods

@@ -1,4 +1,4 @@
-namespace: wechatPay\tests
+namespace: wechatPublicAccount\tests
 actor: Tester
 paths:
     tests: tests

@@ -1,13 +1,13 @@
 <?php
-namespace wechatPay\tests\unit\models;
+namespace wechatPublicAccount\tests\unit\models;
 
 use common\fixtures\UserFixture;
-use wechatPay\models\SignupForm;
+use wechatPublicAccount\models\SignupForm;
 
 class SignupFormTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \wechatPay\tests\UnitTester
+     * @var \wechatPublicAccount\tests\UnitTester
      */
     protected $tester;
 
