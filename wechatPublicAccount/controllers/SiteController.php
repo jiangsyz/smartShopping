@@ -37,12 +37,8 @@ class SiteController extends SmartWebController{
                 libxml_disable_entity_loader(true);
                 $data=simplexml_load_string($data,'SimpleXMLElement',LIBXML_NOCDATA);
                 $data=json_decode(json_encode($data),true);
-                //获取openid
                 if(!isset($data['FromUserName'])) throw new SmartException("miss FromUserName");
-                //获取事件类型
-                if(!isset($data['Event'])) throw new SmartException("miss Event");
-                //只处理订阅事件
-                //if($data['Event']!="subscribe") throw new SmartException("Event is not subscribe");
+                if(!isset($data['ToUserName'])) throw new SmartException("miss ToUserName");
                 //通过公众号appId
                 $appId=Yii::$app->params["app2"]["appId"];
                 //查询是否是老用户
@@ -56,12 +52,21 @@ class SiteController extends SmartWebController{
                     $publicAccountUserData['unionid']=NULL;
                     publicAccountUser::addObj($publicAccountUserData);
                 }
-                //老用户不处理
-                else throw new SmartException("user existed");
                 //提交事务
                 $trascation->commit();
-                //返回验证码订单号
-                $this->response(1,array('error'=>0,'data'=>$data));
+                //返回应答
+                $time=time();
+                $str=
+                "
+                <xml>
+                <ToUserName><![CDATA[{$data['FromUserName']}]]></ToUserName>
+                <FromUserName><![CDATA[{$data['ToUserName']}]]></FromUserName>
+                <CreateTime>{$time}</CreateTime>
+                <MsgType><![CDATA[text]]></MsgType>
+                <Content><![CDATA[正善牛肉欢迎您!]]></Content>
+                </xml>
+                ";
+                $this->response(3,$str);
             }
             catch(Exception $e){
                 //回滚
