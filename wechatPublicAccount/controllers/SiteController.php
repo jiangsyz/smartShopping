@@ -39,6 +39,7 @@ class SiteController extends SmartWebController{
                 $data=json_decode(json_encode($data),true);
                 if(!isset($data['FromUserName'])) throw new SmartException("miss FromUserName");
                 if(!isset($data['ToUserName'])) throw new SmartException("miss ToUserName");
+                if(!isset($data['MsgType'])) throw new SmartException("miss MsgType");
                 //通过公众号appId
                 $appId=Yii::$app->params["app2"]["appId"];
                 //查询是否是老用户
@@ -54,6 +55,11 @@ class SiteController extends SmartWebController{
                 }
                 //提交事务
                 $trascation->commit();
+                //不是用户发消息,直接返回success,微信不会做处理
+                $typeList=array('text','image','voice');
+                if(!in_array($data['MsgType'],$typeList)) $this->response(3,"success");
+                //取用户缓存
+                if(Yii::$app->cache->get($data['FromUserName'])) $this->response(3,"success");
                 //返回应答
                 $time=time();
                 $str=
@@ -66,6 +72,7 @@ class SiteController extends SmartWebController{
                 <Content><![CDATA[正善牛肉欢迎您!]]></Content>
                 </xml>
                 ";
+                Yii::$app->cache->set($data['FromUserName'],true,30);
                 $this->response(3,$str);
             }
             catch(Exception $e){
