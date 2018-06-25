@@ -34,7 +34,7 @@ class orderExtraction extends Component{
 		$data['buyingRecords']=array();
 		$buyingRecords=$this->orderRecord->buyingManagement->getBuyingList();
 		foreach($buyingRecords as $b){
-			$bInfo=$b->getSalesUnit()->getExtraction()->getBasicData($this->orderRecord->member);
+			$bInfo=json_decode($b->dataPhoto,true);
 			$bInfo['buyingCount']=$b->buyingCount;
 			$data['buyingRecords'][]=$bInfo;
 		}
