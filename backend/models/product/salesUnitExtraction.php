@@ -29,7 +29,7 @@ class salesUnitExtraction{
 		$data['keepCout']=$this->salesUnit->getKeepCount();
 		$data['shoppingCartCount']=$shoppingCartRecord?$shoppingCartRecord->count:0;
 		$data['isAllowSale']=$this->salesUnit->isAllowSale();
-		$data['logistics']=$this->salesUnit->getLogistics();
+		$data['logistics']=$this->salesUnit->getLogistics()?$this->salesUnit->getLogistics()->getData():NULL;
 		return $data;
 	}
 }
