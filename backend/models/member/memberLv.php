@@ -8,11 +8,20 @@ use backend\models\order\orderBuyingRecord;
 use backend\models\notice\notice;
 //========================================
 class memberLv extends SmartActiveRecord{
+	//初始化
+	public function init(){
+		parent::init();
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initClosed"));
+	}
+	//========================================
+	//初始化会员等级关闭状态
+	public function initClosed(){$this->closed=0;}
+	//========================================
 	//获取会员的vip详情
 	public static function getVipInfo(member $member){
 		$now=time();
-		//查找在有效期内的会员等级记录
-		$where="`end`>='{$now}' AND `memberId`='{$member->id}'";
+		//查找在有效期内的未关闭的会员等级记录
+		$where="`end`>='{$now}' AND `memberId`='{$member->id}' AND `closed`='0'";
 		$memberLvs=self::find()->where($where)->all();
 		//以等级高的为准,等级相同以最晚截至时间为准
 		$vip=NULL;
@@ -37,9 +46,9 @@ class memberLv extends SmartActiveRecord{
 		//获取会员
 		$member=$orderRecord->member;
 		if(!$member) throw new SmartException("addVip miss member");
-		//找到该会员需要开通等级的最晚到期的记录
+		//找到该会员需要开通等级的未关闭最晚到期的记录
 		$table=self::tableName();
-		$sql="SELECT * FROM {$table} WHERE `memberId`='{$member->id}' AND `lv`='{$data['lv']}' ORDER BY `end` DESC FOR UPDATE;";
+		$sql="SELECT * FROM {$table} WHERE `memberId`='{$member->id}' AND `lv`='{$data['lv']}' AND `closed`='0' ORDER BY `end` DESC FOR UPDATE;";
 		$memberLvRecord=self::findBySql($sql)->one();
 		//确定新纪录的开始时间
 		$now=time();
