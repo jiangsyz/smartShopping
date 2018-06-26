@@ -11,11 +11,14 @@ class memberLv extends SmartActiveRecord{
 	//初始化
 	public function init(){
 		parent::init();
-		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initClosed"));
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initClosedData"));
 	}
 	//========================================
-	//初始化会员等级关闭状态
-	public function initClosed(){$this->closed=0;}
+	//初始化会员等级关闭相关数据
+	public function initClosedData(){
+		$this->closed=0;
+		$this->closedMemo=NULL;
+	}
 	//========================================
 	//获取会员的vip详情
 	public static function getVipInfo(member $member){
