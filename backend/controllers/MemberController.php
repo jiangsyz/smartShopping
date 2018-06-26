@@ -12,6 +12,8 @@ use backend\models\signInManagement\signInManagement;
 use backend\models\identifyingCode\identifyingCodeManagement;
 use backend\models\product\formatPrice;
 class MemberController extends SmartWebController{
+	public $enableCsrfValidation=false;
+    //========================================
 	//通过手机拿令牌
     public function actionApiGetTokenByPhone(){
 		try{
