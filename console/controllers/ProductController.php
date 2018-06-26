@@ -6,6 +6,9 @@ use yii\console\SmartDaemonController;
 use yii\base\SmartException;
 use yii\base\Exception;
 use backend\models\product\sku;
+use backend\models\product\spu;
+use backend\models\recommend\recommendRecord;
+use backend\models\model\source;
 class ProductController extends SmartDaemonController{
     //检查库存,sku自动下架
     public function actionDaemonSkuAutoClose(){
@@ -38,7 +41,7 @@ class ProductController extends SmartDaemonController{
     //========================================
     //如果下属sku全部处于下架状态则自动下架spu
     public function actionDaemonSpuAutoClose(){
-         $this->begin();
+        $this->begin();
         //循环处理
         while(1){
             //查找所有上架状态的spu
@@ -61,6 +64,27 @@ class ProductController extends SmartDaemonController{
                 }
                 catch(Exception $e){$trascation->rollback();}
             }
+            //休息一下
+            $this->sleep();
+            //报告存活
+            $this->alive();
+        }
+    }
+    //========================================
+    //检查已下架的产品不能出现在推荐中
+    public function actionDaemonDelRecommendRecord(){
+        $this->begin();
+        //循环处理
+        while(1){
+            $sTable=spu::tableName();
+            $rTable=recommendRecord::tableName();
+            $spuType=source::TYPE_SPU;
+            //已下架的spu
+            $sql1="SELECT `id` FROM {$sTable} WHERE `closed`='1'";
+            //从推荐中删除
+            $sql2="DELETE FROM {$rTable} WHERE `sourceType`='{$spuType}' AND `sourceId` IN({$sql1})";
+            //跑sql
+            Yii::$app->db->createCommand($sql2)->execute();
             //休息一下
             $this->sleep();
             //报告存活
