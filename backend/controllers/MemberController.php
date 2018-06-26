@@ -195,4 +195,44 @@ class MemberController extends SmartWebController{
 			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
+	//========================================
+	//关闭某个时间段的vip
+	public function actionApiCloseVip(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取员工
+			$token=$this->requestPost('token',false);
+			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
+			//获取会员等级id
+			$memberLvId=$this->requestPost('memberLvId',false); 
+			if(!$memberLvId) throw new SmartException("miss memberLvId");
+			//获取备注
+			$memo=$this->requestPost('memo',""); 
+			if(!$memo) throw new SmartException("miss memo");
+			//获取需要关闭的会员等级
+			$table=memberLv::tableName();
+			$sql="SELECT * FROM {$table} WHERE `id`='{$memberLvId}' AND `closed`='0' FOR UPDATE";
+			$memberLv=memberLv::findBySql($sql)->one();
+			if(!$memberLv) throw new SmartException("miss memberLv");
+			//组织备注
+			$closedMemo=array();
+			$closedMemo['handlerType']=$staff->getSourceType();
+			$closedMemo['handlerId']=$staff->getSourceId();
+			$closedMemo['memo']=$memo;
+			$closedMemo['time']=time();
+			$closedMemo=json_encode($closedMemo);
+			//关闭vip
+			$memberLv->updateObj(array('closed'=>1,'closedMemo'=>$closedMemo));
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
+    	}
+	}
 }
