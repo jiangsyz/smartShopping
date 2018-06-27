@@ -24,7 +24,7 @@ class memberLv extends SmartActiveRecord{
 	public static function getVipInfo(member $member){
 		$now=time();
 		//查找在有效期内的未关闭的会员等级记录
-		$where="`end`>='{$now}' AND `memberId`='{$member->id}' AND `closed`='0'";
+		$where="`start`<='{$now}' AND `end`>='{$now}' AND `memberId`='{$member->id}' AND `closed`='0'";
 		$memberLvs=self::find()->where($where)->all();
 		//以等级高的为准,等级相同以最晚截至时间为准
 		$vip=NULL;
