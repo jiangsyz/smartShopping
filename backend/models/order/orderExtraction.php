@@ -28,6 +28,8 @@ class orderExtraction extends Component{
 		$data['freight']=formatPrice::formatPrice($this->orderRecord->freight);
 		//状态
 		$data['status']=$this->orderRecord->statusManagement->getStatus();
+		//物流状态
+		$data['deliverStatus']=$this->orderRecord->deliverStatus;
 		//是否需要地址
 		$data['isNeedAddress']=$this->orderRecord->isNeedAddress;
 		//获取购买行为
