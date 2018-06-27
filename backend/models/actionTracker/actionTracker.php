@@ -83,9 +83,9 @@ class actionTracker extends SmartActiveRecord{
 	);
 	//========================================
 	//行为追踪
-	public static function actionTrack($startId=1){
+	public static function actionTrack($startId=1,$limit=50){
 		//查询一条日志
-		$sql="SELECT * FROM `smart_log_record` WHERE `id`>='{$startId}' ORDER BY `id`";
+		$sql="SELECT * FROM `smart_log_record` WHERE `id`>='{$startId}' ORDER BY `id` LIMIT {$limit}";
 		$logs=Yii::$app->log_db->createCommand($sql)->queryAll();
 		//分析
 		foreach($logs as $log){
