@@ -53,6 +53,7 @@ class spuExtraction{
 		$data['sourceType']=$this->spu->getSourceType();
 		$data['sourceId']=$this->spu->getSourceId();
 		$data['title']=$this->spu->getProductName();
+		$data['viceTitle']=$this->cheapestSku->title;
 		$data['desc']=$this->spu->getProductDesc();
 		$data['cover']=$this->spu->getCover();
 		$data['detail']=base64_encode(json_encode($this->getSpuDetail()));
