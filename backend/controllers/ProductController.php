@@ -145,7 +145,7 @@ class ProductController extends SmartWebController{
 			//获取spu的id
 			$spuId=$this->requestGet('spuId',0);
 			//获取spu
-			$spu=spu::find()->where("`id`='{$spuId}'");
+			$spu=spu::find()->where("`id`='{$spuId}'")->one();
 			if(!$spu) throw new SmartException("miss spu");
 			//获取推荐spu
 			$recommendSpus=$spu->getRecommend();
