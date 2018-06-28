@@ -67,7 +67,7 @@ class mainOrderFactory extends orderFactory{
 				else $price=$price===false?$f->getFinalPrice():$price+$f->getFinalPrice();
 			//如果整个订单只有虚拟商品,则没有运费
 			if($price===false) return 0;
-			//非虚拟商品
+			//购买了非虚拟商品,则非虚拟商品部分的总价超过300免邮,不满运费18
 			else return $price>=300?0:18;
 		}
 	}
