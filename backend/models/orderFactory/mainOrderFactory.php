@@ -54,16 +54,21 @@ class mainOrderFactory extends orderFactory{
 		//不是会员
 		if($this->member->getLevel()==0){
 			//除了单买虚拟产品,其他情况一口价38
-			foreach($this->childFactories as $v) 
-				if($v->distributeType!=distribute::TYPE_VIRTUAL) return 38;
+			foreach($this->childFactories as $f) 
+				if($f->distributeType!=distribute::TYPE_VIRTUAL) return 38;
 			return 0;
 		}
 		//是会员
 		else{
-			//如果冷链不足2公斤收38,其他情况包邮
-			foreach($this->childFactories as $v)
-				if($v->distributeType==distribute::TYPE_REFRIGERATION) if($v->getWeight()<2000) return 38;
-			return 0;
+			$price=false;
+			//如果用户买了非虚拟商品,统计总价
+			foreach($this->childFactories as $f)
+				if($f->distributeType==distribute::TYPE_VIRTUAL) continue;
+				else $price=$price===false?$f->getFinalPrice():$price+$f->getFinalPrice();
+			//如果整个订单只有虚拟商品,则没有运费
+			if($price===false) return 0;
+			//非虚拟商品
+			else return $price>=300?0:18;
 		}
 	}
 	//========================================
