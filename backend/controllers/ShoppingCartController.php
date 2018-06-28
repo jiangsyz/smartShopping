@@ -32,6 +32,8 @@ class ShoppingCartController extends SmartWebController{
 			//构建订单确认信息处理器
 			$orderConfirmation=new orderConfirmation(array('order'=>$orderAccepter->mainOrder));
 			$data=$orderConfirmation->getConfirmation();
+			//添加会员hash
+			$data['memberHash']=$member->hash();
 			//提交事务
 			$trascation->commit();
 			//返回
