@@ -42,4 +42,14 @@ class spu extends product{
 	//========================================
 	//获取物流渠道
 	public function getLogistics(){return $this->hasOne(logistics::className(),array('id'=>'logisticsId'));}
+	//========================================
+	//获取推荐产品
+	public function getRecommend($count=4){
+		//查出除当前商品以外上架在售的spu
+		$spus=self::find()->where("`closed`＝'0' AND `locked`='0' AND `id`<>'{$this->id}'")->all();
+		if($count<=count($spus)) 
+			return $spus; 
+		else 
+			return array_rand($spus,$count);
+	}
 }
