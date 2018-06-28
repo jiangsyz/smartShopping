@@ -135,4 +135,29 @@ class ProductController extends SmartWebController{
 		}
 		catch(Exception $e){$this->response(1,array('error'=>$e->getCode(),'msg'=>$e->getMessage()));}
 	}
+	//========================================
+	//获取spu的相关推荐
+	public function actionApiGetRecommendSpus(){
+		try{
+			//根据token获取会员
+			$token=$this->requestGet('token',false);
+			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
+			//获取spu的id
+			$spuId=$this->requestGet('spuId',0);
+			//获取spu
+			$spu=spu::find()->where("`id`='{$spuId}'");
+			if(!$spu) throw new SmartException("miss spu");
+			//获取推荐spu
+			$recommendSpus=$spu->getRecommend();
+			//组织数据
+			$data=array();
+			foreach($recommendSpus as $recommendSpu){
+				$spuExtraction=new spuExtraction($recommendSpu);
+				$data[]=$spuExtraction->getBasicData();
+			}
+			//返回
+			$this->response(1,array('error'=>0,'data'=>$data));
+		}
+		catch(Exception $e){$this->response(1,array('error'=>$e->getCode(),'msg'=>$e->getMessage()));}
+	}
 }
