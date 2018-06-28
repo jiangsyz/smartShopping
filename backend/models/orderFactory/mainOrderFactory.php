@@ -73,7 +73,7 @@ class mainOrderFactory extends orderFactory{
 	}
 	//========================================
 	//获取订单标题
-	public function getTitle(){return NULL;}
+	public function getTitle(){return Yii::$app->controller->runningId;}
 	//========================================
 	//索引,在整个订单树中唯一
 	public function getIndex(){return 'main';}
