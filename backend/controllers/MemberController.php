@@ -96,6 +96,7 @@ class MemberController extends SmartWebController{
 			$data['pushUniqueId']=$member->pushUniqueId;
 			$data['customServiceUniqueId']=rand(0,1)==0?"77043":"77484";
 			$data['reduction']=$member->getReduction();
+			$data['expectedReduction']=Yii::$app->params['expectedReduction'];
 			$data['hash']=$member->hash();
 			//返回
 			$this->response(1,array('error'=>0,'data'=>$data));
