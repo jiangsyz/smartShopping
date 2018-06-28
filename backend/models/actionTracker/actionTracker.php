@@ -25,6 +25,7 @@ class actionTracker extends SmartActiveRecord{
 			'product/api-get-spu-detail'=>'获取spu详情',
 			'virtual-item/api-get-virtual-item'=>'获取虚拟商品',
 			'product/api-search-spu'=>'搜索spu',
+			'product/api-get-recommend-spus'=>'获取spu的相关推荐',
 			//订单模块
 			'order/api-get-order-statistics'=>'会员订单统计',
 			'order/api-get-orders'=>'会员订单列表',
