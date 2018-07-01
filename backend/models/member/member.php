@@ -30,8 +30,8 @@ class member extends source implements shop{
 	//========================================
 	//获取会员等级
 	public function getLevel(){
-		$vip=memberLv::getVipInfo($this);
-		if(!$vip) return 0; else return $vip->lv;
+		$vipData=memberLv::getVipData($this);
+		return $vipData['lv'];
 	}
 	//========================================
 	//获取地址簿
@@ -42,7 +42,7 @@ class member extends source implements shop{
 	//获取会员信息的hash
 	public function hash(){
 		$data=$this->getData();
-		$data['vip']=memberLv::getVipInfo($this);
+		$data['vip']=memberLv::getVipData($this);
 		ksort($data);
 		return md5(json_encode($data));
 	}
