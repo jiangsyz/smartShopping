@@ -84,15 +84,15 @@ class MemberController extends SmartWebController{
 			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取vip信息
-			$vip=memberLv::getVipInfo($member);
+			$vipData=memberLv::getVipData($member);
 			//获取数据
 			$data=array();
 			$data['memberId']=$member->id;
 			$data['phone']=$member->phone;
 			$data['nickName']=$member->getNickName();
 			$data['avatar']=$member->getAvatar();
-			$data['level']=$vip==NULL?0:$vip->lv;
-			$data['vipEnd']=$vip==NULL?0:$vip->end;
+			$data['level']=$vipData['lv'];
+			$data['vipEnd']=$vipData['end'];
 			$data['pushUniqueId']=$member->pushUniqueId;
 			$data['customServiceUniqueId']=rand(0,1)==0?"77043":"77484";
 			$data['reduction']=$member->getReduction();
