@@ -23,28 +23,31 @@ class spuExtraction{
 		//先找出所有带<a>标签的图片
         $ruleA='%<a.*?>(.*?)</a>%si';
         preg_match_all($ruleA,$detail,$matchA);
-        foreach($matchA[0] as $a){
-        	//提取href
-        	$ruleHref='/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/i';
-        	preg_match_all($ruleHref,$a,$matchHref);
-        	$href=$matchHref[2][0];
-        	//提取视频或链接
-        	if(strpos($href,'mp4')!==false) 
-        		$images[$i]=array('video'=>$href,'href'=>'');
-        	else
-        		$images[$i]=array('video'=>'','href'=>$href); 
-        	//提取src
-        	$ruleSrc="/<[img|IMG].*?src=[\'|\"](.*?(?:[\.jpg|\.jpeg|\.png|\.gif|\.bmp]))[\'|\"].*?[\/]?>/";
-        	preg_match_all($ruleSrc,$a,$matchSrc,PREG_PATTERN_ORDER);
-        	$images[$i]['src']=$matchSrc[1][0];
-        	//更新索引
-        	$i++;
+        if(isset($matchA[0])){
+        	foreach($matchA[0] as $a){
+	        	//提取href
+	        	$ruleHref='/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/i';
+	        	preg_match_all($ruleHref,$a,$matchHref);
+	        	$href=isset($matchHref[2][0])?$matchHref[2][0]:"";
+	        	//提取视频或链接
+	        	if(strpos($href,'mp4')!==false) 
+	        		$images[$i]=array('video'=>$href,'href'=>'');
+	        	else
+	        		$images[$i]=array('video'=>'','href'=>$href); 
+	        	//提取src
+	        	$ruleSrc="/<[img|IMG].*?src=[\'|\"](.*?(?:[\.jpg|\.jpeg|\.png|\.gif|\.bmp]))[\'|\"].*?[\/]?>/";
+	        	preg_match_all($ruleSrc,$a,$matchSrc,PREG_PATTERN_ORDER);
+	        	$images[$i]['src']=isset($matchSrc[1][0])?$matchSrc[1][0]:"";
+	        	//更新索引
+	        	$i++;
+        	}
         }
         //再找出所有不带<a>标签的图片
         $detail=preg_replace("/<(a.*?)>(.*?)<(\/a.*?)>/si","",$detail);
         $ruleSrc="/<[img|IMG].*?src=[\'|\"](.*?(?:[\.jpg|\.jpeg|\.png|\.gif|\.bmp]))[\'|\"].*?[\/]?>/";
         preg_match_all($ruleSrc,$detail,$matchSrc,PREG_PATTERN_ORDER);
-        foreach($matchSrc[1] as $src) $images[$i++]=array('video'=>'','href'=>'','src'=>$src);
+        if(isset($matchSrc[1])) 
+        	foreach($matchSrc[1] as $src) $images[$i++]=array('video'=>'','href'=>'','src'=>$src);
         //根据图片在原文中的出现位置排序
         foreach($images as $image) $data[strpos($this->spu->detail,$image['src'])]=$image;
         //返回提取数据
