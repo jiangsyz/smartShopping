@@ -101,7 +101,7 @@ class orderStatusManagement extends Component{
 			return self::STATUS_ERROR3;
 		if($r->finishStatus==1 && $r->cancelStatus==1) 
 			return self::STATUS_ERROR4;
-		if($r->finishStatus==1 && $r->payStatus==－1) 
+		if($r->finishStatus==1 && $r->payStatus==-1) 
 			return self::STATUS_ERROR5;
 		if($r->finishStatus==1 && $r->deliverStatus!=3) 
 			return self::STATUS_ERROR6;
