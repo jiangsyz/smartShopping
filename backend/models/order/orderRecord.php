@@ -7,6 +7,7 @@ use yii\db\SmartActiveRecord;
 use backend\models\model\source;
 use backend\models\member\address;
 use backend\models\member\member;
+use backend\models\member\memberLv;
 //========================================
 class orderRecord extends source{
 	//创建订单时所需的外部命令
@@ -67,6 +68,8 @@ class orderRecord extends source{
 		$this->on(self::EVENT_AFTER_INSERT,array($this->addressManagement,"addAddress"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this->memoManagement,"addMemberMemo"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this->dateManagement,"addDate"));
+		$this->on(self::EVENT_AFTER_INSERT,array($this,"chacheMemberData"));
+		$this->on(self::EVENT_AFTER_INSERT,array($this,"cacheOrderData"));
 	}
 	//========================================
 	//初始化创建时间
@@ -92,6 +95,23 @@ class orderRecord extends source{
 			$this->code=3*pow(10,15)+$this->createTime*pow(10,5)+rand(11111,99999);
 		else
 			$this->code=NULL;
+	}
+	//========================================
+	//缓存用户信息
+	public function chacheMemberData(){
+		//获取用户
+		$member=member::find()->where("`id`='{$this->memberId}'")->one();
+		if(!$member) throw new SmartException("miss member");
+		//获取数据
+		$data=$member->getData();
+		$data['vipData']=memberLv::getVipData($member);
+		//缓存
+		$this->propertyManagement->addProperty('chacheMemberData',json_encode($data));
+	}
+	//========================================
+	//缓存订单信息
+	public function cacheOrderData(){
+		$this->propertyManagement->addProperty('cacheOrderData',json_encode($this->getData()));
 	}
 	//========================================
 	//获取通过订单id获取一个锁住的订单
