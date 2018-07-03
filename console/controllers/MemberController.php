@@ -92,7 +92,7 @@ class MemberController extends SmartDaemonController{
 			//开启事务
 			$trascation=Yii::$app->db->beginTransaction();
 			//获取指定openid的用户
-			$row=publicAccountUser::find()->where("`appid`='{$appId}' AND `openId`='{$openId}'")->all();
+			$row=publicAccountUser::find()->where("`appid`='{$appId}' AND `openid`='{$openId}'")->one();
 			if(!$row) throw new SmartException("miss row");
 			//获取unionid
 			$unionid=Yii::$app->smartWechat->getUnionidFromPublicAccount($appId,$appSecret,$row->openid);
