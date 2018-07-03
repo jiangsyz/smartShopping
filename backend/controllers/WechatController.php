@@ -10,6 +10,7 @@ use backend\models\source\sourceProperty;
 class WechatController extends SmartWebController{
     public $enableCsrfValidation=false;
     //========================================
+    //小程序登录授权第一步,获取手机号
     public function actionApiAuth(){
         try{
             //开启事务
@@ -60,6 +61,7 @@ class WechatController extends SmartWebController{
         }
     }
     //========================================
+    //小程序登录授权第二步,获取unionid
     public function actionApiGetUnionid(){
         try{
             //开启事务
