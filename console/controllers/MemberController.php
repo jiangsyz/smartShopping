@@ -6,6 +6,7 @@ use yii\console\SmartDaemonController;
 use yii\base\SmartException;
 use yii\base\Exception;
 use backend\models\member\publicAccountUser;
+use backend\models\member\member;
 class MemberController extends SmartDaemonController{
 	//获取公众号用户的openid
     public function actionDaemonGetOpenidFromPublicAccount(){
@@ -79,6 +80,31 @@ class MemberController extends SmartDaemonController{
 			//记录日志
 			Yii::$app->smartLog->consoleLog('remaining='.$remaining);
     	}
+    }
+    //========================================
+    //获取某个用户的unionid
+    public function actionGetUserUnionid($openId){
+    	$this->begin();
+    	//获取公众号相关配置
+		$appId=Yii::$app->params["app2"]["appId"];
+		$appSecret=Yii::$app->params["app2"]["appSecret"];
+    	try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//获取指定openid的用户
+			$row=publicAccountUser::find()->where("`appid`='{$appId}' AND `openId`='{$openId}'")->all();
+			if(!$row) throw new SmartException("miss row");
+			//获取unionid
+			$unionid=Yii::$app->smartWechat->getUnionidFromPublicAccount($appId,$appSecret,$row->openid);
+			//记录数据
+			$row->updateObj(array('unionid'=>$unionid));
+			//提交事务
+			$trascation->commit();
+		}
+		catch(Exception $e){
+			$trascation->rollback();
+			var_dump($e->getMessage());
+		}
     }
 }
 ?>
