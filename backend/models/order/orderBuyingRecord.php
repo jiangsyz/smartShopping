@@ -7,7 +7,7 @@ use yii\db\SmartActiveRecord;
 use backend\models\model\source;
 use backend\models\order\orderRecord;
 //========================================
-class orderBuyingRecord extends SmartActiveRecord{
+class orderBuyingRecord extends source{
 	const EVENT_BUYING_SUCCESS=1;//购买成功后触发的时间
 	//========================================
 	//初始化
@@ -17,6 +17,9 @@ class orderBuyingRecord extends SmartActiveRecord{
 		$this->on(self::EVENT_AFTER_INSERT,array($this,"deductKeepCount"));
 		$this->on(self::EVENT_BUYING_SUCCESS,array($this,"buyingSuccess"));
 	}
+	//========================================
+	//返回资源类型
+	public function getSourceType(){return source::TYPE_ORDER_BUYING_RECORD;}
 	//========================================
 	//获取购买单元
 	public function getSalesUnit(){
