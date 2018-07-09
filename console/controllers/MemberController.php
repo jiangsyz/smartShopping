@@ -100,6 +100,8 @@ class MemberController extends SmartDaemonController{
 			$row->updateObj(array('unionid'=>$unionid));
 			//提交事务
 			$trascation->commit();
+			//获取到的unionid
+			var_dump($unionid);
 		}
 		catch(Exception $e){
 			$trascation->rollback();
