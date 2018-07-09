@@ -96,4 +96,48 @@ class member extends source implements shop{
 		//返回节省金额
 		return formatPrice::formatPrice($result['SUM(`reduction`)']);
 	}
+	//========================================
+	//同步有赞的vip数据
+	public function syncYouzanVip(){
+		//同步过的不处理
+		$syncYouzanVip=$this->getProperty("syncYouzanVip"); if($syncYouzanVip) return;
+		//同步有赞vip,必须要用户当前没有任何有效的vip
+		$memberLvs=memberLv::find()->where("`memberId`='{$this->id}' AND `closed`='0'")->all();
+		if($memberLvs) 
+			return $this->addProperty("syncYouzanVip","memberLvs is not empty");
+		//获取unionid
+		$unionid=$this->getProperty("unionid");
+		if(!$unionid) 
+			return $this->addProperty("syncYouzanVip","member miss unionid");
+		//获取在公众号中的openid
+		$publicAccountUser=publicAccountUser::find()->where("`unionid`='{$unionid}'")->one();
+		if(!$publicAccountUser) 
+			return $this->addProperty("syncYouzanVip","member is not publicAccountUser");
+		//通过openid去card里查
+		$tableName=youzanCard::tableName();
+		$sql="SELECT * FROM {$tableName} WHERE `yz_openid`='{$publicAccountUser->openid}' FOR UPDATE";
+		$cards=youzanCard::findBySql($sql)->all();
+		//循环插入
+		$success=array();
+		foreach($cards as $card){
+			//同步过的卡不管
+			if($card->result) continue;
+			//新增vip记录
+			$memberLvData=array();
+			$memberLvData['memberId']=$this->id;
+			$memberLvData['lv']=1;
+			$memberLvData['start']=$card->start_time;
+			$memberLvData['end']=$card->end_time;
+			$memberLvData['handlerType']=999;
+			$memberLvData['handlerId']=$card->card_no;
+			$memberLv=memberLv::addObj($memberLvData);
+			//记录成功同步的卡号
+			$success[]=$card->card_no;
+			//反向记录同步结果
+			$card->updateObj(array('result'=>$memberLv->id));
+		}
+		//标记为同步结果,记录同步数量
+		$successCount=count($success);
+		return $this->addProperty("syncYouzanVip","ok({$successCount})");
+	}
 }
