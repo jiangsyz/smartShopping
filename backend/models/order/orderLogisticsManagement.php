@@ -22,7 +22,7 @@ class orderLogisticsManagement extends Component{
 			$logistics=$b->salesUnit->getLogistics();
 			if(!$logistics) throw new SmartException("buyingRecord {$b->id} miss logistics");
 			//获取物流列表索引(物流渠道id_物流号)
-			$index=$logistics->id.'_'.$b->logisticsCode;
+			$index=trim($logistics->id).'_'.trim($b->logisticsCode);
 			//初始化对应索引的物流列表
 			if(!isset($logisticsList[$index])) 
 				$logisticsList[$index]=array('logisticsCode'=>$b->logisticsCode,'logistics'=>$logistics);
