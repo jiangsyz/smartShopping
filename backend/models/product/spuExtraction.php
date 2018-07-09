@@ -49,7 +49,8 @@ class spuExtraction{
         if(isset($matchSrc[1])) 
         	foreach($matchSrc[1] as $src) $images[$i++]=array('video'=>'','href'=>'','src'=>$src);
         //根据图片在原文中的出现位置排序
-        foreach($images as $image) $data[strpos($this->spu->detail,$image['src'])]=$image;
+        foreach($images as $image) 
+        	if($image['src']) $data[strpos($this->spu->detail,$image['src'])]=$image;
         //返回提取数据
         return $data;
 	}
