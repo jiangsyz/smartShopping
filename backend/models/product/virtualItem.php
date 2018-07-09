@@ -45,7 +45,7 @@ class virtualItem extends salesUnit{
 		//根据收益类型执行相应操作
 		foreach($this->details as $d){
 			if($d->benefitType=="member")
-				memberLv::addVip($r,json_decode($d->benefitDetail,true));
+				memberLv::addVipBybuyingRecord($r,json_decode($d->benefitDetail,true));
 			else
 				throw new SmartException("error benefitType");
 		}		
