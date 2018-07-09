@@ -15,6 +15,7 @@ use backend\models\staff\staff;
 use backend\models\shoppingCart\shoppingCartRecord;
 use backend\models\order\orderRecord;
 use backend\models\token\tokenManagement;
+use backend\models\order\orderBuyingRecord;
 //========================================
 abstract class source extends SmartActiveRecord{
 	//资源类型
@@ -25,6 +26,7 @@ abstract class source extends SmartActiveRecord{
 	const TYPE_ARTICLE=5;
 	const TYPE_ORDER_RECORD=6;
 	const TYPE_VIRTUAL_ITEM=7;
+	const TYPE_ORDER_BUYING_RECORD=8;
 	//========================================
 	//返回资源类型
 	abstract public function getSourceType();
@@ -51,7 +53,8 @@ abstract class source extends SmartActiveRecord{
 		$property['sourceId']=$this->getSourceId();
 		$property['propertyKey']=$propertyKey;
 		$property['propertyVal']=$propertyVal;
-		sourceProperty::addObj($property);
+		$sourceProperty=sourceProperty::addObj($property);
+		return $sourceProperty->getData();
 	}
 	//========================================
 	//获取该资源在购物车中的记录
@@ -79,6 +82,7 @@ abstract class source extends SmartActiveRecord{
 		if($sourceType==self::TYPE_STAFF) return staff::className();
 		if($sourceType==self::TYPE_VIRTUAL_ITEM) return virtualItem::className();
 		if($sourceType==self::TYPE_ORDER_RECORD) return orderRecord::className();
+		if($sourceType==self::TYPE_ORDER_BUYING_RECORD) return orderBuyingRecord::className();
 		throw new SmartException("error sourceType");
 	}
 	//========================================
