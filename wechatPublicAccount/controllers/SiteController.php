@@ -28,7 +28,8 @@ class SiteController extends SmartWebController{
         	exit;
     	}
     	else{
-    	   try{
+            //echo "success";exit;
+            try{
                 //开启事务
                 $trascation=Yii::$app->db->beginTransaction();
                 //获取回调数据
@@ -57,9 +58,9 @@ class SiteController extends SmartWebController{
                 $trascation->commit();
                 //不是用户发消息,直接返回success,微信不会做处理
                 $typeList=array('text','image','voice');
-                if(!in_array($data['MsgType'],$typeList)) $this->response(3,"success");
+                //if(!in_array($data['MsgType'],$typeList)) $this->response(3,"success");
                 //取用户缓存
-                if(Yii::$app->cache->get($data['FromUserName'])) $this->response(3,"success");
+                //if(Yii::$app->cache->get($data['FromUserName'])) $this->response(3,"success");
                 //返回应答
                 $time=time();
                 $str=
