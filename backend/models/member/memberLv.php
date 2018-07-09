@@ -141,7 +141,7 @@ class memberLv extends SmartActiveRecord{
 	}
 	//========================================
 	//开通vip
-	public static function addVip(orderBuyingRecord $r,$data){
+	public static function addVipBybuyingRecord(orderBuyingRecord $r,$data){
 		//校验
 		if(!isset($data['lv'])) throw new SmartException("benefitDetail miss lv");
 		if(!isset($data['len'])) throw new SmartException("benefitDetail miss len");
@@ -171,7 +171,8 @@ class memberLv extends SmartActiveRecord{
 		$memberLv['lv']=$data['lv'];
 		$memberLv['start']=$start;
 		$memberLv['end']=$memberLv['start']+$data['len'];
-		$memberLv['orderId']=$orderRecord->id;
+		$memberLv['handlerType']=$r->getSourceType();
+		$memberLv['handlerId']=$r->getSourceId();
 		self::addObj($memberLv);
 		//格式化到期时间
 		$endDate=date("Y-m-d",$memberLv['end']);
