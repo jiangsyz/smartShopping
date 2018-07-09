@@ -97,6 +97,8 @@ class WechatController extends SmartWebController{
             if(!$member) throw new SmartException("miss member");
             //绑定unionid
             if($member->getProperty("unionid")===NULL) $member->addProperty("unionid",$unionid);
+            //同步有赞vip
+            $member->syncYouzanVip();
             //提交事务
             $trascation->commit();
             //返回
