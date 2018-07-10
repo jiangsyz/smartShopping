@@ -115,7 +115,7 @@ class memberLv extends SmartActiveRecord{
 		foreach($vips as $vip){
 			if($currentVip===NULL) $currentVip=$vip;
 			//同一等级不可能命中两次,因为我们的设计规则是同一等级的有效vip不能在时间上产生重合
-			elseif($currentVip->lv==$vip->lv) throw new SmartException("currentVip lv({$vip->lv}) existed");
+			elseif($currentVip->lv==$vip->lv) throw new SmartException("您的vip会员日期有重合,请联系客服",-2);
 			//高等级替代低等级
 			elseif($currentVip->lv<$vip->lv) $currentVip=$vip;
 		}
