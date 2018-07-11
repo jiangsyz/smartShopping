@@ -58,8 +58,9 @@ class mainOrderFactory extends orderFactory{
 				if($f->distributeType!=distribute::TYPE_VIRTUAL) return 38;
 			return 0;
 		}
-		//是会员
+		//是会员免邮
 		else{
+			/*
 			$price=false;
 			//如果用户买了非虚拟商品,统计总价
 			foreach($this->childFactories as $f)
@@ -69,6 +70,8 @@ class mainOrderFactory extends orderFactory{
 			if($price===false) return 0;
 			//购买了非虚拟商品,则非虚拟商品部分的总价超过300免邮,不满运费18
 			else return $price>=300?0:18;
+			*/
+			return 0;
 		}
 	}
 	//========================================
