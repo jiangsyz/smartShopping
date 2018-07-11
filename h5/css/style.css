@@ -34,3 +34,10 @@
 .zcxy p:last-child:before { display: inline-block;}
 
 .sfgm img { width:100%;}
+
+
+/* 正善商户版  */
+.zsshb { text-align:center; background:#fae7d8;}
+.zsshb p:nth-child(1){ height:17.5rem; background-position:center 0!important; background-size: auto 100% !important;}
+.zsshb p img{ width:100%; max-width:800px;}
+.zsshb p:last-child  { font-size:0; line-height:0;}
