@@ -20,8 +20,8 @@ class orderMemoManagement extends Component{
 		//备注为空不处理
 		if(!$oRecord->command[$memoIndex]) return;
 		//做转义处理
-		$val=$oRecord->command[$memoIndex];
-		if(is_string($val) && urlencode(urldecode($val))==$val) $val=urldecode($val);
+		$val=trim($oRecord->command[$memoIndex]);
+		if(is_string($val)) $val=urldecode($val);
 		//添加会员备注
 		$oRecord->propertyManagement->addProperty('memberMemo',$val);
 		//将订单状态改为锁定
