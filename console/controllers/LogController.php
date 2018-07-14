@@ -10,19 +10,19 @@ class LogController extends SmartDaemonController{
 	//用户行为追踪
     public function actionDaemonActionTracker(){
     	$this->begin();
+    	//找到跟踪过的最后一条日志
+		$lastOne=actionTracker::find()->orderBy("`logId` DESC")->one();
+		//确定跟踪日志的起始id
+		$startId=$lastOne?$lastOne->logId+1:1;
     	//循环处理
     	while(1){
     		try{
 				//开启事务
 				$trascation=Yii::$app->db->beginTransaction();
-				//找到跟踪过的最后一条日志
-				$lastOne=actionTracker::find()->orderBy("`logId` DESC")->one();
-				//确定跟踪日志的起始id
-				$startId=$lastOne?$lastOne->logId+1:1;
 				//记录日志
 				Yii::$app->smartLog->consoleLog('log startId='.$startId);
 				//从起始id开始进行行为跟踪
-				actionTracker::actionTrack($startId);
+				$startId=actionTracker::actionTrack($startId);
 				//提交事务
 				$trascation->commit();
     		}
