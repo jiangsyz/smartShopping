@@ -11,10 +11,14 @@ d5=('member/daemon-get-unionid-from-public-account' 'nohup /usr/local/nginx/html
 d6=('product/daemon-sku-auto-close' 'nohup /usr/local/nginx/html/smartShopping/./yii product/daemon-sku-auto-close >> product_daemon_sku_auto_close.log_'${date}' 2>> product_daemon_sku_auto_close.err_'${date}' &')
 d7=('product/daemon-spu-auto-close' 'nohup /usr/local/nginx/html/smartShopping/./yii product/daemon-spu-auto-close >> product_daemon_spu_auto_close.log_'${date}' 2>> product_daemon_spu_auto_close.err_'${date}' &')
 d8=('product/daemon-del-recommend-record' 'nohup /usr/local/nginx/html/smartShopping/./yii product/daemon-del-recommend-record >> product_daemon_del_recommend_record.log_'${date}' 2>> product_daemon_del_recommend_record.err_'${date}' &')
-
-
+#逐个检测启动
 for i in $(seq 0 8)
 do
+		#跳过product/daemon-sku-auto-close
+		if [ "${i}" -eq "6" ];then 
+			continue; 
+		fi
+		#检测,进程不在重新启动
         eval check=\${d$i[0]};
         eval command=\${d$i[1]};
         psCommand=`ps aux | grep ${check} | grep -v grep | wc -l`;
