@@ -29,6 +29,8 @@ class LogController extends SmartDaemonController{
 	    	catch(Exception $e){
 	    		//回滚
 				$trascation->rollback();
+				//记录报错
+				Yii::$app->smartLog->consoleLog('exception='.$e->getMessage());
 	    	}
 	    	//休息一下
 			$this->sleep();
