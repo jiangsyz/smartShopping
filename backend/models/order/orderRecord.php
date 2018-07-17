@@ -116,8 +116,6 @@ class orderRecord extends source{
 	//========================================
 	//获取通过订单id获取一个锁住的订单
 	public static function getLockedOrderById($id){
-		$table=self::tableName();
-		$sql="SELECT * FROM {$table} WHERE `id`='{$id}' FOR UPDATE";
-		return self::findBySql($sql)->one();
+		return source::getSource(source::TYPE_ORDER_RECORD,$id,true);
 	}
 }
