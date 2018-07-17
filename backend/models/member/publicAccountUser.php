@@ -3,9 +3,9 @@
 namespace backend\models\member;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class publicAccountUser extends SmartActiveRecord{
+class publicAccountUser extends LogActiveRecord{
 	public function init(){
 		parent::init();
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initTime"));

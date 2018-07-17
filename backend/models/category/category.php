@@ -3,9 +3,9 @@
 namespace backend\models\category;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class category extends SmartActiveRecord{
+class category extends LogActiveRecord{
 	//获取子分类
 	public function getChildren(){return $this->hasMany(self::className(),array('pid'=>'id'));}
 	//========================================

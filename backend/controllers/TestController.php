@@ -8,19 +8,23 @@ use backend\models\product\sku;
 use backend\models\product\virtualItem;
 use backend\models\orderFactory\buyingRecord;
 use backend\models\member\member;
+use backend\models\member\memberLv;
 use backend\models\token\tokenManagement;
 use backend\models\notice\notice;
 use yii\base\Exception;
+use yii\base\SmartException;
 use backend\models\order\orderRecord;
+use backend\models\staff\staff;
+use backend\models\actionTracker\actionTracker;
 class TestController extends SmartWebController{
-    public function actionIndex(){echo time();}
+    public function actionIndex(){$this->response(3,time());}
     //========================================
     public function actionTest(){
+    	/*
 		$appId1=Yii::$app->params["app1"]["appId"];
 		$appSecret2=Yii::$app->params["app1"]["appSecret"];
 		$appId2=Yii::$app->params["app2"]["appId"];
 		$appSecret2=Yii::$app->params["app2"]["appSecret"];
-
 		$data=array();
 		$data['openid']='oy1Thsj7A0EQ9i8GWz9KtnZWygRI';
 		$data['templateId']='5fT3a_mLXelmzODom-wQAr5mUsPNP5K68me7khqs_os';
@@ -33,7 +37,12 @@ class TestController extends SmartWebController{
 		$data['msgData']['remark']=array("value"=>"感谢您的惠顾","color"=>"#173177");
 		$data['miniAppId']=$appId1;
 		$data['miniPagepath']='';
-
 		Yii::$app->smartWechat->pushTemplateMsg($appId2,$appSecret2,$data);
+		*/
+		//echo exit;
+		$orderRecord=orderRecord::getLockedOrderById(308);
+		$orderRecord->payManagement->canOrderPay();
+		$orderRecord->updateObj(array('payStatus'=>-4));
+		var_dump($orderRecord);
     }
 }

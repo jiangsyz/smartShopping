@@ -3,6 +3,6 @@
 namespace backend\models\member;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class youzanCard extends SmartActiveRecord{}
+class youzanCard extends LogActiveRecord{}

@@ -3,6 +3,6 @@
 namespace backend\models\product;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class logistics extends SmartActiveRecord{}
+class logistics extends LogActiveRecord{}

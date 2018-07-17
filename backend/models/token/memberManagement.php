@@ -3,7 +3,7 @@
 namespace backend\models\token;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 use backend\models\member\member;
 class memberManagement extends tokenManagement{
 	//获取令牌的拥有者

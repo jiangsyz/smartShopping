@@ -3,9 +3,9 @@
 namespace backend\models\member;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class address extends SmartActiveRecord{
+class address extends LogActiveRecord{
 	//字段规则
 	public function rules(){
 	    return array(

@@ -3,11 +3,11 @@
 namespace backend\models\member;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 use backend\models\order\orderBuyingRecord;
 use backend\models\notice\notice;
 //========================================
-class memberLv extends SmartActiveRecord{
+class memberLv extends LogActiveRecord{
 	//初始化
 	public function init(){
 		parent::init();

@@ -3,6 +3,6 @@
 namespace backend\models\version;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class version extends SmartActiveRecord{}
+class version extends LogActiveRecord{}

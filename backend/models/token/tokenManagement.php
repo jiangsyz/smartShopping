@@ -4,7 +4,7 @@ namespace backend\models\token;
 use Yii;
 use yii\base\Component;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 use backend\models\model\source;
 abstract class tokenManagement extends Component{
 	//获取令牌的拥有者

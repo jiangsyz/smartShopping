@@ -3,9 +3,9 @@
 namespace backend\models\product;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class salesUnitKeepCountLog extends SmartActiveRecord{
+class salesUnitKeepCountLog extends LogActiveRecord{
 	//初始化
 	public function init(){
 		parent::init();

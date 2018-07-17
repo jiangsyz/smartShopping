@@ -3,7 +3,7 @@
 namespace backend\models\member;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 use backend\models\model\source;
 use backend\models\model\shop;
 use backend\models\order\orderRecord;

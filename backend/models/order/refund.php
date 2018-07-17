@@ -3,10 +3,10 @@
 namespace backend\models\order;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 use backend\models\model\source;
 //========================================
-class refund extends SmartActiveRecord{
+class refund extends LogActiveRecord{
 	//状态
 	const STATUS_REJECT=-1;//驳回
 	const STATUS_TODO=0;//待办

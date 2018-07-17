@@ -3,9 +3,9 @@
 namespace backend\models\order;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class orderRecordLog extends SmartActiveRecord{
+class orderRecordLog extends LogActiveRecord{
 	//初始化
 	public function init(){
 		parent::init();

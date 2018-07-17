@@ -3,8 +3,8 @@
 namespace backend\models\model;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
 use yii\db\ActiveRecord;
+use common\models\LogActiveRecord;
 use backend\models\source\sourceProperty;
 use backend\models\mark\mark;
 use backend\models\member\member;
@@ -17,7 +17,7 @@ use backend\models\order\orderRecord;
 use backend\models\token\tokenManagement;
 use backend\models\order\orderBuyingRecord;
 //========================================
-abstract class source extends SmartActiveRecord{
+abstract class source extends LogActiveRecord{
 	//资源类型
 	const TYPE_SPU=1;
 	const TYPE_SKU=2;

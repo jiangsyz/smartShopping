@@ -3,7 +3,7 @@
 namespace backend\models\distribute;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
 class distribute{
 	const TYPE_VIRTUAL="虚拟商品";

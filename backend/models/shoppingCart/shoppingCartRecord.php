@@ -3,11 +3,11 @@
 namespace backend\models\shoppingCart;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 use backend\models\member\member;
 use backend\models\model\source;
 //========================================
-class shoppingCartRecord extends SmartActiveRecord{
+class shoppingCartRecord extends LogActiveRecord{
 	//字段规则
 	public function rules(){
 	    return array(

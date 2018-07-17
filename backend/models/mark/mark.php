@@ -3,11 +3,11 @@
 namespace backend\models\mark;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 use backend\models\member\member;
 use backend\models\model\source;
 //========================================
-class mark extends SmartActiveRecord{
+class mark extends LogActiveRecord{
 	//标记类型
 	const TYPE_COLLECTION=1;//收藏(针对产品)
 	//========================================

@@ -3,10 +3,10 @@
 namespace backend\models\actionTracker;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 use backend\models\model\source;
 //========================================
-class actionTracker extends SmartActiveRecord{
+class actionTracker extends LogActiveRecord{
 	//指定库
 	public static function getDb(){return Yii::$app->log_db;}
 	//========================================

@@ -3,6 +3,6 @@
 namespace backend\models\banner;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class banner extends SmartActiveRecord{}
+class banner extends LogActiveRecord{}

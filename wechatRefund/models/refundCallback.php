@@ -3,9 +3,9 @@
 namespace wechatRefund\models;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class refundCallback extends SmartActiveRecord{
+class refundCallback extends LogActiveRecord{
 	//指定库
 	public static function getDb(){return Yii::$app->log_db;}
 }

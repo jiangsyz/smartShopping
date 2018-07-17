@@ -3,10 +3,10 @@
 namespace backend\models\notice;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 use backend\models\member\member;
 //========================================
-class notice extends SmartActiveRecord{
+class notice extends LogActiveRecord{
 	const TYPE_PAY=1;
 	const TYPE_VIP=2;
 	const TYPE_ORDER=3;

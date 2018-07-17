@@ -3,9 +3,9 @@
 namespace backend\models\source;
 use Yii;
 use yii\base\SmartException;
-use yii\db\SmartActiveRecord;
+use common\models\LogActiveRecord;
 //========================================
-class sourceProperty extends SmartActiveRecord{
+class sourceProperty extends LogActiveRecord{
 	//初始化
 	public function init(){
 		parent::init();
