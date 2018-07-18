@@ -135,6 +135,35 @@ class member extends source implements shop{
 			$success[]=$card->card_no;
 			//反向记录同步结果
 			$card->updateObj(array('result'=>$memberLv->id));
+			//年卡会员奖励一个月会员
+			if($card->card_title=='年卡'){
+				//新增vip记录
+				$memberLvData=array();
+				$memberLvData['memberId']=$this->id;
+				$memberLvData['lv']=1;
+				$memberLvData['start']=$card->end_time+1;
+				$memberLvData['end']=$memberLvData['start']+60*60*24*31;
+				$memberLvData['handlerType']=998;
+				$memberLvData['handlerId']=$card->card_no;
+				$memberLv=memberLv::addObj($memberLvData);
+			}
+			//615～716购买的月卡会员奖励一个月会员
+			elseif($card->card_title=='月卡' || $card->card_title=='新月卡'){
+				//奖励的购买区间
+				$start=strtotime("20180615");
+				$end=strtotime("20180717");	
+				if($card->end_time>=$start & $card->end_time<$end){
+					//新增vip记录
+					$memberLvData=array();
+					$memberLvData['memberId']=$this->id;
+					$memberLvData['lv']=1;
+					$memberLvData['start']=$card->end_time+1;
+					$memberLvData['end']=$memberLvData['start']+60*60*24*31;
+					$memberLvData['handlerType']=998;
+					$memberLvData['handlerId']=$card->card_no;
+					$memberLv=memberLv::addObj($memberLvData);
+				}
+			}
 		}
 		//标记为同步结果,记录同步数量
 		$successCount=count($success);
