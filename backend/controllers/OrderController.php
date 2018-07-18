@@ -458,8 +458,11 @@ class OrderController extends SmartWebController{
 			//拼接api的uri
 			$gmApi=Yii::$app->params["gmApi"];
 			$uri=$gmApi."?r=zs-api/get-logistics-trace&com={$logisticsList[$index]['logistics']['code']}&num={$logisticsCode}";
+			$curlConf=array();
+			$curlConf[CURLOPT_SSL_VERIFYPEER]=false;
+			$curlConf[CURLOPT_SSL_VERIFYHOST]=false;
 			//调用api
-			$response=Yii::$app->smartApi->get($uri);
+			$response=Yii::$app->smartApi->get($uri,$curlConf);
 			if(!$response['state']) throw new SmartException("call api error");
 			//分析结果
 			$response=json_decode($response['response'],true);
