@@ -11,8 +11,10 @@ d5=('member/daemon-get-unionid-from-public-account' 'nohup /usr/local/nginx/html
 d6=('product/daemon-sku-auto-close' 'nohup /usr/local/nginx/html/smartShopping/./yii product/daemon-sku-auto-close >> product_daemon_sku_auto_close.log_'${date}' 2>> product_daemon_sku_auto_close.err_'${date}' &')
 d7=('product/daemon-spu-auto-close' 'nohup /usr/local/nginx/html/smartShopping/./yii product/daemon-spu-auto-close >> product_daemon_spu_auto_close.log_'${date}' 2>> product_daemon_spu_auto_close.err_'${date}' &')
 d8=('product/daemon-del-recommend-record' 'nohup /usr/local/nginx/html/smartShopping/./yii product/daemon-del-recommend-record >> product_daemon_del_recommend_record.log_'${date}' 2>> product_daemon_del_recommend_record.err_'${date}' &')
+d9=('notice/daemon-send-notice' 'nohup /usr/local/nginx/html/smartShopping/./yii notice/daemon-send-notice >> notice_daemon_send_notice.log_'${date}' 2>> notice_daemon_send_notice.err_'${date}' &')
+
 #逐个检测启动
-for i in $(seq 0 8)
+for i in $(seq 0 9)
 do
 		#跳过product/daemon-sku-auto-close
 		if [ "${i}" -eq "6" ];then 
