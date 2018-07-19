@@ -17,7 +17,7 @@ class VirtualItemController extends SmartWebController{
 			$token=$this->requestGet('token',false);
 			$member=tokenManagement::getManagement($token,array(source::TYPE_MEMBER))->getOwner();
 			//获取虚拟产品
-			$virtualItems=virtualItem::find()->where("`closed`='0' AND `locked`='0'")->all();
+			$virtualItems=virtualItem::find()->where("`closed`='0' AND `locked`='0'")->orderBy("`sort` ASC")->all();
 			//组织数据
 			$data=array();
 			foreach($virtualItems as $v) $data[]=$v->getExtraction()->getBasicData($member);
