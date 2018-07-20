@@ -24,8 +24,7 @@ class SiteController extends SmartWebController{
 		if($str==$signature && $echostr){
 			header('content-type:text');
 			ob_clean();
-        	echo $echostr;
-        	exit;
+            $this->response(3,$echostr);
     	}
     	else{
             //echo "success";exit;
@@ -69,8 +68,8 @@ class SiteController extends SmartWebController{
                 <ToUserName><![CDATA[{$data['FromUserName']}]]></ToUserName>
                 <FromUserName><![CDATA[{$data['ToUserName']}]]></FromUserName>
                 <CreateTime>{$time}</CreateTime>
-                <MsgType><![CDATA[text]]></MsgType>
-                <Content><![CDATA[正善牛肉欢迎您!]]></Content>
+                <MsgType><![CDATA[image]]></MsgType>
+                <Image><MediaId><![CDATA[FX5CghJXxIuUGNcTVye7rOMJu3mZybzzpvEpRzCco1Y]]></MediaId></Image>
                 </xml>
                 ";
                 Yii::$app->cache->set($data['FromUserName'],true,30);
