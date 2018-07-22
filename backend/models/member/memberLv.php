@@ -8,6 +8,18 @@ use backend\models\order\orderBuyingRecord;
 use backend\models\notice\notice;
 //========================================
 class memberLv extends LogActiveRecord{
+	//字段规则
+	public function rules(){
+        return array(
+        	//必填
+        	[['memberId','lv','start','end','handlerType','handlerId'],'required'],
+        	//整型
+            [['memberId','lv','start','end','handlerType','handlerId','closed'],'integer'],
+            //字符串
+            [['closedMemo'],'string','max'=>500],
+        );
+    }
+    //========================================
 	//初始化
 	public function init(){
 		parent::init();
