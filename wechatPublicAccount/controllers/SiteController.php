@@ -69,7 +69,7 @@ class SiteController extends SmartWebController{
                 <FromUserName><![CDATA[{$data['ToUserName']}]]></FromUserName>
                 <CreateTime>{$time}</CreateTime>
                 <MsgType><![CDATA[image]]></MsgType>
-                <Image><MediaId><![CDATA[FX5CghJXxIuUGNcTVye7rOMJu3mZybzzpvEpRzCco1Y]]></MediaId></Image>
+                <Image><MediaId><![CDATA[FX5CghJXxIuUGNcTVye7rABp8KHdzQGARudiQbC6yJA]]></MediaId></Image>
                 </xml>
                 ";
                 Yii::$app->cache->set($data['FromUserName'],true,30);
