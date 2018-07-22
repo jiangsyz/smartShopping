@@ -6,6 +6,16 @@ use yii\base\SmartException;
 use common\models\LogActiveRecord;
 //========================================
 class refundTransaction extends LogActiveRecord{
+	//字段规则
+	public function rules(){
+		return array(
+			//字符串
+			[['transactionType','transactionId'],'string','max'=>200],
+			//唯一
+			[['transactionId'],'unique'],
+		);
+	}
+	//========================================
 	//初始化
 	public function init(){
 		parent::init();
