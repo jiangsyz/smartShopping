@@ -10,11 +10,13 @@ class address extends LogActiveRecord{
 	public function rules(){
 	    return array(
 	        //去空格
-	        array(array('name','phone','address','postCode'),'trim'),
+	        [['name','phone','address','postCode'],'trim'],
 	        //必填
-	        array(array('memberId','name','phone','areaId','address'),'required'),
-	        //唯一
-	        array(array(),'unique'),
+	        [['memberId','name','phone','areaId','address'],'required'],
+	        //整型
+            [['memberId','areaId','createTime','isDeled'],'integer'],
+            //字符串
+            [['name','phone','address','postCode'],'string','max'=>200],
 	    );
 	}
 	//========================================
