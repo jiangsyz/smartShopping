@@ -6,6 +6,14 @@ use yii\base\SmartException;
 use common\models\LogActiveRecord;
 //========================================
 class sourceProperty extends LogActiveRecord{
+	//字段规则
+	public function rules(){
+		return array(
+			//字符串
+			[['propertyKey','propertyVal'],'string','max'=>200],
+		);
+	}
+	//========================================
 	//初始化
 	public function init(){
 		parent::init();
