@@ -22,6 +22,14 @@ class refund extends LogActiveRecord{
 		$this->on(self::EVENT_BEFORE_UPDATE,array($this,"checkPrice"));
 	}
 	//========================================
+	//字段规则
+	public function rules(){
+		return array(
+			//字符串
+			[['applyMemo','rejectMemo'],'string','max'=>300],
+		);
+	}
+	//========================================
 	//初始化数据
 	public function initData(){
 		$this->applyTime=time();
