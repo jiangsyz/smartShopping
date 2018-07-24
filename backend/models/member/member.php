@@ -152,7 +152,7 @@ class member extends source implements shop{
 				//奖励的购买区间
 				$start=strtotime("20180615");
 				$end=strtotime("20180717");	
-				if($card->end_time>=$start & $card->end_time<$end){
+				if($card->start_time>=$start && $card->start_time<$end){
 					//新增vip记录
 					$memberLvData=array();
 					$memberLvData['memberId']=$this->id;
