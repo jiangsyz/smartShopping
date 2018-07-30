@@ -489,4 +489,42 @@ class OrderController extends SmartWebController{
 			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
+	//========================================
+	//员工修改地址
+	public function actionApiChangeAddressByStaff(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取员工
+			$token=$this->requestPost('token',false);
+			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
+			//获取订单id
+			$orderId=$this->requestPost('orderId',0);
+			//获取收件人姓名
+			$name=$this->requestPost('name',false);
+			//获取收件人手机
+			$phone=$this->requestPost('phone',false);
+			//获取收件人区域
+			$areaId=$this->requestPost('areaId',0);
+			//获取收件人地址
+			$address=$this->requestPost('address',false);
+			//获取邮编
+			$postCode=$this->requestPost('postCode',NULL);
+			//获取订单
+			$orderRecord=orderRecord::getLockedOrderById($orderId);
+			if(!$orderRecord) throw new SmartException("miss orderRecord");
+			//修改地址
+			$orderRecord->addressManagement->changeAddressByStaff($staff,$name,$phone,$areaId,$address,$postCode);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
+    	}
+	}
+
 }
