@@ -79,6 +79,7 @@ class actionTracker extends LogActiveRecord{
 				'product/api-update-sku-price'=>'员工修改sku价格',
 				'product/api-update-sku-keep-count'=>'员工修改sku库存',
 				'member/api-close-vip'=>'员工关闭vip',
+				'order/api-change-address-by-staff'=>'员工修改订单地址',
 			),
 		),
 		//无用的需要删除的
