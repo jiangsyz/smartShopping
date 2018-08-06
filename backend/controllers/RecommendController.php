@@ -24,7 +24,7 @@ class RecommendController extends SmartWebController{
 			//查询query
 			$sourceType=source::TYPE_SPU;
 			$where="`recommendType`='{$recommendType}' AND `sourceType`='{$sourceType}'";
-			$query=recommendRecord::find()->where($where)->with('source');
+			$query=recommendRecord::find()->where($where)->with('source')->orderBy("`sort` ASC");
 			//获取分页数据
 			$result=Yii::$app->smartPagination->getData($query,$pageSize,$pageNum);
 			//组织数据

@@ -92,7 +92,7 @@ class actionTracker extends LogActiveRecord{
 	);
 	//========================================
 	//行为追踪
-	public static function actionTrack($startId=1,$limit=500,$safeSeconds=60){
+	public static function actionTrack($startId=1,$limit=100,$safeSeconds=60){
 		//确定时间,一分钟内产生的日志不取
 		if($safeSeconds<0) throw new SmartException("error safeSeconds");
 		$time=time()-$safeSeconds;
