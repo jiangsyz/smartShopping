@@ -36,7 +36,7 @@ abstract class orderFactory extends Component{
 	public function getFactoryType(){return static::className();}
 	//========================================
 	//获取订单价格(分为单位)	
-	public function getPay(){return (static::getFinalPrice()+static::getFreight())*100;}
+	public function getPay(){return (string)((static::getFinalPrice()+static::getFreight())*100);}
 	//========================================
 	//初始化订单
 	public function initOrder(){
