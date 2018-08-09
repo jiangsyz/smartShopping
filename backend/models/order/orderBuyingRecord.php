@@ -13,9 +13,16 @@ class orderBuyingRecord extends source{
 	//初始化
 	public function init(){
 		parent::init();
+		$this->on(self::EVENT_BEFORE_INSERT,array($this,"initLogisticsId"));
 		$this->on(self::EVENT_BEFORE_INSERT,array($this,"checkBuyingCount"));
 		$this->on(self::EVENT_AFTER_INSERT,array($this,"deductKeepCount"));
 		$this->on(self::EVENT_BUYING_SUCCESS,array($this,"buyingSuccess"));
+	}
+	//========================================
+	//初始化物流平台
+	public function initLogisticsId(){
+		$logistics=$this->salesUnit->getLogistics();
+		if($logistics) $this->logisticsId=$logistics->id; else $this->logisticsId=NULL;
 	}
 	//========================================
 	//返回资源类型
