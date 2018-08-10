@@ -6,6 +6,7 @@ use yii\base\SmartException;
 use common\models\LogActiveRecord;
 use backend\models\model\source;
 use backend\models\order\orderRecord;
+use backend\models\product\logistics;
 //========================================
 class orderBuyingRecord extends source{
 	const EVENT_BUYING_SUCCESS=1;//购买成功后触发的时间
@@ -37,6 +38,9 @@ class orderBuyingRecord extends source{
 	public function getOrderRecord(){
 		return $this->hasOne(orderRecord::className(),array('id'=>'orderId'));
 	}
+	//========================================
+	//获取物流渠道
+	public function getLogistics(){return $this->hasOne(logistics::className(),array('id'=>'logisticsId'));}
 	//========================================
 	//检查购买数量
 	public function checkBuyingCount(){
