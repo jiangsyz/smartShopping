@@ -8,8 +8,9 @@ use yii\base\Exception;
 use backend\models\member\youzanCard;
 use backend\models\member\member;
 use backend\models\member\memberLv;
+use backend\models\order\orderBuyingRecord;
 class FixController extends SmartDaemonController{
-	//用户行为追踪
+	//修复vip奖励
     public function actionFixYouzanBonus(){
     	try{
             //开启事务
@@ -49,6 +50,42 @@ class FixController extends SmartDaemonController{
 						}
             		}
             	}
+            }
+            //提交事务
+            $trascation->commit();
+            //处理成功
+            var_dump($fix);
+        }
+        catch(Exception $e){
+            //回滚
+            $trascation->rollback();
+            //处理错误
+            echo $e->getMessage();
+        }
+    }
+    //========================================
+    //修复购买记录中的物流平台id
+    public function actionFixBuyingRecordLogisticsId(){
+        try{
+            //开启事务
+            $trascation=Yii::$app->db->beginTransaction();
+            //修复计数
+            $fix=0;
+            //查询所有购物记录
+            $orderBuyingRecords=orderBuyingRecord::find()->all();
+            //逐个修复
+            foreach($orderBuyingRecords as $orderBuyingRecord){
+                //已经有物流平台id的跳过
+                if($orderBuyingRecord->logisticsId) continue;
+                //获取物流
+                $logistics=$orderBuyingRecord->salesUnit->getLogistics();
+                //更新物流平台id
+                if(!$logistics) 
+                    $orderBuyingRecord->updateObj(array('logisticsId'=>NULL));
+                else
+                    $orderBuyingRecord->updateObj(array('logisticsId'=>$logistics->id));
+                //更新修复计数
+                $fix++;
             }
             //提交事务
             $trascation->commit();
