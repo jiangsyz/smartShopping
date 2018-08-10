@@ -19,7 +19,7 @@ class orderLogisticsManagement extends Component{
 			//没有回填单号的跳过
 			if(!$b->logisticsCode) continue;
 			//获取物流渠道
-			$logistics=$b->salesUnit->getLogistics();
+			$logistics=$b->logistics;
 			if(!$logistics) throw new SmartException("buyingRecord {$b->id} miss logistics");
 			//获取物流列表索引(物流渠道id_物流号)
 			$index=trim($logistics->id).'_'.trim($b->logisticsCode);
