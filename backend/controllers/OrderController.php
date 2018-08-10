@@ -470,12 +470,12 @@ class OrderController extends SmartWebController{
 			if(!isset($response['error'])) throw new SmartException("response miss error");
 			if($response['error']!=0)
 				if(!isset($response['msg'])) 
-					throw new SmartException("response miss msg");
+					throw new SmartException("第三方物流查询接口错误",-2);
 				else 
-					throw new SmartException($response['msg']);
+					throw new SmartException($response['msg'],-2);
 			else
 				if(!isset($response['data']))
-					throw new SmartException("response miss data");
+					throw new SmartException("快递100物流查询接口错误",-2);
 				else
 					$data=$response['data'];
 			//提交事务
