@@ -6,6 +6,8 @@ use yii\base\SmartException;
 use common\models\LogActiveRecord;
 use backend\models\order\orderBuyingRecord;
 use backend\models\notice\notice;
+use backend\models\member\member;
+use backend\models\model\source;
 //========================================
 class memberLv extends LogActiveRecord{
 	//字段规则
@@ -16,7 +18,7 @@ class memberLv extends LogActiveRecord{
         	//整型
             [['memberId','lv','start','end','handlerType','handlerId','closed'],'integer'],
             //字符串
-            [['closedMemo'],'string','max'=>500],
+            [['handlerMemo','closedMemo'],'string','max'=>500],
         );
     }
     //========================================
@@ -152,27 +154,39 @@ class memberLv extends LogActiveRecord{
 		return $data;
 	}
 	//========================================
-	//开通vip
+	//会员卡开通vip
 	public static function addVipBybuyingRecord(orderBuyingRecord $r,$data){
 		//校验
 		if(!isset($data['lv'])) throw new SmartException("benefitDetail miss lv");
 		if(!isset($data['len'])) throw new SmartException("benefitDetail miss len");
-		if($data['lv']<1) throw new SmartException("benefitDetail error lv");
-		if($data['len']<1) throw new SmartException("benefitDetail error len");
 		//获取订单
 		$orderRecord=$r->orderRecord;
 		if(!$orderRecord) throw new SmartException("addVip miss orderRecord");
 		//获取会员
 		$member=$orderRecord->member;
 		if(!$member) throw new SmartException("addVip miss member");
+		//增加vip
+		self::addVip($member,$r,$data['lv'],$data['len']);
+	}
+	//========================================
+	//增加vip
+	public static function addVip(member $member,source $handler,$lv,$lenth,$memo=NULL){
+		//校验
+		if($lv<1) throw new SmartException("错误的vip等级",-2);
+		if($lenth<1) throw new SmartException("错误的vip时长",-2);
 		//找到该会员需要开通等级的未关闭最晚到期的记录
 		$table=self::tableName();
-		$sql="SELECT * FROM {$table} WHERE `memberId`='{$member->id}' AND `lv`='{$data['lv']}' AND `closed`='0' ORDER BY `end` DESC FOR UPDATE;";
+		$sql=
+		"
+		SELECT * FROM {$table} 
+		WHERE 
+		`memberId`='{$member->id}' AND `lv`='{$lv}' AND `closed`='0' ORDER BY `end` DESC FOR UPDATE;
+		";
 		$memberLvRecord=self::findBySql($sql)->one();
 		//确定新纪录的开始时间
 		$now=time();
 		$start=NULL;
-		if($memberLvRecord && $memberLvRecord->end>=$now) 
+		if($memberLvRecord && $memberLvRecord->end>=$now)
 			$start=$memberLvRecord->end+1;
 		else 
 			$start=$now;
@@ -180,11 +194,12 @@ class memberLv extends LogActiveRecord{
 		//新增vip记录
 		$memberLv=array();
 		$memberLv['memberId']=$member->id;
-		$memberLv['lv']=$data['lv'];
+		$memberLv['lv']=$lv;
 		$memberLv['start']=$start;
-		$memberLv['end']=$memberLv['start']+$data['len'];
-		$memberLv['handlerType']=$r->getSourceType();
-		$memberLv['handlerId']=$r->getSourceId();
+		$memberLv['end']=$memberLv['start']+$lenth;
+		$memberLv['handlerType']=$handler->getSourceType();
+		$memberLv['handlerId']=$handler->getSourceId();
+		$memberLv['handlerMemo']=$memo;
 		self::addObj($memberLv);
 		//格式化到期时间
 		$endDate=date("Y-m-d",$memberLv['end']);
