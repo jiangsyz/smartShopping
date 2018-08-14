@@ -238,4 +238,38 @@ class MemberController extends SmartWebController{
 			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
     	}
 	}
+	//========================================
+	//员工增加vip
+	public function actionApiStaffAddVip(){
+		try{
+			//开启事务
+			$trascation=Yii::$app->db->beginTransaction();
+			//根据token获取员工
+			$token=$this->requestPost('token',false);
+			$staff=tokenManagement::getManagement($token,array(source::TYPE_STAFF))->getOwner();
+			//获取会员id
+			$memberId=$this->requestPost('memberId',0);
+			if(!$memberId) throw new SmartException("miss memberId");
+			//获取备注
+			$memo=$this->requestPost('memo',"");
+			if(!$memo) throw new SmartException("miss memo");
+			//获取时常
+			$length=$this->requestPost('length',0);
+			if(!$length) throw new SmartException("miss length");
+			//获取会员
+			$member=source::getSource(source::TYPE_MEMBER,$memberId,true);
+			if(!$member) throw new SmartException("miss member");
+			//开通vip
+			memberLv::addVip($member,$staff,1,$length,$memo);
+			//提交事务
+			$trascation->commit();
+			//返回
+			$this->response(1,array('error'=>0));
+		}
+		catch(Exception $e){
+			//回滚
+			$trascation->rollback();
+			$this->response(1,array('error'=>$e->getCode()?$e->getCode():-1,'msg'=>$e->getMessage()));
+    	}
+	}
 }
