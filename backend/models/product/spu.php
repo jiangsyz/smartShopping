@@ -55,4 +55,14 @@ class spu extends product{
 			return $rand;
 		} 
 	}
+	//========================================
+	//获取SPU下所有SKU的库存总和 
+	public function getStock()
+	{
+		$stock = 0;
+		foreach($this->skus as $sku) {
+			$stock += $sku->count;
+		}
+		return $stock;
+	}
 }
